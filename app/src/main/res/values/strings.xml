@@ -1,0 +1,340 @@
+<resources>
+    <string name="app_name">BringCloser</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_sign_out">Sign out</string>
+    <string name="action_delete_account">Delete account</string>
+
+    <string name="connected_people_fragment_title">Connections</string>
+    <string name="request_to_people_fragment_title">Sent requests</string>
+    <string name="request_from_people_fragment_title">Received requests</string>
+
+    <string name="welcome_start">Hi,</string>
+
+    <string name="nav_received_items">Received Items</string>
+    <string name="nav_profile_settings">Profile Settings</string>
+    <string name="nav_about">About</string>
+
+    <string name="no_internet_message">You are currently offline!
+        Please, check your connection, and open the app again.</string>
+    <string name="zero_character_name_message">It is not recommended to leave it empty
+        so that your close people can more easily reach you!</string>
+    <string name="wrong_date_selected_message">Your birthday should be before today!</string>
+    <string name="uploading_image">Uploading your image...</string>
+    <string name="settings_display_name_header">Displayed name</string>
+    <string name="settings_birthday_header">Birthday</string>
+    <string name="settings_gender_header">Gender</string>
+    <string name="settings_verification_header">Email verification</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_none">I do not want to specify</string>
+    <string name="settings_name_warning">Name should not contain line break(s)!</string>
+    <string name="settings_activity">Profile Settings</string>
+    <string name="add_new_connection_activity">Search for a new connection</string>
+    <string name="add_chosen_connection_activity">Add the chosen connection</string>
+    <string name="settings_birthday_default">Data not provided</string>
+    <string name="settings_birthday_set_default">Set default</string>
+    <string name="dialog_settings_name">Type the desired name</string>
+    <string name="dialog_settings_positive_btn">OK</string>
+    <string name="dialog_settings_negative_btn">CANCEL</string>
+    <string name="settings_change_btn">CHANGE</string>
+    <string name="settings_verification_btn">VERIFY</string>
+    <string name="settings_verification_positive">Verified</string>
+    <string name="settings_verification_negative">Not verified</string>
+    <string name="settings_verification_ongoing">Checking mail box, verifying, re-authenticating</string>
+    <string name="nav_drawer_verification_required">Email verification required</string>
+    <string name="starting_toolbar_title">Loading...</string>
+    <string name="no_suitable_app_message">Your phone has no app to perform the request!</string>
+    <string name="take_photo_error_message">Photo file can\'t be created, please try again!</string>
+    <string name="permission_needed">The following permissions are necessary to continue...</string>
+    <string name="permission_needed_message">Read and write external storage permissions are needed!</string>
+    <string name="denied_permission_message">You cannot add camera picture or image from
+        your device without granting permissions!</string>
+    <string name="re_authenticate_request">Please, re-authenticate, and then
+        try again to complete the deletion of account.</string>
+    <string name="delete_account_dialog_title">You\'re about to delete your account!</string>
+    <string name="delete_account_dialog_alert_start">Before deleting</string>
+    <string name="delete_account_dialog_alert_part_1">\n
+        \u2022 Make sure that you have recently logged in</string>
+    <string name="delete_account_dialog_alert_part_2">
+        -> Otherwise, your request cannot be fully performed</string>
+    <string name="delete_account_dialog_alert_part_3">\n
+        \u2022 To be sure, re-authenticate to the app\n
+        \u2022 Come back here if you still want to delete</string>
+    <string name="delete_account_dialog_data_info_start">\nIf done, the followings will be deleted</string>
+    <string name="delete_account_dialog_data_info">\n
+        \u2022 All of your info (profile and connections)\n
+        \u2022 All of your images\n
+        \u2022 Your authorization to enter BringCloser app</string>
+    <string name="settings_verification_dialog_title">Email verification request</string>
+    <string name="settings_verification_dialog_info">\n
+        \u2022 Click \"OK\" to have the request sent to you\n
+        \u2022 Check your mail box and click on verifying\n
+        \u2022 Re-authenticate to the app\n
+        \u2022 Have fun with your close ones :)</string>
+    <string name="filter_hint">Type to filter the list below...</string>
+    <string name="add_connection_possible_size">Possible connections</string>
+    <string name="add_connection_found_possible_size">Found possible connections</string>
+    <string name="add_connection_no_available">
+        No available new connections!\nLet others know the BringCloser app!</string>
+    <string name="add_connection_chosen_question_part1">Who is</string>
+    <string name="add_connection_chosen_question_part2">to you mostly?</string>
+
+    <string name="relationship_type_none">Data not provided</string>
+    <string name="relationship_type_lover">Love</string>
+    <string name="relationship_type_friend">Friend</string>
+    <string name="relationship_type_sibling">Sibling</string>
+    <string name="relationship_type_sibling_male">Brother</string>
+    <string name="relationship_type_sibling_female">Sister</string>
+    <string name="relationship_type_cousin">Cousin</string>
+    <string name="relationship_type_parent">Parent</string>
+    <string name="relationship_type_parent_male">Father</string>
+    <string name="relationship_type_parent_female">Mother</string>
+    <string name="relationship_type_child">Child</string>
+    <string name="relationship_type_child_male">Son</string>
+    <string name="relationship_type_child_female">Daughter</string>
+    <string name="relationship_type_grandparent">Grandparent</string>
+    <string name="relationship_type_grandparent_male">Grandpa</string>
+    <string name="relationship_type_grandparent_female">Grandma</string>
+    <string name="relationship_type_godchild">Godchild</string>
+    <string name="relationship_type_godchild_male">Godson</string>
+    <string name="relationship_type_godchild_female">Goddaughter</string>
+    <string name="relationship_type_godparent">Godparent</string>
+    <string name="relationship_type_godparent_male">Godfather</string>
+    <string name="relationship_type_godparent_female">Godmother</string>
+    <string name="relationship_type_grandchild">Grandchild</string>
+    <string name="relationship_type_grandchild_male">Grandson</string>
+    <string name="relationship_type_grandchild_female">Granddaughter</string>
+    <string name="relationship_type_uncle">Uncle</string>
+    <string name="relationship_type_aunt">Aunt</string>
+    <string name="relationship_type_nephew">Nephew</string>
+    <string name="relationship_type_niece">Niece</string>
+    <string name="relationship_type_other">Other</string>
+    <string name="relationship_type_acquaintanceship">Acquaintanceship</string>
+    <string name="relationship_type_not_selected">Please, select a valid relationship type!</string>
+
+    <string name="play_services_alert">Without a valid Play Services installed,
+        you may not receive certain notifications!</string>
+
+    <string name="fragment_from_user_empty">No pending requests from any of your close people!\n
+    Let them know the BringCloser app!</string>
+    <string name="fragment_to_user_empty">No pending requests to any of your close people!\n
+    Browse and add one of them!</string>
+    <string name="fragment_connected_user_empty">No connections to any of your close people!\n
+    Browse and add one of them!</string>
+
+    <string name="not_verified_email_address_message">You have to verify your email address
+        firstly to perform this action!</string>
+
+    <string name="dialog_request_to_delete_title">You\'re about to withdraw
+        the following request!</string>
+    <string name="dialog_request_from_delete_title">You\'re about to reject
+        the following request!</string>
+
+    <string name="congrats_on_accepted_request_start">Congrats! Your new connection is</string>
+    <string name="request_is_sent">Your request has been sent to</string>
+    <string name="request_deleted_1">The request relating to</string>
+    <string name="request_deleted_2">has been deleted</string>
+
+    <string name="found_connections">Found connections</string>
+    <string name="found_sent_requests">Found sent requests</string>
+    <string name="found_received_requests">Found received requests</string>
+
+    <string name="search_title">Search by:</string>
+    <string name="search_radio_btn_name">Name</string>
+    <string name="search_radio_btn_type">Relationship type</string>
+
+    <string name="new_request_title">New contact request!</string>
+    <string name="new_request_body">wants to connect you.</string>
+    <string name="new_approval_title">Congrats for new contact!</string>
+    <string name="new_approval_body">and you are connected.</string>
+
+    <string name="already_got_request">You already have received a request from</string>
+
+    <string name="connection_activity_toolbar_title">You and</string>
+
+    <string name="test_text">aaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \naaaaaa
+        \n</string>
+</resources>

@@ -1,0 +1,46 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="@dimen/distance"
+    android:layout_marginEnd="@dimen/distance"
+    android:layout_marginLeft="@dimen/distance"
+    android:layout_marginStart="@dimen/distance"
+    android:animateLayoutChanges="true"
+    tools:context="karsai.laszlo.bringcloser.fragment.RequestFromPeopleFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv_request_from_users"/>
+
+    <ProgressBar
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:layout_gravity="center"
+        android:id="@+id/pb_search_request_from"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_margin="@dimen/distance"
+        android:id="@+id/tv_request_from_empty"
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold|italic"
+        android:text="@string/fragment_from_user_empty"
+        android:visibility="gone"/>
+
+    <!--android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_search_request_from"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_gravity="bottom|left|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/baseline_search_black_48"
+        android:elevation="@dimen/fab_elevation"
+        android:translationZ="@dimen/fab_press_translation_z" /-->
+
+</android.support.design.widget.CoordinatorLayout>

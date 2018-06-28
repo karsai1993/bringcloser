@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "8187963515",
+    "firebase_url": "https://bringcloser-26b92.firebaseio.com",
+    "project_id": "bringcloser-26b92",
+    "storage_bucket": "bringcloser-26b92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8187963515:android:2800d3d7d6581acb",
+        "android_client_info": {
+          "package_name": "karsai.laszlo.bringcloser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8187963515-ciok2hdpaam9n5qfpl2ndm70s2582n6g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "karsai.laszlo.bringcloser",
+            "certificate_hash": "2ddf2662e4c5cbd8c3b53ec6144edbf9e0ee8737"
+          }
+        },
+        {
+          "client_id": "8187963515-dvcgmt3gsgpjoi186teqq71sjf6sp92e.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "8187963515-dvcgmt3gsgpjoi186teqq71sjf6sp92e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABzr51z0oIf84q5KSlzGpSyD9_mxhgDZw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8187963515-dvcgmt3gsgpjoi186teqq71sjf6sp92e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
