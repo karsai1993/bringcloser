@@ -25,9 +25,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            app:fastscroll__handleColor="#8f93d1"
-            app:fastscroll__bubbleColor="#5e64ce"
-            app:fastscroll__bubbleTextAppearance="@style/TextAppearance.AppCompat"/>
+            android:layout_alignParentEnd="true"
+            app:fastscroll__handleColor="@color/colorPrimaryDark"
+            app:fastscroll__bubbleColor="@color/colorPrimary"
+            app:fastscroll__bubbleTextAppearance="@style/FastScrollerTextAppearance"/>
 
     </RelativeLayout>
 
@@ -54,7 +55,7 @@
         android:id="@+id/fab_add_new_connection_connected"
         android:layout_width="@dimen/fab_size"
         android:layout_height="@dimen/fab_size"
-        android:layout_gravity="bottom|right|end"
+        android:layout_gravity="bottom|left|start"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/baseline_person_add_black_48"
         app:borderWidth="0dp"

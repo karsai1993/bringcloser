@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginRight="@dimen/distance"
     android:layout_marginEnd="@dimen/distance"
     android:layout_marginLeft="@dimen/distance"
@@ -9,10 +10,27 @@
     android:animateLayoutChanges="true"
     tools:context="karsai.laszlo.bringcloser.fragment.RequestFromPeopleFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv_request_from_users"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rv_request_from_users"/>
+
+        <karsai.laszlo.bringcloser.CustomFastScroller
+            android:id="@+id/fast_scroll_rq_from"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            app:fastscroll__handleColor="@color/colorPrimaryDark"
+            app:fastscroll__bubbleColor="@color/colorPrimary"
+            app:fastscroll__bubbleTextAppearance="@style/FastScrollerTextAppearance"/>
+
+    </RelativeLayout>
 
     <ProgressBar
         android:layout_width="@dimen/progress_bar_size"
@@ -32,15 +50,5 @@
         android:textStyle="bold|italic"
         android:text="@string/fragment_from_user_empty"
         android:visibility="gone"/>
-
-    <!--android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_search_request_from"
-        android:layout_width="@dimen/fab_size"
-        android:layout_height="@dimen/fab_size"
-        android:layout_gravity="bottom|left|start"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/baseline_search_black_48"
-        android:elevation="@dimen/fab_elevation"
-        android:translationZ="@dimen/fab_press_translation_z" /-->
 
 </android.support.design.widget.CoordinatorLayout>

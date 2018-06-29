@@ -39,4 +39,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FastScrollerTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">@dimen/nav_drawer_user_name_text_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

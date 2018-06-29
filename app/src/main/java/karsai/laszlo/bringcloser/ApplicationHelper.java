@@ -86,6 +86,8 @@ public class ApplicationHelper {
     public static final String NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION = "action_connection";
     public static final String VIEW_IMAGE = "view_image";
     public static final String SAVE_RECYCLERVIEW_POS_KEY = "save_recyclerview_pos";
+    public static final String EXTRA_X_COORD = "x_coord";
+    public static final String EXTRA_Y_COORD = "y_coord";
     public static final int CONNECTION_BIT_POS = 1;
     public static final int CONNECTION_BIT_NEG = 0;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;

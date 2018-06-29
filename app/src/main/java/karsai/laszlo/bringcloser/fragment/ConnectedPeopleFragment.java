@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +31,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.futuremind.recyclerviewfastscroll.FastScroller;
+import com.futuremind.recyclerviewfastscroll.RecyclerViewScrollListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +41,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.CustomFastScroller;
@@ -75,6 +81,7 @@ public class ConnectedPeopleFragment extends Fragment {
     private ValueEventListener mConnectionsEventListener;
     private int mPos = -1;
     private CustomFastScroller mFastScroller;
+    private String mCurrentUserUid;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,6 +135,14 @@ public class ConnectedPeopleFragment extends Fragment {
             }
         });
 
+        mFastScroller.addScrollerListener(new RecyclerViewScrollListener.ScrollerListener() {
+            @Override
+            public void onScroll(float relativePos) {
+
+            }
+        });
+
+        mCurrentUserUid = mFirebaseUser.getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseRef = mFirebaseDatabase.getReference()
                 .child(ApplicationHelper.CONNECTIONS_NODE);
@@ -140,7 +155,9 @@ public class ConnectedPeopleFragment extends Fragment {
                 mConnectionList = new ArrayList<>();
                 for (DataSnapshot connSnapshot : dataSnapshot.getChildren()) {
                     Connection connection = connSnapshot.getValue(Connection.class);
-                    if (connection.getConnectionBit() == 1) {
+                    if (connection.getConnectionBit() == 1
+                            && (connection.getToUid().equals(mCurrentUserUid)
+                            || connection.getFromUid().equals(mCurrentUserUid))) {
                         mConnectionList.add(connection);
                     }
                 }
@@ -148,16 +165,34 @@ public class ConnectedPeopleFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         mConnectionDetailList = new ArrayList<>();
-                        for (int i = 0; i < 100; i++ ){
+                        for (int i = 0; i < 10; i++ ){
                             mConnectionDetailList.add(
                                     new ConnectionDetail(
-                                            "1",
-                                            String.valueOf(i),
+                                            mCurrentUserUid,
+                                            "b",
                                             "Male",
                                             null,
                                             null,
                                             "2",
-                                            String.valueOf(i + 1),
+                                            "b",
+                                            "Male",
+                                            null,
+                                            null,
+                                            "Parent",
+                                            0
+                                    )
+                            );
+                        }
+                        for (int i = 0; i < 10; i++ ){
+                            mConnectionDetailList.add(
+                                    new ConnectionDetail(
+                                            "1",
+                                            "a",
+                                            "Male",
+                                            null,
+                                            null,
+                                            mCurrentUserUid,
+                                            "d",
                                             "Male",
                                             null,
                                             null,
@@ -205,6 +240,63 @@ public class ConnectedPeopleFragment extends Fragment {
                         } else {
                             mEmptyListTextView.setVisibility(View.GONE);
                             mConnectedUsersRecyclerView.setVisibility(View.VISIBLE);
+                            Collections.sort(mConnectionDetailList, new Comparator<ConnectionDetail>() {
+                                @Override
+                                public int compare(
+                                        ConnectionDetail detailOne, ConnectionDetail detailTwo) {
+                                    // currentuseruid
+                                    // 1 from 2 from
+                                    // 1 from 2 to
+                                    // 1 to 2 from
+                                    // 1 to 2 to
+                                    if (detailOne.getFromUid().equals(mCurrentUserUid)
+                                            && detailTwo.getFromUid().equals(mCurrentUserUid)) {
+                                        return detailOne
+                                                .getToName()
+                                                .toLowerCase(Locale.getDefault())
+                                                .compareTo(
+                                                        detailTwo.getToName()
+                                                                .toLowerCase(
+                                                                        Locale.getDefault()
+                                                                )
+                                                );
+                                    } else if (detailOne.getFromUid().equals(mCurrentUserUid)
+                                            && detailTwo.getToUid().equals(mCurrentUserUid)) {
+                                        return detailOne
+                                                .getToName()
+                                                .toLowerCase(Locale.getDefault())
+                                                .compareTo(
+                                                        detailTwo.getFromName()
+                                                                .toLowerCase(
+                                                                        Locale.getDefault()
+                                                                )
+                                                );
+                                    } else if (detailOne.getToUid().equals(mCurrentUserUid)
+                                            && detailTwo.getToUid().equals(mCurrentUserUid)) {
+                                        return detailOne
+                                                .getFromName()
+                                                .toLowerCase(Locale.getDefault())
+                                                .compareTo(
+                                                        detailTwo.getFromName()
+                                                                .toLowerCase(
+                                                                        Locale.getDefault()
+                                                                )
+                                                );
+                                    } else if (detailOne.getToUid().equals(mCurrentUserUid)
+                                            && detailTwo.getFromUid().equals(mCurrentUserUid)) {
+                                        return detailOne
+                                                .getFromName()
+                                                .toLowerCase(Locale.getDefault())
+                                                .compareTo(
+                                                        detailTwo.getToName()
+                                                                .toLowerCase(
+                                                                        Locale.getDefault()
+                                                                )
+                                                );
+                                    }
+                                    return 0;
+                                }
+                            });
                             int pos = ((GridLayoutManager)mConnectedUsersRecyclerView
                                     .getLayoutManager())
                                     .findFirstVisibleItemPosition();

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,19 +36,17 @@ import karsai.laszlo.bringcloser.utils.ImageUtils;
  */
 
 public class RequestFromUsersAdapter
-        extends RecyclerView.Adapter<RequestFromUsersAdapter.RequestToUsersViewHolder>{
+        extends RecyclerView.Adapter<RequestFromUsersAdapter.RequestToUsersViewHolder>
+        implements SectionTitleProvider {
 
     private Context mContext;
     private List<ConnectionDetail> mConnectionDetailList;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mFromUserDatabaseRef;
-    private DatabaseReference mToUserDatabaseRef;
     private DatabaseReference mConnectionsDatabaseReference;
 
     public RequestFromUsersAdapter(Context context, List<ConnectionDetail> connectionDetailList) {
         this.mContext = context;
         this.mConnectionDetailList = connectionDetailList;
-        //this.mFirebaseDatabase = FirebaseDatabase.getInstance();
     }
 
     public RequestFromUsersAdapter() {}
@@ -64,52 +63,6 @@ public class RequestFromUsersAdapter
     @Override
     public void onBindViewHolder(@NonNull final RequestToUsersViewHolder holder, int position) {
         final ConnectionDetail connectionDetail = mConnectionDetailList.get(position);
-        String fromUid = connectionDetail.getFromUid();
-        String toUid = connectionDetail.getToUid();
-        /*mFromUserDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE)
-                .child(fromUid);
-        mToUserDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE)
-                .child(toUid);
-        mFromUserDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final User user = dataSnapshot.getValue(User.class);
-                ImageUtils.setUserPhoto(
-                        mContext,
-                        user.getPhotoUrl(),
-                        holder.requestFromUserPhotoImageView
-                );
-                holder.requestFromUserNameTextView.setText(user.getUsername());
-                mToUserDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User otherUser = dataSnapshot.getValue(User.class);
-                        holder.requestFromUserTypeTextView.setText(
-                                ApplicationHelper.getPersonalizedRelationshipType(
-                                        mContext,
-                                        connection.getType(),
-                                        otherUser.getGender(),
-                                        user.getGender(),
-                                        true
-                                ).toUpperCase(Locale.getDefault())
-                        );
-                        setOnClickListeners(mContext, holder, user, otherUser);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
         ImageUtils.setUserPhoto(
                 mContext,
                 connectionDetail.getFromPhotoUrl(),
@@ -205,96 +158,16 @@ public class RequestFromUsersAdapter
         });
     }
 
-    private void setOnClickListeners(
-            final Context mContext,
-            final RequestToUsersViewHolder holder,
-            final User user,
-            final User otherUser) {
-        holder.requestFromUserWithdrawImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ApplicationHelper.deletePairConnection(
-                                user.getUid(),
-                                otherUser.getUid(),
-                                mContext,
-                                user.getUsername()
-                        );
-                    }
-                };
-                Context context = view.getContext();
-                TextView rejectRequest = new TextView(context);
-                rejectRequest.setText(
-                        new StringBuilder()
-                                .append("\n")
-                                .append(user.getUsername())
-                                .append("\n")
-                                .append(holder.requestFromUserTypeTextView.getText().toString())
-                                .toString()
-                );
-                rejectRequest.setGravity(Gravity.CENTER);
-                DialogUtils.onDialogRequest(
-                        context,
-                        context.getResources().getString(R.string.dialog_request_from_delete_title),
-                        rejectRequest,
-                        onClickListener,
-                        R.style.DialogLeftRightTheme
-                );
-            }
-        });
-        holder.requestFromUserApproveImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mFirebaseDatabase = FirebaseDatabase.getInstance();
-                mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                        .child(ApplicationHelper.CONNECTIONS_NODE);
-                mConnectionsDatabaseReference
-                        .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
-                        .equalTo(user.getUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
-                                    String key = connectionSnapshot.getKey();
-                                    if (dataSnapshot
-                                            .child(key)
-                                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                                            .getValue(String.class).equals(otherUser.getUid())) {
-                                        mConnectionsDatabaseReference
-                                                .child(key)
-                                                .child(ApplicationHelper.CONNECTION_CONNECTED_IDENTIFIER)
-                                                .setValue(ApplicationHelper.CONNECTION_BIT_POS);
-                                    }
-                                }
-                                //MainActivity.sViewPager.setCurrentItem(0);
-                                Toast.makeText(
-                                        mContext,
-                                        new StringBuilder()
-                                                .append(mContext
-                                                        .getResources()
-                                                        .getString(
-                                                                R.string.congrats_on_accepted_request_start)
-                                                ).append(" ")
-                                                .append(user.getUsername())
-                                                .append("!")
-                                                .toString(),
-                                        Toast.LENGTH_LONG
-                                ).show();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {}
-                        });
-            }
-        });
-    }
-
     @Override
     public int getItemCount() {
         if (mConnectionDetailList == null) return 0;
         return mConnectionDetailList.size();
+    }
+
+    @Override
+    public String getSectionTitle(int position) {
+        ConnectionDetail connectionDetail = mConnectionDetailList.get(position);
+        return connectionDetail.getFromName().substring(0, 1);
     }
 
     class RequestToUsersViewHolder extends RecyclerView.ViewHolder{

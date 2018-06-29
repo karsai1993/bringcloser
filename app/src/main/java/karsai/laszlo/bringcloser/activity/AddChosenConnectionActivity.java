@@ -84,6 +84,7 @@ public class AddChosenConnectionActivity extends AppCompatActivity {
         requestOptions.fitCenter();
         requestOptions.circleCrop();
 
+        String chosenUserName = mChosenUser.getUsername();
         String photoUrl = mChosenUser.getPhotoUrl();
         RequestBuilder<Drawable> requestBuilder;
         if (photoUrl != null && !photoUrl.isEmpty())
@@ -95,12 +96,21 @@ public class AddChosenConnectionActivity extends AppCompatActivity {
                 .apply(requestOptions)
                 .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(
+                            @Nullable GlideException e,
+                            Object model,
+                            Target<Drawable> target,
+                            boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    public boolean onResourceReady(
+                            Drawable resource,
+                            Object model,
+                            Target<Drawable> target,
+                            DataSource dataSource,
+                            boolean isFirstResource) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                             startPostponedEnterTransition();
                         else supportStartPostponedEnterTransition();
@@ -109,7 +119,6 @@ public class AddChosenConnectionActivity extends AppCompatActivity {
                 })
                 .into(mChosenPhotoImageView);
 
-        String chosenUserName = mChosenUser.getUsername();
         mChosenNameTextView.setText(chosenUserName);
         mChosenQuestionTextView.setText(
                 new StringBuilder()
@@ -224,15 +233,10 @@ public class AddChosenConnectionActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onNavigateUp() {
-        Log.d("hopp", "onNavigateUp");
-        return super.onNavigateUp();
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
-        supportFinishAfterTransition();
-        Log.d("hopp", "onSupportNavigateUp");
-        return super.onSupportNavigateUp();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            finishAfterTransition();
+        else supportFinishAfterTransition();
+        return true;
     }
 }

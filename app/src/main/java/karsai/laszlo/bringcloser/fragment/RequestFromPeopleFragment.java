@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,9 +22,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.CustomFastScroller;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.adapter.ConnectedPeopleAdapter;
@@ -55,6 +60,7 @@ public class RequestFromPeopleFragment extends Fragment {
     private DatabaseReference mUsersDatabaseRef;
     private ValueEventListener mConnectionsEventListener;
     private int mPos = -1;
+    private CustomFastScroller mFastScroller;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +69,7 @@ public class RequestFromPeopleFragment extends Fragment {
         mRequestFromUsersRecyclerView = rootView.findViewById(R.id.rv_request_from_users);
         mEmptyListTextView = rootView.findViewById(R.id.tv_request_from_empty);
         mProgressBar = rootView.findViewById(R.id.pb_search_request_from);
+        mFastScroller = rootView.findViewById(R.id.fast_scroll_rq_from);
 
         if (savedInstanceState != null) {
             mPos = savedInstanceState.getInt(ApplicationHelper.SAVE_RECYCLERVIEW_POS_KEY, -1);
@@ -96,6 +103,24 @@ public class RequestFromPeopleFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         mRequestFromConnectionDetailList = new ArrayList<>();
+                        for (int i = 0; i < 20; i++ ){
+                            mRequestFromConnectionDetailList.add(
+                                    new ConnectionDetail(
+                                            "1",
+                                            String.valueOf(i),
+                                            "Male",
+                                            null,
+                                            null,
+                                            "2",
+                                            "b",
+                                            "Male",
+                                            null,
+                                            null,
+                                            "Parent",
+                                            0
+                                    )
+                            );
+                        }
                         for (Connection connection : mRequestFromConnectionList) {
                             String fromUid = connection.getFromUid();
                             String toUid = connection.getToUid();
@@ -135,6 +160,22 @@ public class RequestFromPeopleFragment extends Fragment {
                         } else {
                             mEmptyListTextView.setVisibility(View.GONE);
                             mRequestFromUsersRecyclerView.setVisibility(View.VISIBLE);
+                            Collections.sort(mRequestFromConnectionDetailList,
+                                    new Comparator<ConnectionDetail>() {
+                                @Override
+                                public int compare(
+                                        ConnectionDetail detailOne, ConnectionDetail detailTwo) {
+                                    return detailOne
+                                            .getFromName()
+                                            .toLowerCase(Locale.getDefault())
+                                            .compareTo(
+                                                    detailTwo.getFromName()
+                                                            .toLowerCase(
+                                                                    Locale.getDefault()
+                                                            )
+                                            );
+                                }
+                            });
                             int pos = ((GridLayoutManager)mRequestFromUsersRecyclerView
                                     .getLayoutManager())
                                     .findFirstVisibleItemPosition();
@@ -150,6 +191,7 @@ public class RequestFromPeopleFragment extends Fragment {
                                 mRequestFromUsersRecyclerView.scrollToPosition(mPos);
                                 mPos = -1;
                             }
+                            mFastScroller.setRecyclerView(mRequestFromUsersRecyclerView);
                         }
                     }
 

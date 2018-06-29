@@ -152,6 +152,13 @@
 
     <string name="already_got_request">You already have received a request from</string>
 
+    <!--string name="number_connections_start">Connected to\u0020</string>
+    <string name="number_connections_end">\u0020of your close people</string>
+    <string name="number_sent_rq_start">Waiting for\u0020</string>
+    <string name="number_sent_rq_end">\u0020of your close people</string>
+    <string name="number_received_rq_start">Demanded by\u0020</string>
+    <string name="number_received_rq_end">\u0020of your close people</string-->
+
     <string name="connection_activity_toolbar_title">You and</string>
 
     <string name="test_text">aaaaaa
@@ -337,4 +344,7 @@
         \naaaaaa
         \naaaaaa
         \n</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

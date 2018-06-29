@@ -2,7 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/distance"
+    android:layout_marginEnd="@dimen/distance"
+    android:layout_marginRight="@dimen/distance"
+    android:layout_marginBottom="@dimen/distance"
+    android:layout_marginStart="@dimen/distance"
+    android:layout_marginLeft="@dimen/distance"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center">

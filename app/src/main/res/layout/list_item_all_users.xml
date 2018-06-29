@@ -9,7 +9,7 @@
         android:layout_width="@dimen/list_photo_size"
         android:layout_height="@dimen/list_photo_size"
         android:src="@drawable/baseline_face_black_48"
-        android:transitionName="profile"
+        android:transitionName="image_transition"
         android:layout_gravity="center"
         android:id="@+id/iv_photo"/>
 
