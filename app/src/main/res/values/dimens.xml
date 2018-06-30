@@ -22,5 +22,6 @@
     <dimen name="icon_size">35dp</dimen>
     <dimen name="fab_size">56dp</dimen>
     <dimen name="fragment_rv_margin">88dp</dimen>
-    <dimen name="number_padding">3dp</dimen>
+    <dimen name="action_padding">3dp</dimen>
+    <dimen name="action_corner">6dp</dimen>
 </resources>

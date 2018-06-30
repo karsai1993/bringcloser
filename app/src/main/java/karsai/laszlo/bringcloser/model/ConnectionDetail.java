@@ -21,6 +21,7 @@ public class ConnectionDetail implements Parcelable{
     private String toBirthday;
     private String type;
     private int connectionBit;
+    private String timestamp;
 
     public ConnectionDetail() {}
 
@@ -36,7 +37,8 @@ public class ConnectionDetail implements Parcelable{
             String toPhotoUrl,
             String toBirthday,
             String type,
-            int connectionBit) {
+            int connectionBit,
+            String timestamp) {
         this.fromUid = fromUid;
         this.fromName = fromName;
         this.fromGender = fromGender;
@@ -49,6 +51,7 @@ public class ConnectionDetail implements Parcelable{
         this.toBirthday = toBirthday;
         this.type = type;
         this.connectionBit = connectionBit;
+        this.timestamp = timestamp;
     }
 
     protected ConnectionDetail(Parcel in) {
@@ -64,6 +67,7 @@ public class ConnectionDetail implements Parcelable{
         toBirthday = in.readString();
         type = in.readString();
         connectionBit = in.readInt();
+        timestamp = in.readString();
     }
 
     public static final Creator<ConnectionDetail> CREATOR = new Creator<ConnectionDetail>() {
@@ -77,6 +81,14 @@ public class ConnectionDetail implements Parcelable{
             return new ConnectionDetail[size];
         }
     };
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public String getFromBirthday() {
         return fromBirthday;
@@ -193,5 +205,6 @@ public class ConnectionDetail implements Parcelable{
         parcel.writeString(toBirthday);
         parcel.writeString(type);
         parcel.writeInt(connectionBit);
+        parcel.writeString(timestamp);
     }
 }

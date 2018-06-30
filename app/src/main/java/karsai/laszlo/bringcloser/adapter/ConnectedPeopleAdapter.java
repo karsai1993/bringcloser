@@ -117,30 +117,6 @@ public class ConnectedPeopleAdapter
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptions options
-                            = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext);
-                    Intent connectionIntent = new Intent(mContext, ConnectionActivity.class);
-                    connectionIntent.putExtra(ApplicationHelper.CONNECTION_KEY, connectionDetail);
-                    mContext.startActivity(connectionIntent, options.toBundle());
-                } else {
-                    Intent connectionIntent = new Intent(mContext, ConnectionActivity.class);
-                    connectionIntent.putExtra(ApplicationHelper.CONNECTION_KEY, connectionDetail);
-                    mContext.startActivity(connectionIntent);
-                }*/
-                /*ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(
-                                (Activity) mContext,
-                                view,
-                                "transition");
-                int xCoord = (int) (view.getX() + view.getWidth() / 2);
-                int yCoord = (int) (view.getY() + view.getHeight() / 2);
-
-                Intent intent = new Intent(mContext, ConnectionActivity.class);
-                intent.putExtra(ApplicationHelper.EXTRA_X_COORD, xCoord);
-                intent.putExtra(ApplicationHelper.EXTRA_Y_COORD, yCoord);
-
-                ActivityCompat.startActivity(mContext, intent, options.toBundle());*/
                 Intent connectionIntent = new Intent(mContext, ConnectionActivity.class);
                 connectionIntent.putExtra(ApplicationHelper.CONNECTION_KEY, connectionDetail);
                 mContext.startActivity(connectionIntent);

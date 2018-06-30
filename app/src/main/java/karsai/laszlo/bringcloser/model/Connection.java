@@ -13,12 +13,22 @@ public class Connection implements Parcelable {
     private String toUid;
     private int connectionBit;
     private String type;
+    private String timestamp;
 
-    public Connection(String fromUid, String toUid, int connectionBit, String type) {
+    public Connection(String fromUid, String toUid, int connectionBit, String type, String timestamp) {
         this.fromUid = fromUid;
         this.toUid = toUid;
         this.connectionBit = connectionBit;
         this.type = type;
+        this.timestamp = timestamp;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getFromUid() {
@@ -60,6 +70,7 @@ public class Connection implements Parcelable {
         this.toUid = in.readString();
         this.connectionBit = in.readInt();
         this.type = in.readString();
+        this.timestamp = in.readString();
     }
 
     public static final Creator<Connection> CREATOR = new Creator<Connection>() {
@@ -85,5 +96,6 @@ public class Connection implements Parcelable {
         parcel.writeString(toUid);
         parcel.writeInt(connectionBit);
         parcel.writeString(type);
+        parcel.writeString(timestamp);
     }
 }

@@ -1,9 +1,8 @@
 package karsai.laszlo.bringcloser.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,28 +11,33 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ConnectionDetailFragmentPagerAdapter;
+import karsai.laszlo.bringcloser.model.ConnectionDetail;
+import karsai.laszlo.bringcloser.model.User;
+import karsai.laszlo.bringcloser.utils.DialogUtils;
+import karsai.laszlo.bringcloser.utils.ImageUtils;
 
-/*
-Circular animation is from:
-https://android.jlelse.eu/a-little-thing-that-matter-how-to-reveal-an-activity-with-circular-revelation-d94f9bfcae28
- */
 public class ConnectionActivity extends AppCompatActivity {
-
-    private static final int COLLAPSING_THRESHOLD = -360;
 
     @BindView(R.id.connection_toolbar)
     Toolbar mToolbar;
@@ -47,16 +51,25 @@ public class ConnectionActivity extends AppCompatActivity {
     ViewPager mViewPager;
     @BindView(R.id.tab_layout_connection_details)
     TabLayout mTabLayout;
+    @BindView(R.id.tv_connection_toolbar_title)
+    TextView mToolbarTitleTextView;
+    @BindView(R.id.tv_connection_toolbar_other_name)
+    TextView mToolbarExpandedTitleTextView;
+    @BindView(R.id.tv_connection_toolbar_relationship)
+    TextView mToolbarRelationshipTextView;
+    @BindView(R.id.tv_connection_toolbar_since)
+    TextView mToolbarSinceTextView;
+    @BindView(R.id.iv_connection_toolbar_other_photo)
+    ImageView mToolbarPhotoImageView;
 
-    private TextView mToolbarTitleTextView;
     private String mCurrentUserUid;
-    private String mOtherUserUid;
+    private String mCurrentType;
+    private String mOtherType;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mDetailsDatabaseReference;
-    private boolean mIsCurrentTheFirst;
-    private int mPosX;
-    private int mPosY;
+    private DatabaseReference mUsersDatabaseRef;
+    private ValueEventListener mConnectionUsersValueEventListener;
     private ConnectionDetailFragmentPagerAdapter mPageAdapter;
+    private ConnectionDetail mConnectionDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +80,24 @@ public class ConnectionActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSupportNavigateUp();
+                //onSupportNavigateUp();
+                onBackPressed();
             }
         });
-        mToolbarTitleTextView = mToolbar.findViewById(R.id.tv_connection_toolbar_title);
+        mToolbar.inflateMenu(R.menu.connection_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_delete_connection:
+                        applyConnectionDeletionHandler();
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
         mToolbarTitleTextView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -91,7 +118,7 @@ public class ConnectionActivity extends AppCompatActivity {
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset < COLLAPSING_THRESHOLD) {
+                if (verticalOffset < getResources().getInteger(R.integer.collapsing_threshold)) {
                     mToolbarTitleTextView.setVisibility(View.VISIBLE);
                 } else {
                     mToolbarTitleTextView.setVisibility(View.GONE);
@@ -99,48 +126,56 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         });
 
-        /*Intent receivedIntent = getIntent();
-        mDetail = receivedIntent.getParcelableExtra(ApplicationHelper.CONNECTION_DETAIL_KEY);
-        mCurrentUserUid = receivedIntent.getStringExtra(Intent.EXTRA_TEXT);
-        mIsCurrentTheFirst = mDetail.getFirstUid().equals(mCurrentUserUid);
-        if (mIsCurrentTheFirst) mOtherUserUid = mDetail.getSecondUid();
-        else mOtherUserUid = mDetail.getFirstUid();
-
+        Intent receivedData = getIntent();
+        if (receivedData != null) {
+            mConnectionDetail = receivedData.getParcelableExtra(ApplicationHelper.CONNECTION_KEY);
+        }
+        mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDetailsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.DETAILS_NODE);
-        mDetailsDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mUsersDatabaseRef = mFirebaseDatabase.getReference()
+                .child(ApplicationHelper.USERS_NODE);
+        mConnectionUsersValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                String fromUid = mConnectionDetail.getFromUid();
+                String toUid = mConnectionDetail.getToUid();
+                String type = mConnectionDetail.getType();
+                String timestamp = mConnectionDetail.getTimestamp();
+                ConnectionDetail connectionDetail = new ConnectionDetail();
+                boolean isFromDataRead = false;
+                boolean isToDataRead = false;
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String uid = userSnapshot.getKey();
+                    User user = userSnapshot.getValue(User.class);
+                    if (fromUid.equals(uid)) {
+                        connectionDetail.setFromUid(uid);
+                        connectionDetail.setFromGender(user.getGender());
+                        connectionDetail.setFromName(user.getUsername());
+                        connectionDetail.setFromPhotoUrl(user.getPhotoUrl());
+                        connectionDetail.setFromBirthday(user.getBirthday());
+                        isFromDataRead = true;
+                    } else if (toUid.equals(uid)) {
+                        connectionDetail.setToUid(uid);
+                        connectionDetail.setToGender(user.getGender());
+                        connectionDetail.setToName(user.getUsername());
+                        connectionDetail.setToPhotoUrl(user.getPhotoUrl());
+                        connectionDetail.setToBirthday(user.getBirthday());
+                        isToDataRead = true;
+                    }
+                    if (isFromDataRead && isToDataRead) {
+                        connectionDetail.setType(type);
+                        connectionDetail.setTimestamp(timestamp);
+                        populateToolbarData(connectionDetail);
+                        break;
+                    }
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
-
-        /*Intent receivedData = getIntent();
-        if (savedInstanceState == null
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && receivedData != null) {
-            mCoordinatorLayout.setVisibility(View.INVISIBLE);
-            mPosX = receivedData.getIntExtra(ApplicationHelper.EXTRA_X_COORD, 0);
-            mPosY = receivedData.getIntExtra(ApplicationHelper.EXTRA_Y_COORD, 0);
-            ViewTreeObserver viewTreeObserver = mCoordinatorLayout.getViewTreeObserver();
-            if (viewTreeObserver.isAlive()) {
-                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        revealActivity(mPosX, mPosY);
-                        mCoordinatorLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                });
-            }
-        } else {
-            mCoordinatorLayout.setVisibility(View.VISIBLE);
-        }*/
+        };
 
         mPageAdapter = new ConnectionDetailFragmentPagerAdapter(
                 getSupportFragmentManager(),
@@ -148,62 +183,120 @@ public class ConnectionActivity extends AppCompatActivity {
         );
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        mToolbarTitleTextView.setText(
+    }
+
+    private void populateToolbarData(ConnectionDetail connectionDetail) {
+        String title;
+        String photoUrl;
+        if (connectionDetail.getFromUid().equals(mCurrentUserUid)) {
+            title = new StringBuilder()
+                    .append(
+                            getResources()
+                                    .getString(R.string.connection_activity_toolbar_title)
+                    ).append(connectionDetail.getToName().split(" ")[0])
+                    .toString();
+            photoUrl = connectionDetail.getToPhotoUrl();
+            mOtherType = ApplicationHelper.getPersonalizedRelationshipType(
+                    this,
+                    connectionDetail.getType(),
+                    connectionDetail.getToGender(),
+                    connectionDetail.getFromGender(),
+                    false
+            ).toUpperCase(Locale.getDefault());
+            mCurrentType = ApplicationHelper.getPersonalizedRelationshipType(
+                    this,
+                    connectionDetail.getType(),
+                    connectionDetail.getToGender(),
+                    connectionDetail.getFromGender(),
+                    true
+            ).toUpperCase(Locale.getDefault());
+        } else {
+            title = new StringBuilder()
+                    .append(
+                            getResources()
+                                    .getString(R.string.connection_activity_toolbar_title)
+                    ).append(connectionDetail.getFromName().split(" ")[0])
+                    .toString();
+            photoUrl = connectionDetail.getFromPhotoUrl();
+            mCurrentType = ApplicationHelper.getPersonalizedRelationshipType(
+                    this,
+                    connectionDetail.getType(),
+                    connectionDetail.getToGender(),
+                    connectionDetail.getFromGender(),
+                    false
+            ).toUpperCase(Locale.getDefault());
+            mOtherType = ApplicationHelper.getPersonalizedRelationshipType(
+                    this,
+                    connectionDetail.getType(),
+                    connectionDetail.getToGender(),
+                    connectionDetail.getFromGender(),
+                    true
+            ).toUpperCase(Locale.getDefault());
+        }
+        mToolbarTitleTextView.setText(title);
+        mToolbarExpandedTitleTextView.setText(title);
+        mToolbarSinceTextView.setText(
+                ApplicationHelper.convertDateAndTimeToLocal(connectionDetail.getTimestamp())
+        );
+        mToolbarRelationshipTextView.setText(
+                new StringBuilder().append(mCurrentType).append(" - ").append(mOtherType).toString()
+        );
+        ImageUtils.setUserPhoto(this, photoUrl, mToolbarPhotoImageView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mUsersDatabaseRef.addValueEventListener(mConnectionUsersValueEventListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mConnectionUsersValueEventListener != null) {
+            mUsersDatabaseRef.removeEventListener(mConnectionUsersValueEventListener);
+        }
+    }
+
+    private void applyConnectionDeletionHandler() {
+        final String otherName;
+        final String fromUid = mConnectionDetail.getFromUid();
+        if (fromUid.equals(mCurrentUserUid)) otherName = mConnectionDetail.getToName();
+        else otherName = mConnectionDetail.getFromName();
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ApplicationHelper.deletePairConnection(
+                        fromUid,
+                        mConnectionDetail.getToUid(),
+                        ConnectionActivity.this,
+                        otherName
+                );
+                finish();
+            }
+        };
+        TextView deleteConnection = new TextView(this);
+        deleteConnection.setText(
                 new StringBuilder()
-                        .append(
-                                getResources()
-                                        .getString(R.string.connection_activity_toolbar_title)
-                        ).append(" ")
-                        .append("Laci")
+                        .append("\n")
+                        .append(otherName)
+                        .append("\n")
+                        .append(mOtherType)
                         .toString()
+        );
+        deleteConnection.setGravity(Gravity.CENTER);
+        DialogUtils.onDialogRequest(
+                this,
+                getResources().getString(R.string.dialog_connection_delete_title),
+                deleteConnection,
+                onClickListener,
+                R.style.DialogUpDownTheme
         );
     }
 
-    /*protected void revealActivity(int x, int y) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            float finalRadius = (float) (Math.max(mCoordinatorLayout.getWidth(), mCoordinatorLayout.getHeight()) * 1.1);
-
-            // create the animator for this view (the start radius is zero)
-            Animator circularReveal = ViewAnimationUtils.createCircularReveal(mCoordinatorLayout, x, y, 0, finalRadius);
-            circularReveal.setDuration(400);
-            circularReveal.setInterpolator(new AccelerateInterpolator());
-
-            // make the view visible and start the animation
-            mCoordinatorLayout.setVisibility(View.VISIBLE);
-            circularReveal.start();
-        } else {
-            finish();
-        }
-    }
-
-    protected void unRevealActivity() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            finish();
-        } else {
-            float finalRadius = (float) (Math.max(mCoordinatorLayout.getWidth(), mCoordinatorLayout.getHeight()) * 1.1);
-            Animator circularReveal = ViewAnimationUtils.createCircularReveal(
-                    mCoordinatorLayout, mPosX, mPosY, finalRadius, 0);
-
-            circularReveal.setDuration(400);
-            circularReveal.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mCoordinatorLayout.setVisibility(View.INVISIBLE);
-                    finish();
-                }
-            });
-
-            circularReveal.start();
-        }
-    }*/
-
     @Override
     public boolean onSupportNavigateUp() {
-        /*unRevealActivity();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            startPostponedEnterTransition();
-        else supportStartPostponedEnterTransition();
-        */startActivity(new Intent(ConnectionActivity.this, MainActivity.class));
+        startActivity(new Intent(ConnectionActivity.this, MainActivity.class));
         return true;
     }
 }

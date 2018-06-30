@@ -181,6 +181,10 @@ public class MainActivity extends AppCompatActivity
                     mViewPager.setCurrentItem(2);
                 else if (action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION))
                     mViewPager.setCurrentItem(0);
+                else if (action
+                        .equals(ApplicationHelper.NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION)) {
+                    mViewPager.setCurrentItem(1);
+                }
             }
         }
     }

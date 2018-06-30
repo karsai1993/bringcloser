@@ -8,9 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -38,7 +36,6 @@ import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.User;
-import karsai.laszlo.bringcloser.utils.ImageUtils;
 
 /**
  * Created by Laci on 07/06/2018.
@@ -197,15 +194,19 @@ public class AddChosenConnectionActivity extends AppCompatActivity {
                                             mCurrentUser.getUid(),
                                             mChosenUser.getUid(),
                                             ApplicationHelper.CONNECTION_BIT_NEG,
-                                            selectedRelationshipType
+                                            selectedRelationshipType,
+                                            ApplicationHelper.getCurrentUTCDateAndTime()
                                     );
                                     mConnectionsDatabaseReference.push().setValue(connection);
-                                    startActivity(
-                                            new Intent(
-                                                    AddChosenConnectionActivity.this,
+                                    Intent mainIntent = new Intent(
+                                            AddChosenConnectionActivity.this,
                                             MainActivity.class
-                                            )
                                     );
+                                    mainIntent.setAction(
+                                            ApplicationHelper
+                                                    .NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION
+                                    );
+                                    startActivity(mainIntent);
                                 }
 
                                 @Override

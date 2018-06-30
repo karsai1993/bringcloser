@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,6 +80,16 @@ public class RequestFromUsersAdapter
                         true
                 ).toUpperCase(Locale.getDefault())
         );
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.requestFromUserActionLinearLayout.getVisibility() == View.VISIBLE) {
+                    holder.requestFromUserActionLinearLayout.setVisibility(View.GONE);
+                } else {
+                    holder.requestFromUserActionLinearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         holder.requestFromUserWithdrawImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +146,10 @@ public class RequestFromUsersAdapter
                                         .child(key)
                                         .child(ApplicationHelper.CONNECTION_CONNECTED_IDENTIFIER)
                                         .setValue(ApplicationHelper.CONNECTION_BIT_POS);
+                                mConnectionsDatabaseReference
+                                        .child(key)
+                                        .child(ApplicationHelper.CONNECTION_TIMESTAMP_IDENTIFIER)
+                                        .setValue(ApplicationHelper.getCurrentUTCDateAndTime());
                             }
                         }
                         Toast.makeText(
@@ -177,6 +193,7 @@ public class RequestFromUsersAdapter
         TextView requestFromUserTypeTextView;
         ImageView requestFromUserWithdrawImageView;
         ImageView requestFromUserApproveImageView;
+        LinearLayout requestFromUserActionLinearLayout;
 
         public RequestToUsersViewHolder(View itemView) {
             super(itemView);
@@ -187,6 +204,8 @@ public class RequestFromUsersAdapter
                     = itemView.findViewById(R.id.iv_requested_from_user_delete);
             requestFromUserApproveImageView
                     = itemView.findViewById(R.id.iv_requested_from_user_approve);
+            requestFromUserActionLinearLayout
+                    = itemView.findViewById(R.id.ll_requested_from_user_action);
         }
     }
 }

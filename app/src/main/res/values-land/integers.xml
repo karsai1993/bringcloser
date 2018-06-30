@@ -5,4 +5,5 @@
     <integer name="requested_rv_span_count">3</integer>
     <integer name="dialog_animation_duration">500</integer>
     <integer name="rv_animation_duration">500</integer>
+    <integer name="collapsing_threshold">-163</integer>
 </resources>

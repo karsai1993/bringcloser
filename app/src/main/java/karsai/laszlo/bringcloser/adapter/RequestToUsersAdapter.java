@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,16 @@ public class RequestToUsersAdapter
                         false
                 ).toUpperCase(Locale.getDefault())
         );
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.requestToUserWithdrawImageView.getVisibility() == View.VISIBLE) {
+                    holder.requestToUserWithdrawImageView.setVisibility(View.GONE);
+                } else {
+                    holder.requestToUserWithdrawImageView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         holder.requestToUserWithdrawImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

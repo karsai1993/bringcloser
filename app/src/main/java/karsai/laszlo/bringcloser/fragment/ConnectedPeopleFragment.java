@@ -134,6 +134,21 @@ public class ConnectedPeopleFragment extends Fragment {
                 }
             }
         });
+        mFastScroller.addScrollerListener(new RecyclerViewScrollListener.ScrollerListener() {
+
+            float previousPos = 0F;
+
+            @Override
+            public void onScroll(float relativePos) {
+                float dy = relativePos - previousPos;
+                if (dy > 0 && mAddFab.getVisibility() == View.VISIBLE) {
+                    mAddFab.setVisibility(View.INVISIBLE);
+                } else if (dy < 0 && mAddFab.getVisibility() != View.VISIBLE) {
+                    mAddFab.setVisibility(View.VISIBLE);
+                }
+                previousPos = relativePos;
+            }
+        });
 
         mFastScroller.addScrollerListener(new RecyclerViewScrollListener.ScrollerListener() {
             @Override
@@ -179,7 +194,8 @@ public class ConnectedPeopleFragment extends Fragment {
                                             null,
                                             null,
                                             "Parent",
-                                            0
+                                            0,
+                                            "asdf"
                                     )
                             );
                         }
@@ -197,7 +213,8 @@ public class ConnectedPeopleFragment extends Fragment {
                                             null,
                                             null,
                                             "Parent",
-                                            0
+                                            0,
+                                            "asdf"
                                     )
                             );
                         }
@@ -205,6 +222,7 @@ public class ConnectedPeopleFragment extends Fragment {
                             String fromUid = connection.getFromUid();
                             String toUid = connection.getToUid();
                             String type = connection.getType();
+                            String timestamp = connection.getTimestamp();
                             ConnectionDetail connectionDetail = new ConnectionDetail();
                             boolean isFromDataRead = false;
                             boolean isToDataRead = false;
@@ -228,6 +246,7 @@ public class ConnectedPeopleFragment extends Fragment {
                                 }
                                 if (isFromDataRead && isToDataRead) {
                                     connectionDetail.setType(type);
+                                    connectionDetail.setTimestamp(timestamp);
                                     mConnectionDetailList.add(connectionDetail);
                                     break;
                                 }
@@ -244,11 +263,6 @@ public class ConnectedPeopleFragment extends Fragment {
                                 @Override
                                 public int compare(
                                         ConnectionDetail detailOne, ConnectionDetail detailTwo) {
-                                    // currentuseruid
-                                    // 1 from 2 from
-                                    // 1 from 2 to
-                                    // 1 to 2 from
-                                    // 1 to 2 to
                                     if (detailOne.getFromUid().equals(mCurrentUserUid)
                                             && detailTwo.getFromUid().equals(mCurrentUserUid)) {
                                         return detailOne

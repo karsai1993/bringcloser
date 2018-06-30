@@ -131,6 +131,8 @@
         the following request!</string>
     <string name="dialog_request_from_delete_title">You\'re about to reject
         the following request!</string>
+    <string name="dialog_connection_delete_title">You\'re about to delete
+        the following connection!</string>
 
     <string name="congrats_on_accepted_request_start">Congrats! Your new connection is</string>
     <string name="request_is_sent">Your request has been sent to</string>
@@ -159,7 +161,9 @@
     <string name="number_received_rq_start">Demanded by\u0020</string>
     <string name="number_received_rq_end">\u0020of your close people</string-->
 
-    <string name="connection_activity_toolbar_title">You and</string>
+    <string name="connection_activity_toolbar_title">You and\u0020</string>
+    <string name="connection_activity_since">Connected since\u0020</string>
+    <string name="action_connection_delete">Delete connection</string>
 
     <string name="test_text">aaaaaa
         \naaaaaa

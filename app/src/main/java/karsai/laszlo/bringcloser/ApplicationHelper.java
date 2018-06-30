@@ -2,55 +2,28 @@ package karsai.laszlo.bringcloser;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.animation.OvershootInterpolator;
-import android.widget.Adapter;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import karsai.laszlo.bringcloser.activity.AddNewConnectionActivity;
-import karsai.laszlo.bringcloser.activity.MainActivity;
-import karsai.laszlo.bringcloser.adapter.ConnectedPeopleAdapter;
-import karsai.laszlo.bringcloser.adapter.ConnectionFragmentPagerAdapter;
-import karsai.laszlo.bringcloser.adapter.RequestFromUsersAdapter;
-import karsai.laszlo.bringcloser.adapter.RequestToUsersAdapter;
-import karsai.laszlo.bringcloser.model.Connection;
-import karsai.laszlo.bringcloser.model.User;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Laci on 28/05/2018.
@@ -79,18 +52,43 @@ public class ApplicationHelper {
     public static final String CONNECTION_TO_GENDER_IDENTIFIER = "toGender";
     public static final String CONNECTION_TO_PHOTO_URL_IDENTIFIER = "toPhotoUrl";
     public static final String CONNECTION_CONNECTED_IDENTIFIER = "connectionBit";
+    public static final String CONNECTION_TIMESTAMP_IDENTIFIER = "timestamp";
     public static final String INTENT_CHOSEN_USER_KEY = "chosen_user";
     public static final String TOKEN_STORAGE_KEY = "firebase_instance_id_key";
     public static final String TOKEN_NEW_STORAGE_KEY = "new_firebase_instance_id_key";
     public static final String NOTIFICATION_INTENT_ACTION_PAGE_REQUEST = "action_request";
     public static final String NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION = "action_connection";
+    public static final String NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION = "action_sent_rq";
     public static final String VIEW_IMAGE = "view_image";
     public static final String SAVE_RECYCLERVIEW_POS_KEY = "save_recyclerview_pos";
     public static final String EXTRA_X_COORD = "x_coord";
     public static final String EXTRA_Y_COORD = "y_coord";
+    public static final String DATE_PATTERN_FULL = "yyyyMMdd_HHmmss";
+    public static final String DATE_PATTERN_DISPLAY = "yyyy MMM dd";
+
     public static final int CONNECTION_BIT_POS = 1;
     public static final int CONNECTION_BIT_NEG = 0;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    public static String convertDateAndTimeToLocal(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN_FULL);
+        try {
+            Date date = sdf.parse(time);
+            SimpleDateFormat displayDateFormat
+                    = new SimpleDateFormat(DATE_PATTERN_DISPLAY, Locale.getDefault());
+            displayDateFormat.setTimeZone(TimeZone.getDefault());
+            return displayDateFormat.format(date);
+        } catch (ParseException e) {
+            return "";
+        }
+    }
+
+    public static String getCurrentUTCDateAndTime() {
+        final Date currentDate = new Date();
+        final SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN_FULL);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(currentDate);
+    }
 
     public static void showFoundResultsNumber(String title, int size, TextView textView) {
         textView.setText(
