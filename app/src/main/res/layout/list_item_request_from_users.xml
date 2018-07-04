@@ -41,12 +41,9 @@
             android:layout_margin="@dimen/small_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ll_requested_from_user_action"
             android:orientation="vertical"
-            android:background="@drawable/action_background"
             android:layout_gravity="center"
-            android:gravity="right|end"
-            android:visibility="gone">
+            android:gravity="right|end">
 
             <ImageView
                 android:layout_width="@dimen/icon_size"

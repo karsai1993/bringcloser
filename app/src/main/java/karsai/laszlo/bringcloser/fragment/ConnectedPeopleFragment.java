@@ -52,8 +52,6 @@ import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.AddNewConnectionActivity;
 import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.adapter.ConnectedPeopleAdapter;
-import karsai.laszlo.bringcloser.adapter.RequestToUsersAdapter;
-import karsai.laszlo.bringcloser.background.SearchConnectionAsyncTask;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
@@ -150,13 +148,6 @@ public class ConnectedPeopleFragment extends Fragment {
             }
         });
 
-        mFastScroller.addScrollerListener(new RecyclerViewScrollListener.ScrollerListener() {
-            @Override
-            public void onScroll(float relativePos) {
-
-            }
-        });
-
         mCurrentUserUid = mFirebaseUser.getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseRef = mFirebaseDatabase.getReference()
@@ -180,44 +171,6 @@ public class ConnectedPeopleFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         mConnectionDetailList = new ArrayList<>();
-                        for (int i = 0; i < 10; i++ ){
-                            mConnectionDetailList.add(
-                                    new ConnectionDetail(
-                                            mCurrentUserUid,
-                                            "b",
-                                            "Male",
-                                            null,
-                                            null,
-                                            "2",
-                                            "b",
-                                            "Male",
-                                            null,
-                                            null,
-                                            "Parent",
-                                            0,
-                                            "asdf"
-                                    )
-                            );
-                        }
-                        for (int i = 0; i < 10; i++ ){
-                            mConnectionDetailList.add(
-                                    new ConnectionDetail(
-                                            "1",
-                                            "a",
-                                            "Male",
-                                            null,
-                                            null,
-                                            mCurrentUserUid,
-                                            "d",
-                                            "Male",
-                                            null,
-                                            null,
-                                            "Parent",
-                                            0,
-                                            "asdf"
-                                    )
-                            );
-                        }
                         for (Connection connection : mConnectionList) {
                             String fromUid = connection.getFromUid();
                             String toUid = connection.getToUid();

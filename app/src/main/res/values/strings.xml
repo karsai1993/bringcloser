@@ -10,6 +10,11 @@
     <string name="request_to_people_fragment_title">Sent requests</string>
     <string name="request_from_people_fragment_title">Received requests</string>
 
+    <string name="connection_detail_chat_fragment_title">Chat</string>
+    <string name="connection_detail_wish_fragment_title">Wish</string>
+    <string name="connection_detail_event_fragment_title">Scheduled event</string>
+    <string name="connection_detail_thought_fragment_title">Private thought</string>
+
     <string name="welcome_start">Hi,</string>
 
     <string name="nav_received_items">Received Items</string>
@@ -133,6 +138,8 @@
         the following request!</string>
     <string name="dialog_connection_delete_title">You\'re about to delete
         the following connection!</string>
+    <string name="dialog_request_approve_title">You\'re about to approve
+        the following request!</string>
 
     <string name="congrats_on_accepted_request_start">Congrats! Your new connection is</string>
     <string name="request_is_sent">Your request has been sent to</string>
@@ -154,201 +161,13 @@
 
     <string name="already_got_request">You already have received a request from</string>
 
-    <!--string name="number_connections_start">Connected to\u0020</string>
-    <string name="number_connections_end">\u0020of your close people</string>
-    <string name="number_sent_rq_start">Waiting for\u0020</string>
-    <string name="number_sent_rq_end">\u0020of your close people</string>
-    <string name="number_received_rq_start">Demanded by\u0020</string>
-    <string name="number_received_rq_end">\u0020of your close people</string-->
-
     <string name="connection_activity_toolbar_title">You and\u0020</string>
+    <string name="connection_activity_toolbar_you">You</string>
     <string name="connection_activity_since">Connected since\u0020</string>
     <string name="action_connection_delete">Delete connection</string>
 
-    <string name="test_text">aaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \naaaaaa
-        \n</string>
+    <string name="chat_hint">Type your message&#8230;</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_application_id" translatable="false">621043098259578</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>
 </resources>

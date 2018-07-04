@@ -75,7 +75,8 @@ public class WelcomeActivity extends AppCompatActivity {
                                         .setIsSmartLockEnabled(true)
                                         .setAvailableProviders(Arrays.asList(
                                                 new AuthUI.IdpConfig.EmailBuilder().build(),
-                                                new AuthUI.IdpConfig.GoogleBuilder().build())
+                                                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                                new AuthUI.IdpConfig.FacebookBuilder().build())
                                         ).build(),
                                 RC_SIGN_IN);
                     }

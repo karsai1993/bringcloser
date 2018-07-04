@@ -2,6 +2,7 @@ package karsai.laszlo.bringcloser.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,16 +79,6 @@ public class RequestToUsersAdapter
                         false
                 ).toUpperCase(Locale.getDefault())
         );
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (holder.requestToUserWithdrawImageView.getVisibility() == View.VISIBLE) {
-                    holder.requestToUserWithdrawImageView.setVisibility(View.GONE);
-                } else {
-                    holder.requestToUserWithdrawImageView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         holder.requestToUserWithdrawImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

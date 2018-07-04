@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import karsai.laszlo.bringcloser.R;
@@ -40,8 +41,17 @@ public class DialogUtils {
         AlertDialog dialog = builder.create();
         dialog.getWindow().getAttributes().windowAnimations = animationStyle;
         dialog.show();
-        if (dialogView instanceof EditText) {
+        /*int dividerId = dialog.getContext().getResources().getIdentifier(
+                "android:id/titleDivider", null, null);
+        View divider = dialog.findViewById(dividerId);
+        divider.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+        int textViewId = dialog.getContext().getResources().getIdentifier(
+                "android:id/alertTitle", null, null);
+        TextView tv = (TextView) dialog.findViewById(textViewId);
+        tv.setTextColor(context.getResources().getColor(titleColor));
+        */if (dialogView instanceof EditText) {
             EditText dialogText = (EditText) dialogView;
+            dialogText.setHintTextColor(context.getResources().getColor(R.color.colorAccent));
             dialogText.setSelection(dialogText.getText().toString().length());
         }
     }

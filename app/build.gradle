@@ -42,5 +42,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:multidex:1.0.1'
     implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    implementation 'com.facebook.android:facebook-login:4.34.0'
 }
 apply plugin: 'com.google.gms.google-services'

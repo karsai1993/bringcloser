@@ -2,20 +2,27 @@ package karsai.laszlo.bringcloser.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +40,7 @@ import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ConnectionDetailFragmentPagerAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
+import karsai.laszlo.bringcloser.model.Message;
 import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
@@ -54,19 +62,41 @@ public class ConnectionActivity extends AppCompatActivity {
     @BindView(R.id.tv_connection_toolbar_title)
     TextView mToolbarTitleTextView;
     @BindView(R.id.tv_connection_toolbar_other_name)
-    TextView mToolbarExpandedTitleTextView;
-    @BindView(R.id.tv_connection_toolbar_relationship)
-    TextView mToolbarRelationshipTextView;
+    TextView mToolbarOtherNameTextView;
+    @BindView(R.id.tv_connection_toolbar_other_relationship)
+    TextView mToolbarOtherRelationshipTextView;
+    @BindView(R.id.iv_connection_toolbar_other_photo)
+    ImageView mToolbarOtherPhotoImageView;
+    @BindView(R.id.tv_connection_toolbar_current_relationship)
+    TextView mToolbarCurrentRelationshipTextView;
+    @BindView(R.id.iv_connection_toolbar_current_photo)
+    ImageView mToolbarCurrentPhotoImageView;
     @BindView(R.id.tv_connection_toolbar_since)
     TextView mToolbarSinceTextView;
-    @BindView(R.id.iv_connection_toolbar_other_photo)
-    ImageView mToolbarPhotoImageView;
+    /*mSearchFab = rootView.findViewById(R.id.fab_chat_search);
+        mCameraImageView = rootView.findViewById(R.id.iv_chat_add_photo_from_camera);
+        mGalleryImageView = rootView.findViewById(R.id.iv_chat_add_photo_from_gallery);
+        mSendImageView = rootView.findViewById(R.id.iv_chat_send);
+        mMessageEditText = rootView.findViewById(R.id.et_chat);*/
+    @BindView(R.id.fab_chat_search)
+    FloatingActionButton mSearchFab;
+    @BindView(R.id.iv_chat_add_photo_from_camera)
+    ImageView mCameraImageView;
+    @BindView(R.id.iv_chat_add_photo_from_gallery)
+    ImageView mGalleryImageView;
+    @BindView(R.id.iv_chat_send)
+    ImageView mSendImageView;
+    @BindView(R.id.et_chat)
+    EditText mMessageEditText;
+    @BindView(R.id.ll_chat_action_panel)
+    LinearLayout mChatControlPanelLinearLayout;
 
     private String mCurrentUserUid;
     private String mCurrentType;
     private String mOtherType;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersDatabaseRef;
+    private DatabaseReference mConnectionsDatabaseReference;
     private ValueEventListener mConnectionUsersValueEventListener;
     private ConnectionDetailFragmentPagerAdapter mPageAdapter;
     private ConnectionDetail mConnectionDetail;
@@ -126,11 +156,118 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         });
 
+        mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedData = getIntent();
         if (receivedData != null) {
             mConnectionDetail = receivedData.getParcelableExtra(ApplicationHelper.CONNECTION_KEY);
+            mPageAdapter = new ConnectionDetailFragmentPagerAdapter(
+                    getSupportFragmentManager(),
+                    this,
+                    mConnectionDetail
+            );
+            mViewPager.setAdapter(mPageAdapter);
+            mTabLayout.setupWithViewPager(mViewPager);
         }
-        mCurrentUserUid = FirebaseAuth.getInstance().getUid();
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mChatControlPanelLinearLayout.measure(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                mSearchFab.measure(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                int heightFab = mSearchFab.getMeasuredHeight();
+                int heightPanel = mChatControlPanelLinearLayout.getMeasuredHeight();
+                float compOffset = 1F - positionOffset;
+                if (position == 0) {
+                    mChatControlPanelLinearLayout.setVisibility(View.VISIBLE);
+                    mSearchFab.setVisibility(View.VISIBLE);
+                    mChatControlPanelLinearLayout.setAlpha(compOffset);
+                    mSearchFab.setAlpha(compOffset);
+                    mChatControlPanelLinearLayout.setTranslationY(heightPanel * positionOffset);
+                    mSearchFab.setTranslationY(heightFab * positionOffset);
+                } else {
+                    mChatControlPanelLinearLayout.setVisibility(View.GONE);
+                    mSearchFab.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        mMessageEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String message = editable.toString();
+                if (message.isEmpty()) mSendImageView.setVisibility(View.GONE);
+                else mSendImageView.setVisibility(View.VISIBLE);
+            }
+        });
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
+                .child(ApplicationHelper.CONNECTIONS_NODE);
+        mSendImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mConnectionsDatabaseReference
+                        .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                        .equalTo(mConnectionDetail.getFromUid())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
+                                    String key = connectionSnapshot.getKey();
+                                    if (dataSnapshot
+                                            .child(key)
+                                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                            .getValue(String.class)
+                                            .equals(mConnectionDetail.getToUid())) {
+                                        mConnectionsDatabaseReference
+                                                .child(key)
+                                                .child(ApplicationHelper.MESSAGES_NODE)
+                                                .push()
+                                                .setValue(
+                                                        new Message(
+                                                                mCurrentUserUid,
+                                                                mMessageEditText.getText().toString(),
+                                                                null,
+                                                                ApplicationHelper
+                                                                        .getCurrentUTCDateAndTime()
+                                                        )
+                                                );
+                                        mMessageEditText.setText("");
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+            }
+        });
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseRef = mFirebaseDatabase.getReference()
                 .child(ApplicationHelper.USERS_NODE);
@@ -176,26 +313,16 @@ public class ConnectionActivity extends AppCompatActivity {
 
             }
         };
-
-        mPageAdapter = new ConnectionDetailFragmentPagerAdapter(
-                getSupportFragmentManager(),
-                this
-        );
-        mViewPager.setAdapter(mPageAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private void populateToolbarData(ConnectionDetail connectionDetail) {
-        String title;
-        String photoUrl;
+        String currentPhotoUrl;
+        String otherPhotoUrl;
+        String otherName;
         if (connectionDetail.getFromUid().equals(mCurrentUserUid)) {
-            title = new StringBuilder()
-                    .append(
-                            getResources()
-                                    .getString(R.string.connection_activity_toolbar_title)
-                    ).append(connectionDetail.getToName().split(" ")[0])
-                    .toString();
-            photoUrl = connectionDetail.getToPhotoUrl();
+            otherName = connectionDetail.getToName().split(" ")[0];
+            currentPhotoUrl = connectionDetail.getFromPhotoUrl();
+            otherPhotoUrl = connectionDetail.getToPhotoUrl();
             mOtherType = ApplicationHelper.getPersonalizedRelationshipType(
                     this,
                     connectionDetail.getType(),
@@ -211,13 +338,9 @@ public class ConnectionActivity extends AppCompatActivity {
                     true
             ).toUpperCase(Locale.getDefault());
         } else {
-            title = new StringBuilder()
-                    .append(
-                            getResources()
-                                    .getString(R.string.connection_activity_toolbar_title)
-                    ).append(connectionDetail.getFromName().split(" ")[0])
-                    .toString();
-            photoUrl = connectionDetail.getFromPhotoUrl();
+            otherName = connectionDetail.getFromName().split(" ")[0];
+            currentPhotoUrl = connectionDetail.getToPhotoUrl();
+            otherPhotoUrl = connectionDetail.getFromPhotoUrl();
             mCurrentType = ApplicationHelper.getPersonalizedRelationshipType(
                     this,
                     connectionDetail.getType(),
@@ -233,15 +356,22 @@ public class ConnectionActivity extends AppCompatActivity {
                     true
             ).toUpperCase(Locale.getDefault());
         }
+        String title = new StringBuilder()
+                .append(
+                        getResources()
+                                .getString(R.string.connection_activity_toolbar_title)
+                ).append(otherName)
+                .toString();
+
         mToolbarTitleTextView.setText(title);
-        mToolbarExpandedTitleTextView.setText(title);
+        mToolbarOtherNameTextView.setText(otherName);
+        mToolbarOtherRelationshipTextView.setText(mOtherType);
+        ImageUtils.setUserPhoto(this, otherPhotoUrl, mToolbarOtherPhotoImageView);
+        mToolbarCurrentRelationshipTextView.setText(mCurrentType);
+        ImageUtils.setUserPhoto(this, currentPhotoUrl, mToolbarCurrentPhotoImageView);
         mToolbarSinceTextView.setText(
                 ApplicationHelper.convertDateAndTimeToLocal(connectionDetail.getTimestamp())
         );
-        mToolbarRelationshipTextView.setText(
-                new StringBuilder().append(mCurrentType).append(" - ").append(mOtherType).toString()
-        );
-        ImageUtils.setUserPhoto(this, photoUrl, mToolbarPhotoImageView);
     }
 
     @Override

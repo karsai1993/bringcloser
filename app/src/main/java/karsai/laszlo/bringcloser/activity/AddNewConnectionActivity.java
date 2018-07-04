@@ -144,19 +144,6 @@ public class AddNewConnectionActivity extends AppCompatActivity {
                                 mUserList.add(user);
                             }
                         }
-                        for (int i = 0; i < 100; i++ ){
-                            mUserList.add(
-                                    new User(
-                                            true,
-                                            String.valueOf(i+1),
-                                            null,
-                                            null,
-                                            "Male",
-                                            null,
-                                            String.valueOf(i)
-                                    )
-                            );
-                        }
                         Collections.sort(mUserList, new Comparator<User>() {
                             @Override
                             public int compare(User userOne, User userTwo) {

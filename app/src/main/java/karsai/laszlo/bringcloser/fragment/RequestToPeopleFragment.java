@@ -40,7 +40,6 @@ import karsai.laszlo.bringcloser.activity.AddNewConnectionActivity;
 import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.adapter.RequestFromUsersAdapter;
 import karsai.laszlo.bringcloser.adapter.RequestToUsersAdapter;
-import karsai.laszlo.bringcloser.background.SearchConnectionAsyncTask;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
@@ -129,25 +128,6 @@ public class RequestToPeopleFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         mRequestToConnectionDetailList = new ArrayList<>();
-                        for (int i = 0; i < 20; i++ ){
-                            mRequestToConnectionDetailList.add(
-                                    new ConnectionDetail(
-                                            "1",
-                                           "a",
-                                            "Male",
-                                            null,
-                                            null,
-                                            "2",
-                                            String.valueOf(i),
-                                            "Male",
-                                            null,
-                                            null,
-                                            "Parent",
-                                            0,
-                                            "asf"
-                                    )
-                            );
-                        }
                         for (Connection connection : mRequestToConnectionList) {
                             String fromUid = connection.getFromUid();
                             String toUid = connection.getToUid();

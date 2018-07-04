@@ -41,6 +41,7 @@ public class ApplicationHelper {
     public static final String CONNECTION_KEY = "connection";
     public static final String USERS_NODE = "users";
     public static final String CONNECTIONS_NODE = "connections";
+    public static final String MESSAGES_NODE = "messages";
     public static final String CONNECTION_FROM_UID_IDENTIFIER = "fromUid";
     public static final String CONNECTION_FROM_NAME_IDENTIFIER = "fromName";
     public static final String CONNECTION_FROM_BIRTHDAY_IDENTIFIER = "fromBirthday";
@@ -65,6 +66,7 @@ public class ApplicationHelper {
     public static final String EXTRA_Y_COORD = "y_coord";
     public static final String DATE_PATTERN_FULL = "yyyyMMdd_HHmmss";
     public static final String DATE_PATTERN_DISPLAY = "yyyy MMM dd";
+    public static final String CONNECTION_DETAIL_KEY = "connection_detail";
 
     public static final int CONNECTION_BIT_POS = 1;
     public static final int CONNECTION_BIT_NEG = 0;

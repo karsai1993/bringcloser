@@ -2,8 +2,10 @@ package karsai.laszlo.bringcloser.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -45,10 +48,12 @@ public class RequestFromUsersAdapter
     private List<ConnectionDetail> mConnectionDetailList;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mConnectionsDatabaseReference;
+    private List<Integer> mSelectedPosList;
 
     public RequestFromUsersAdapter(Context context, List<ConnectionDetail> connectionDetailList) {
         this.mContext = context;
         this.mConnectionDetailList = connectionDetailList;
+        this.mSelectedPosList = new ArrayList<>();
     }
 
     public RequestFromUsersAdapter() {}
@@ -63,7 +68,7 @@ public class RequestFromUsersAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RequestToUsersViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RequestToUsersViewHolder holder, final int position) {
         final ConnectionDetail connectionDetail = mConnectionDetailList.get(position);
         ImageUtils.setUserPhoto(
                 mContext,
@@ -80,16 +85,6 @@ public class RequestFromUsersAdapter
                         true
                 ).toUpperCase(Locale.getDefault())
         );
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (holder.requestFromUserActionLinearLayout.getVisibility() == View.VISIBLE) {
-                    holder.requestFromUserActionLinearLayout.setVisibility(View.GONE);
-                } else {
-                    holder.requestFromUserActionLinearLayout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         holder.requestFromUserWithdrawImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,13 +122,42 @@ public class RequestFromUsersAdapter
         holder.requestFromUserApproveImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFirebaseDatabase = FirebaseDatabase.getInstance();
-                mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                        .child(ApplicationHelper.CONNECTIONS_NODE);
-                mConnectionsDatabaseReference
-                        .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
-                        .equalTo(connectionDetail.getFromUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        applyDeletion(connectionDetail);
+                    }
+                };
+                Context context = view.getContext();
+                TextView rejectRequest = new TextView(context);
+                rejectRequest.setText(
+                        new StringBuilder()
+                                .append("\n")
+                                .append(connectionDetail.getFromName())
+                                .append("\n")
+                                .append(holder.requestFromUserTypeTextView.getText().toString())
+                                .toString()
+                );
+                rejectRequest.setGravity(Gravity.CENTER);
+                DialogUtils.onDialogRequest(
+                        context,
+                        context.getResources().getString(R.string.dialog_request_approve_title),
+                        rejectRequest,
+                        onClickListener,
+                        R.style.DialogUpDownTheme
+                );
+            }
+        });
+    }
+
+    private void applyDeletion(final ConnectionDetail connectionDetail) {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
+                .child(ApplicationHelper.CONNECTIONS_NODE);
+        mConnectionsDatabaseReference
+                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .equalTo(connectionDetail.getFromUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
@@ -170,8 +194,6 @@ public class RequestFromUsersAdapter
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
-            }
-        });
     }
 
     @Override
@@ -193,7 +215,6 @@ public class RequestFromUsersAdapter
         TextView requestFromUserTypeTextView;
         ImageView requestFromUserWithdrawImageView;
         ImageView requestFromUserApproveImageView;
-        LinearLayout requestFromUserActionLinearLayout;
 
         public RequestToUsersViewHolder(View itemView) {
             super(itemView);
@@ -204,8 +225,6 @@ public class RequestFromUsersAdapter
                     = itemView.findViewById(R.id.iv_requested_from_user_delete);
             requestFromUserApproveImageView
                     = itemView.findViewById(R.id.iv_requested_from_user_approve);
-            requestFromUserActionLinearLayout
-                    = itemView.findViewById(R.id.ll_requested_from_user_action);
         }
     }
 }

@@ -43,9 +43,7 @@
             android:layout_height="@dimen/icon_size"
             android:src="@drawable/baseline_delete_black_48"
             android:id="@+id/iv_requested_to_user_delete"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:background="@drawable/action_background"/>
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 
