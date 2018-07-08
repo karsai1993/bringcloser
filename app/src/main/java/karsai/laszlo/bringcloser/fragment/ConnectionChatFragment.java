@@ -61,7 +61,7 @@ public class ConnectionChatFragment extends Fragment {
     private ValueEventListener mConnectionMessagesValueEventListener;
     private List<MessageDetail> mMessageDetailList;
     private List<Message> mMessageList;
-    private FloatingActionButton mActivitySearchFab;
+    //private FloatingActionButton mActivitySearchFab;
     private MessageAdapter mMessageAdapter;
     private RecyclerView.OnScrollListener mOnScrollListener;
     private TextView mChatNoDataTextView;
@@ -81,18 +81,18 @@ public class ConnectionChatFragment extends Fragment {
         mChatRecyclerView.setHasFixedSize(true);
         Activity activity = getActivity();
         if (activity != null) {
-            mActivitySearchFab = activity.findViewById(R.id.fab_chat_search);
+            //mActivitySearchFab = activity.findViewById(R.id.fab_chat_search);
         }
         mOnScrollListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (mActivitySearchFab == null) return;
+                /*if (mActivitySearchFab == null) return;
                 if (dy > 0 && mActivitySearchFab.getVisibility() == View.VISIBLE) {
                     mActivitySearchFab.setVisibility(View.INVISIBLE);
                 } else if (dy < 0 && mActivitySearchFab.getVisibility() != View.VISIBLE) {
                     mActivitySearchFab.setVisibility(View.VISIBLE);
-                }
+                }*/
             }
         };
 
@@ -214,7 +214,7 @@ public class ConnectionChatFragment extends Fragment {
 
             }
         };
-        if (mActivitySearchFab != null) {
+        /*if (mActivitySearchFab != null) {
             mActivitySearchFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -230,7 +230,7 @@ public class ConnectionChatFragment extends Fragment {
                    }
                 }
             });
-        }
+        }*/
         mProgressBar.setVisibility(View.VISIBLE);
         mChatRecyclerView.setVisibility(View.GONE);
         return rootView;
@@ -253,7 +253,7 @@ public class ConnectionChatFragment extends Fragment {
                 ChatDetail currDate = new ChatDetail(currDateAsText);
                 chatDetailList.add(currDate);
             }
-            ChatDetail currMessage = new ChatDetail(messageDetail, currTimeAsText);
+            ChatDetail currMessage = new ChatDetail(messageDetail, currDateAndTimeLocale);
             chatDetailList.add(currMessage);
         }
         return chatDetailList;

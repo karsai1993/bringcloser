@@ -274,7 +274,7 @@
 
         </android.support.v4.widget.NestedScrollView-->
 
-        <android.support.design.widget.FloatingActionButton
+        <!--android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_chat_search"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
@@ -288,7 +288,7 @@
             app:srcCompat="@drawable/baseline_search_black_48"
             app:borderWidth="0dp"
             app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_press_translation_z"/>
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"/-->
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -311,15 +311,24 @@
             android:background="@android:color/white">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/chat_control_panel_icon_size"
+                android:layout_height="@dimen/chat_control_panel_icon_size"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_search_black_48"
+                android:id="@+id/iv_chat_search"/>
+
+            <ImageView
+                android:layout_width="@dimen/chat_control_panel_icon_size"
+                android:layout_height="@dimen/chat_control_panel_icon_size"
+                android:layout_gravity="center"
                 android:src="@drawable/baseline_photo_camera_black_48"
                 android:id="@+id/iv_chat_add_photo_from_camera"/>
 
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/chat_control_panel_icon_size"
+                android:layout_height="@dimen/chat_control_panel_icon_size"
+                android:layout_gravity="center"
                 android:src="@drawable/baseline_photo_black_48"
                 android:id="@+id/iv_chat_add_photo_from_gallery"/>
 
@@ -332,8 +341,9 @@
                 android:layout_weight="1"/>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/chat_control_panel_icon_size"
+                android:layout_height="@dimen/chat_control_panel_icon_size"
+                android:layout_gravity="center"
                 android:src="@drawable/baseline_send_black_48"
                 android:id="@+id/iv_chat_send"
                 android:visibility="gone"/>

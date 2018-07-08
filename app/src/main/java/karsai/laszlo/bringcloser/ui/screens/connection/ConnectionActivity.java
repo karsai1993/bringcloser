@@ -83,9 +83,9 @@ public class ConnectionActivity extends AppCompatActivity {
         mGalleryImageView = rootView.findViewById(R.id.iv_chat_add_photo_from_gallery);
         mSendImageView = rootView.findViewById(R.id.iv_chat_send);
         mMessageEditText = rootView.findViewById(R.id.et_chat);*/
-    @BindView(R.id.fab_chat_search)
+    /*@BindView(R.id.fab_chat_search)
     FloatingActionButton mSearchFab;
-    @BindView(R.id.iv_chat_add_photo_from_camera)
+    */@BindView(R.id.iv_chat_add_photo_from_camera)
     ImageView mCameraImageView;
     @BindView(R.id.iv_chat_add_photo_from_gallery)
     ImageView mGalleryImageView;
@@ -204,23 +204,23 @@ public class ConnectionActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                mSearchFab.measure(
+                /*mSearchFab.measure(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                int heightFab = mSearchFab.getMeasuredHeight();
+                );*/
+                //int heightFab = mSearchFab.getMeasuredHeight();
                 int heightPanel = mChatControlPanelLinearLayout.getMeasuredHeight();
                 float compOffset = 1F - positionOffset;
                 if (position == 0) {
                     mChatControlPanelLinearLayout.setVisibility(View.VISIBLE);
-                    mSearchFab.setVisibility(View.VISIBLE);
+                    //mSearchFab.setVisibility(View.VISIBLE);
                     mChatControlPanelLinearLayout.setAlpha(compOffset);
-                    mSearchFab.setAlpha(compOffset);
+                    //mSearchFab.setAlpha(compOffset);
                     mChatControlPanelLinearLayout.setTranslationY(heightPanel * positionOffset);
-                    mSearchFab.setTranslationY(heightFab * positionOffset);
+                    //mSearchFab.setTranslationY(heightFab * positionOffset);
                 } else {
                     mChatControlPanelLinearLayout.setVisibility(View.GONE);
-                    mSearchFab.setVisibility(View.GONE);
+                    //mSearchFab.setVisibility(View.GONE);
                 }
             }
 
@@ -308,6 +308,14 @@ public class ConnectionActivity extends AppCompatActivity {
         };
     }
 
+    private void applySearchHandler() {
+        if (mChatControlPanelLinearLayout.getVisibility() == View.VISIBLE) {
+            mChatControlPanelLinearLayout.setVisibility(View.GONE);
+        } else {
+            mChatControlPanelLinearLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void createNewMessageObject(final String text, final String photoUrl) {
         mConnectionsDatabaseReference
                 .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
@@ -353,7 +361,11 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mMessageImagesRef = mMessageImagesRef.child(ApplicationHelper.getCurrentUTCDateAndTime(ApplicationHelper.DATE_PATTERN_FULL_STORAGE));
+        mMessageImagesRef = mMessageImagesRef.child(
+                ApplicationHelper.getCurrentUTCDateAndTime(
+                        ApplicationHelper.DATE_PATTERN_FULL_STORAGE
+                )
+        );
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

@@ -43,6 +43,7 @@
     <string name="dialog_settings_name">Type the desired name</string>
     <string name="dialog_settings_positive_btn">OK</string>
     <string name="dialog_settings_negative_btn">CANCEL</string>
+    <string name="dialog_settings_back_btn">BACK</string>
     <string name="settings_change_btn">CHANGE</string>
     <string name="settings_verification_btn">VERIFY</string>
     <string name="settings_verification_positive">Verified</string>
@@ -172,6 +173,11 @@
     <string name="chat_no_data_message">There is no sent message in which you could search!</string>
 
     <string name="data_not_available">Data not available</string>
+    <string name="saved_to_clipboard_1">\"</string>
+    <string name="saved_to_clipboard_12">&#8230;</string>
+    <string name="saved_to_clipboard_2">\" has been saved to clipboard!</string>
+
+    <string name="share_title">Sharing your image&#8230;</string>
 
     <string name="facebook_application_id" translatable="false">621043098259578</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>

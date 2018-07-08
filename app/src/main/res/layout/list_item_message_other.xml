@@ -15,18 +15,33 @@
         android:src="@drawable/baseline_face_black_48"
         android:id="@+id/iv_chat_from_other_photo"/>
 
-    <TextView
-        style="@style/AppTheme"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_chat_from_other_text"
+        android:orientation="vertical"
+        android:visibility="gone"
         android:layout_marginStart="@dimen/small_distance"
         android:layout_marginLeft="@dimen/small_distance"
-        android:background="@drawable/message_from_other_background"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="asfg"/>
+        android:id="@+id/ll_chat_from_other_text"
+        android:background="@drawable/message_from_other_background">
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_chat_from_other_text"
+            android:text="hopppdfgasfgawee"/>
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_chat_from_other_time"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/time_text_size"
+            android:text="21:32"/>
+
+    </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"

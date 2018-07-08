@@ -51,4 +51,26 @@ public class DialogUtils {
             dialogText.setSelection(dialogText.getText().toString().length());
         }
     }
+
+    public static void onDialogRequestForImage(
+            Context context,
+            View dialogView,
+            int animationStyle) {
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(context);
+        //builder.setTitle(title);
+        builder.setView(dialogView);
+        //builder.setPositiveButton(R.string.dialog_settings_positive_btn, onClickListener);
+        builder.setNegativeButton(
+                R.string.dialog_settings_back_btn,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().getAttributes().windowAnimations = animationStyle;
+        dialog.show();
+    }
 }
