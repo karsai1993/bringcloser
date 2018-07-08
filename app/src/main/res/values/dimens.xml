@@ -24,8 +24,10 @@
     <dimen name="fab_size">56dp</dimen>
     <dimen name="fragment_rv_margin">88dp</dimen>
     <dimen name="action_padding">3dp</dimen>
+    <dimen name="action_padding_date">10dp</dimen>
     <dimen name="action_corner">6dp</dimen>
     <dimen name="chat_ctrl_panel_height">60dp</dimen>
     <dimen name="fab_bottom_margin_chat_ctrl_panel_height">76dp</dimen>
-    <dimen name="chat_first_message_top_padding">12dp</dimen>
+    <dimen name="chat_first_message_top_padding">4dp</dimen>
+    <dimen name="chat_sent_image_size">150dp</dimen>
 </resources>

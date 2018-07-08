@@ -1,7 +1,5 @@
 package karsai.laszlo.bringcloser.service;
 
-import android.widget.Toast;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -9,7 +7,6 @@ import java.util.Map;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.utils.NotificationUtils;
 
 /**

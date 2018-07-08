@@ -22,4 +22,16 @@
         android:id="@+id/pb_chat"
         android:visibility="gone"/>
 
+    <TextView
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_chat_no_data"
+        android:layout_gravity="top"
+        android:gravity="center_horizontal"
+        android:textStyle="bold|italic"
+        android:textSize="@dimen/header_text_size"
+        android:text="@string/chat_no_data"
+        android:visibility="gone"/>
+
 </FrameLayout>

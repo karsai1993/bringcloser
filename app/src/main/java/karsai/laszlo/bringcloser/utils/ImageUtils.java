@@ -77,14 +77,13 @@ public class ImageUtils {
         }
     }
 
-    /*public static void setUserPhotoWithTransition(final Context context, String photoUrl, ImageView imageView) {
+    public static void displayMessagePhoto(final Context context, String photoUrl, ImageView imageView) {
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.ic_icons8_load_96_1);
         requestOptions.error(R.drawable.baseline_error_outline_black_48);
         requestOptions.fitCenter();
-        requestOptions.circleCrop();
         if (photoUrl != null && !photoUrl.isEmpty()) {
-            GlideApp.with(context)
+            Glide.with(context)
                     .load(photoUrl)
                     .apply(requestOptions)
                     .into(imageView);
@@ -94,7 +93,7 @@ public class ImageUtils {
                     .apply(requestOptions)
                     .into(imageView);
         }
-    }*/
+    }
 
     public static void onClickFromFile(Context context) {
         sRequestPermissionSource = FROM_FILE_ID;

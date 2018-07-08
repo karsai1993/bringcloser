@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
-    tools:context="karsai.laszlo.bringcloser.activity.MainActivity">
+    tools:context="karsai.laszlo.bringcloser.ui.screens.main.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

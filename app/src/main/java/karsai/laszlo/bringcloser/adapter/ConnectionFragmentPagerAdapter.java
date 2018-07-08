@@ -1,30 +1,15 @@
 package karsai.laszlo.bringcloser.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.fragment.ConnectedPeopleFragment;
 import karsai.laszlo.bringcloser.fragment.RequestFromPeopleFragment;
 import karsai.laszlo.bringcloser.fragment.RequestToPeopleFragment;
-import karsai.laszlo.bringcloser.model.Connection;
-import karsai.laszlo.bringcloser.model.ConnectionDetail;
 
 /**
  * Created by Laci on 28/05/2018.

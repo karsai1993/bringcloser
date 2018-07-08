@@ -67,6 +67,7 @@ public class ApplicationHelper {
     public static final String DATE_PATTERN_FULL = "yyyyMMdd_HHmmss";
     public static final String DATE_PATTERN_DISPLAY = "yyyy MMM dd";
     public static final String CONNECTION_DETAIL_KEY = "connection_detail";
+    public static final String STORAGE_MESSAGE_IMAGES_FOLDER = "message_images";
 
     public static final int CONNECTION_BIT_POS = 1;
     public static final int CONNECTION_BIT_NEG = 0;

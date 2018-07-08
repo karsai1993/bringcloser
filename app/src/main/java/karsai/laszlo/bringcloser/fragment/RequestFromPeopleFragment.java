@@ -2,14 +2,12 @@ package karsai.laszlo.bringcloser.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,10 +28,7 @@ import java.util.Locale;
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.CustomFastScroller;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.activity.MainActivity;
-import karsai.laszlo.bringcloser.adapter.ConnectedPeopleAdapter;
 import karsai.laszlo.bringcloser.adapter.RequestFromUsersAdapter;
-import karsai.laszlo.bringcloser.adapter.RequestToUsersAdapter;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;

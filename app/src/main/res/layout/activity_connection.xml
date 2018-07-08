@@ -11,7 +11,7 @@
         android:id="@+id/connection_root_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="karsai.laszlo.bringcloser.activity.ConnectionActivity"
+        tools:context="karsai.laszlo.bringcloser.ui.screens.connection.ConnectionActivity"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
@@ -230,7 +230,7 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="karsai.laszlo.bringcloser.activity.ConnectionActivity">
+                tools:contekarsai.laszlo.bringcloser.ui.screens.connection.ConnectionActivityvity">
 
                 <LinearLayout
                     android:id="@+id/ll_connection_details"
@@ -320,7 +320,7 @@
 
         <EditText
             style="@style/AppTheme"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/et_chat"
             android:hint="@string/chat_hint"

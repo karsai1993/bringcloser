@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/small_distance"
+    android:orientation="horizontal"
+    android:id="@+id/ll_chat_from_other">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/baseline_face_black_48"
+        android:id="@+id/iv_chat_from_other_photo"/>
+
+    <TextView
+        style="@style/AppTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_chat_from_other_text"
+        android:layout_marginStart="@dimen/small_distance"
+        android:layout_marginLeft="@dimen/small_distance"
+        android:background="@drawable/message_from_other_background"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="asfg"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/chat_sent_image_size"
+        android:layout_marginStart="@dimen/small_distance"
+        android:layout_marginLeft="@dimen/small_distance"
+        android:layout_gravity="center"
+        android:src="@drawable/baseline_face_black_48"
+        android:id="@+id/iv_chat_from_other_sent_photo"/>
+
+</LinearLayout>

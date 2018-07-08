@@ -3,14 +3,10 @@ package karsai.laszlo.bringcloser.utils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.activity.SettingsActivity;
 
 /**
  * Created by Laci on 06/06/2018.

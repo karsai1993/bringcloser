@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="karsai.laszlo.bringcloser.activity.SettingsActivity"
+    tools:context="karsai.laszlo.bringcloser.ui.screens.settings.SettingsActivity"
     android:animateLayoutChanges="true">
 
     <LinearLayout
