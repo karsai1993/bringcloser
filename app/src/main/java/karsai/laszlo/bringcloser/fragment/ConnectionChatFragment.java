@@ -3,29 +3,21 @@ package karsai.laszlo.bringcloser.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,8 +36,6 @@ import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Message;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 import karsai.laszlo.bringcloser.model.User;
-import karsai.laszlo.bringcloser.ui.screens.settings.SettingsActivity;
-import karsai.laszlo.bringcloser.utils.ImageUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -250,14 +240,20 @@ public class ConnectionChatFragment extends Fragment {
         List<ChatDetail> chatDetailList = new ArrayList<>();
         List<String> dateList = new ArrayList<>();
         for (MessageDetail messageDetail : messageDetailList) {
-            String currDateAsText = ApplicationHelper
-                    .convertDateAndTimeToLocal(messageDetail.getTimestamp());
+            String currDateAndTime = messageDetail.getTimestamp();
+            String currDateAndTimeLocale = ApplicationHelper.getLocalDateAndTime(
+                    getContext(),
+                    currDateAndTime
+            );
+            String [] parts = currDateAndTimeLocale.split(ApplicationHelper.DATE_SPLITTER);
+            String currDateAsText = parts[0];
+            String currTimeAsText = parts[1];
             if (!dateList.contains(currDateAsText)) {
                 dateList.add(currDateAsText);
                 ChatDetail currDate = new ChatDetail(currDateAsText);
                 chatDetailList.add(currDate);
             }
-            ChatDetail currMessage = new ChatDetail(messageDetail);
+            ChatDetail currMessage = new ChatDetail(messageDetail, currTimeAsText);
             chatDetailList.add(currMessage);
         }
         return chatDetailList;

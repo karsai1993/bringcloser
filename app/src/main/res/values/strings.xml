@@ -171,6 +171,8 @@
     <string name="chat_no_data">No chat between you! Get deep in it!</string>
     <string name="chat_no_data_message">There is no sent message in which you could search!</string>
 
+    <string name="data_not_available">Data not available</string>
+
     <string name="facebook_application_id" translatable="false">621043098259578</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>
 </resources>

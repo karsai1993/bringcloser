@@ -47,7 +47,6 @@ import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Message;
 import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.ui.screens.main.MainActivity;
-import karsai.laszlo.bringcloser.ui.screens.settings.SettingsActivity;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
 
@@ -333,7 +332,10 @@ public class ConnectionActivity extends AppCompatActivity {
                                                         text,
                                                         photoUrl,
                                                         ApplicationHelper
-                                                                .getCurrentUTCDateAndTime()
+                                                                .getCurrentUTCDateAndTime(
+                                                                        ApplicationHelper
+                                                                                .DATE_PATTERN_FULL
+                                                                )
                                                 )
                                         );
                                 mMessageEditText.setText("");
@@ -351,6 +353,7 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mMessageImagesRef = mMessageImagesRef.child(ApplicationHelper.getCurrentUTCDateAndTime(ApplicationHelper.DATE_PATTERN_FULL_STORAGE));
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -429,9 +432,12 @@ public class ConnectionActivity extends AppCompatActivity {
         ImageUtils.setUserPhoto(this, otherPhotoUrl, mToolbarOtherPhotoImageView);
         mToolbarCurrentRelationshipTextView.setText(mCurrentType);
         ImageUtils.setUserPhoto(this, currentPhotoUrl, mToolbarCurrentPhotoImageView);
-        mToolbarSinceTextView.setText(
-                ApplicationHelper.convertDateAndTimeToLocal(connectionDetail.getTimestamp())
+        String currDateAndTimeLocal = ApplicationHelper.getLocalDateAndTime(
+                this,
+                connectionDetail.getTimestamp()
         );
+        String [] parts = currDateAndTimeLocal.split(ApplicationHelper.DATE_SPLITTER);
+        mToolbarSinceTextView.setText(parts[0]);
     }
 
     @Override

@@ -5,24 +5,52 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/small_distance"
     android:orientation="horizontal"
-    android:gravity="right|end"
+    android:gravity="end"
     android:id="@+id/ll_chat_from_current">
 
-    <TextView
-        style="@style/AppTheme"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_chat_from_current_text"
-        android:background="@drawable/message_from_current_background"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="hopppdfgasfgawee"/>
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/ll_chat_from_current_text"
+        android:background="@drawable/message_from_current_background">
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_chat_from_current_text"
+            android:layout_gravity="end"
+            android:text="hopppdfgasfgawee"/>
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_chat_from_current__time"
+            android:textColor="@android:color/white"
+            android:layout_gravity="end"
+            android:textSize="@dimen/time_text_size"
+            android:text="21:32"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:id="@+id/v_chat_from_current_placeholder"/>
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="@dimen/chat_sent_image_size"
-        android:layout_gravity="center"
         android:src="@drawable/baseline_face_black_48"
+        android:scaleType="centerInside"
+        android:layout_gravity="center"
+        android:visibility="visible"
         android:id="@+id/iv_chat_from_current_sent_photo"/>
 
 </LinearLayout>

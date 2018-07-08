@@ -87,8 +87,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         String sentPhotoUrl = "";
         String fromPhotoUrl = "";
         String date = "";
+        String time = "";
         if (messageDetail != null) {
             sentText = messageDetail.getText();
+            time = chatDetail.getTime();
             sentPhotoUrl = messageDetail.getPhotoUrl();
             fromPhotoUrl = messageDetail.getFromPhotoUrl();
         } else {
@@ -105,8 +107,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     messageOtherViewHolder.mChatFromOtherTextView.setVisibility(View.VISIBLE);
                     messageOtherViewHolder.mChatFromOtherTextView.setText(sentText);
                     messageOtherViewHolder.mChatFromOtherSentImageView.setVisibility(View.GONE);
+                    messageOtherViewHolder.mView.setVisibility(View.GONE);
                 } else {
                     messageOtherViewHolder.mChatFromOtherTextView.setVisibility(View.GONE);
+                    messageOtherViewHolder.mView.setVisibility(View.VISIBLE);
                     messageOtherViewHolder.mChatFromOtherSentImageView.setVisibility(View.VISIBLE);
                     ImageUtils.displayMessagePhoto(
                             mContext,
@@ -117,11 +121,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case MESSAGE_CURRENT_VIEW_TYPE:
                 MessageCurrentViewHolder messageCurrentViewHolder = (MessageCurrentViewHolder) holder;
                 if (sentText != null && !sentText.isEmpty()) {
-                    messageCurrentViewHolder.mChatFromCurrentTextView.setVisibility(View.VISIBLE);
+                    messageCurrentViewHolder.mChatFromCurrentTextLinearLayout.setVisibility(View.VISIBLE);
                     messageCurrentViewHolder.mChatFromCurrentTextView.setText(sentText);
+                    messageCurrentViewHolder.mChatFromCurrentTimeTextView.setText(time);
                     messageCurrentViewHolder.mChatFromCurrentSentImageView.setVisibility(View.GONE);
+                    messageCurrentViewHolder.mView.setVisibility(View.GONE);
                 } else {
-                    messageCurrentViewHolder.mChatFromCurrentTextView.setVisibility(View.GONE);
+                    messageCurrentViewHolder.mChatFromCurrentTextLinearLayout.setVisibility(View.GONE);
+                    messageCurrentViewHolder.mView.setVisibility(View.VISIBLE);
                     messageCurrentViewHolder.mChatFromCurrentSentImageView.setVisibility(View.VISIBLE);
                     ImageUtils.displayMessagePhoto(
                             mContext,
@@ -143,32 +150,36 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     class MessageCurrentViewHolder extends RecyclerView.ViewHolder{
 
-        LinearLayout mChatFromCurrentLinearLayout;
         TextView mChatFromCurrentTextView;
+        TextView mChatFromCurrentTimeTextView;
         ImageView mChatFromCurrentSentImageView;
+        View mView;
+        LinearLayout mChatFromCurrentTextLinearLayout;
 
         public MessageCurrentViewHolder(View itemView) {
             super(itemView);
-            mChatFromCurrentLinearLayout = itemView.findViewById(R.id.ll_chat_from_current);
             mChatFromCurrentTextView = itemView.findViewById(R.id.tv_chat_from_current_text);
             mChatFromCurrentSentImageView
                     = itemView.findViewById(R.id.iv_chat_from_current_sent_photo);
+            mView = itemView.findViewById(R.id.v_chat_from_current_placeholder);
+            mChatFromCurrentTextLinearLayout = itemView.findViewById(R.id.ll_chat_from_current_text);
+            mChatFromCurrentTimeTextView = itemView.findViewById(R.id.tv_chat_from_current__time);
         }
     }
 
     class MessageOtherViewHolder extends RecyclerView.ViewHolder{
 
-        LinearLayout mChatFromOtherLinearLayout;
         ImageView mChatFromOtherImageView;
         TextView mChatFromOtherTextView;
         ImageView mChatFromOtherSentImageView;
+        View mView;
 
         public MessageOtherViewHolder(View itemView) {
             super(itemView);
-            mChatFromOtherLinearLayout = itemView.findViewById(R.id.ll_chat_from_other);
             mChatFromOtherImageView = itemView.findViewById(R.id.iv_chat_from_other_photo);
             mChatFromOtherTextView = itemView.findViewById(R.id.tv_chat_from_other_text);
             mChatFromOtherSentImageView = itemView.findViewById(R.id.iv_chat_from_other_sent_photo);
+            mView = itemView.findViewById(R.id.v_chat_from_other_placeholder);
         }
     }
 

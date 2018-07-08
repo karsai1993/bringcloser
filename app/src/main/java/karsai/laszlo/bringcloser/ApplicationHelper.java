@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.text.format.Time;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,13 +19,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import karsai.laszlo.bringcloser.model.Connection;
 
 /**
  * Created by Laci on 28/05/2018.
@@ -64,8 +73,9 @@ public class ApplicationHelper {
     public static final String SAVE_RECYCLERVIEW_POS_KEY = "save_recyclerview_pos";
     public static final String EXTRA_X_COORD = "x_coord";
     public static final String EXTRA_Y_COORD = "y_coord";
-    public static final String DATE_PATTERN_FULL = "yyyyMMdd_HHmmss";
-    public static final String DATE_PATTERN_DISPLAY = "yyyy MMM dd";
+    public static final String DATE_PATTERN_FULL = "yyyy MMM dd_HH:mm";
+    public static final String DATE_PATTERN_FULL_STORAGE = "yyyyMMddHHmmss";
+    public static final String DATE_SPLITTER = "_";
     public static final String CONNECTION_DETAIL_KEY = "connection_detail";
     public static final String STORAGE_MESSAGE_IMAGES_FOLDER = "message_images";
 
@@ -73,23 +83,49 @@ public class ApplicationHelper {
     public static final int CONNECTION_BIT_NEG = 0;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    public static String convertDateAndTimeToLocal(String time) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN_FULL);
-        try {
-            Date date = sdf.parse(time);
-            SimpleDateFormat displayDateFormat
-                    = new SimpleDateFormat(DATE_PATTERN_DISPLAY, Locale.getDefault());
-            displayDateFormat.setTimeZone(TimeZone.getDefault());
-            return displayDateFormat.format(date);
-        } catch (ParseException e) {
-            return "";
+    public static String getLocalDateAndTime(Context context, String dateAndTime) {
+        Locale[] locales = Locale.getAvailableLocales();
+        String result = convertDateAndTimeToLocal(dateAndTime, Locale.getDefault());
+        if (!result.isEmpty()) {
+            return result;
+        } else {
+            for (Locale locale : locales) {
+                result = convertDateAndTimeToLocal(dateAndTime, locale);
+                if (!result.isEmpty()) {
+                    return result;
+                }
+            }
+            return context.getResources().getString(R.string.data_not_available);
         }
     }
 
-    public static String getCurrentUTCDateAndTime() {
-        final Date currentDate = new Date();
-        final SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN_FULL);
+    public static String convertDateAndTimeToLocal(
+            String dateAndTime,
+            Locale locale) {
+        SimpleDateFormat df = new SimpleDateFormat(DATE_PATTERN_FULL, locale);
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date;
+        try {
+            date = df.parse(dateAndTime);
+        } catch (ParseException e) {
+            return "";
+        }
+        df.setTimeZone(TimeZone.getDefault());
+        String result = df.format(date);
+        if (!result.isEmpty()) {
+            SimpleDateFormat defLocaleSdf = new SimpleDateFormat(
+                    DATE_PATTERN_FULL, Locale.getDefault());
+            defLocaleSdf.setTimeZone(TimeZone.getDefault());
+            return defLocaleSdf.format(date);
+        }
+        return df.format(date);
+    }
+
+    public static String getCurrentUTCDateAndTime(String pattern) {
+        Date currentDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.getDefault());
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Log.d("hopp", sdf.format(currentDate));
         return sdf.format(currentDate);
     }
 

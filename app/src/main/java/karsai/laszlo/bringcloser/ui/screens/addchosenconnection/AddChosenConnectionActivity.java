@@ -196,7 +196,8 @@ public class AddChosenConnectionActivity extends AppCompatActivity {
                                             mChosenUser.getUid(),
                                             ApplicationHelper.CONNECTION_BIT_NEG,
                                             selectedRelationshipType,
-                                            ApplicationHelper.getCurrentUTCDateAndTime()
+                                            ApplicationHelper.getCurrentUTCDateAndTime(
+                                                    ApplicationHelper.DATE_PATTERN_FULL)
                                     );
                                     mConnectionsDatabaseReference.push().setValue(connection);
                                     Intent mainIntent = new Intent(

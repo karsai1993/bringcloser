@@ -30,4 +30,5 @@
     <dimen name="fab_bottom_margin_chat_ctrl_panel_height">76dp</dimen>
     <dimen name="chat_first_message_top_padding">4dp</dimen>
     <dimen name="chat_sent_image_size">150dp</dimen>
+    <dimen name="time_text_size">8sp</dimen>
 </resources>

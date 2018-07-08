@@ -7,9 +7,19 @@ package karsai.laszlo.bringcloser.model;
 public class ChatDetail {
     private MessageDetail messageDetail;
     private String date;
+    private String time;
 
-    public ChatDetail(MessageDetail messageDetail) {
+    public ChatDetail(MessageDetail messageDetail, String time) {
         this.messageDetail = messageDetail;
+        this.time = time;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public ChatDetail(String date) {
