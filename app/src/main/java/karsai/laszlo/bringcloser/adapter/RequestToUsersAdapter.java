@@ -52,10 +52,11 @@ public class RequestToUsersAdapter
     @Override
     public void onBindViewHolder(@NonNull final RequestToUsersViewHolder holder, int position) {
         final ConnectionDetail connectionDetail = mConnectionDetailList.get(position);
-        ImageUtils.setUserPhoto(
+        ImageUtils.setPhoto(
                 mContext,
                 connectionDetail.getToPhotoUrl(),
-                holder.requestToUserPhotoImageView
+                holder.requestToUserPhotoImageView,
+                true
         );
         holder.requestToUserNameTextView.setText(connectionDetail.getToName());
         holder.requestToUserTypeTextView.setText(

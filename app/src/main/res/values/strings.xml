@@ -23,10 +23,10 @@
 
     <string name="no_internet_message">You are currently offline!
         Please, check your connection, and open the app again.</string>
-    <string name="zero_character_name_message">It is not recommended to leave it empty
-        so that your close people can more easily reach you!</string>
-    <string name="wrong_date_selected_message">Your birthday should be before today!</string>
-    <string name="uploading_image">Uploading your image...</string>
+    <string name="zero_character_name_message">It is not recommended to leave it empty!</string>
+    <string name="wrong_date_selected_message_before">Selected day should be before today!</string>
+    <string name="wrong_date_selected_message_after">Selected day should be today or after!</string>
+    <string name="uploading_image">Uploading your image&#8230;</string>
     <string name="settings_display_name_header">Displayed name</string>
     <string name="settings_birthday_header">Birthday</string>
     <string name="settings_gender_header">Gender</string>
@@ -41,6 +41,9 @@
     <string name="settings_birthday_default">Data not provided</string>
     <string name="settings_birthday_set_default">Set default</string>
     <string name="dialog_settings_name">Type the desired name</string>
+    <string name="dialog_title">Type the desired message</string>
+    <string name="dialog_wish_withdraw_title">You\'re about to withdraw the following wish!</string>
+    <string name="dialog_event_withdraw_title">You\'re about to withdraw the following event notification!</string>
     <string name="dialog_settings_positive_btn">OK</string>
     <string name="dialog_settings_negative_btn">CANCEL</string>
     <string name="dialog_settings_back_btn">BACK</string>
@@ -50,10 +53,10 @@
     <string name="settings_verification_negative">Not verified</string>
     <string name="settings_verification_ongoing">Checking mail box, verifying, re-authenticating</string>
     <string name="nav_drawer_verification_required">Email verification required</string>
-    <string name="starting_toolbar_title">Loading...</string>
+    <string name="starting_toolbar_title">Loading&#8230;</string>
     <string name="no_suitable_app_message">Your phone has no app to perform the request!</string>
     <string name="take_photo_error_message">Photo file can\'t be created, please try again!</string>
-    <string name="permission_needed">The following permissions are necessary to continue...</string>
+    <string name="permission_needed">The following permissions are necessary to continue&#8230;</string>
     <string name="permission_needed_message">Read and write external storage permissions are needed!</string>
     <string name="denied_permission_message">You cannot add camera picture or image from
         your device without granting permissions!</string>
@@ -79,7 +82,7 @@
         \u2022 Check your mail box and click on verifying\n
         \u2022 Re-authenticate to the app\n
         \u2022 Have fun with your close ones :)</string>
-    <string name="filter_hint">Type to filter the list below...</string>
+    <string name="filter_hint">Type to filter the list below&#8230;</string>
     <string name="add_connection_possible_size">Possible connections</string>
     <string name="add_connection_found_possible_size">Found possible connections</string>
     <string name="add_connection_no_available">
@@ -119,6 +122,87 @@
     <string name="relationship_type_other">Other</string>
     <string name="relationship_type_acquaintanceship">Acquaintanceship</string>
     <string name="relationship_type_not_selected">Please, select a valid relationship type!</string>
+
+    <string name="wish_default_occasion">Select an occasion&#8230;</string>
+    <string name="wish_other_occasion">Other</string>
+    <string name="wish_birthday_occasion">Birthday</string>
+    <string name="wish_name_day_occasion">Name Day</string>
+    <string name="wish_christmas_occasion">Christmas Eve</string>
+    <string name="wish_new_year_occasion">New Year</string>
+    <string name="wish_easter_occasion">Easter</string>
+    <string name="wish_valentine_day_occasion">Valentine\'s Day</string>
+    <string name="wish_anniversary_occasion">Anniversary</string>
+    <string name="wish_women_day_occasion">Women\'s Day</string>
+    <string name="wish_mother_day_occasion">Mother\'s Day</string>
+    <string name="wish_father_day_occasion">Father\'s Day</string>
+
+    <string name="wish_default_message_person_spec_day_1">Hi,\u0020</string>
+    <string name="wish_default_message_person_spec_day_2">!\u0020It\'s your\u0020</string>
+    <string name="wish_default_message_person_spec_day_3">!\u0020I wish you have a wonderful one!</string>
+
+    <string name="wish_default_message_year_spec_day_new_year">Happy New Year,\u0020</string>
+    <string name="wish_default_message_year_spec_day_christmas">Merry Christmas,\u0020</string>
+    <string name="wish_default_message_year_spec_day_easter">Happy Easter,\u0020</string>
+    <string name="wish_default_message_year_spec_day_end">!</string>
+
+    <string name="wish_default_message_valentine_day_1">Happy Valentine\'s day,\u0020</string>
+    <string name="wish_default_message_valentine_day_2">! I cannot tell how much
+        I am glad to be with you!</string>
+
+    <string name="wish_default_message_anniversary_day_1">Happy Anniversary,\u0020</string>
+    <string name="wish_default_message_anniversary_day_2">! I am really looking for our
+        celebration!</string>
+
+    <string name="wish_default_message_women_day_1">Happy Women\'s Day,\u0020</string>
+    <string name="wish_default_message_women_day_2">! Have a nice day!</string>
+
+    <string name="wish_default_message_mother_day">Hi Mom! I am glad you are my mother!
+        Happy Mother\'s Day!</string>
+    <string name="wish_default_message_father_day">Hi Dad! I am glad you are my father!
+        Happy Father\'s Day!</string>
+
+    <string-array name="wish_basic_occasions">
+        <item>@string/wish_birthday_occasion</item>
+        <item>@string/wish_name_day_occasion</item>
+        <item>@string/wish_christmas_occasion</item>
+        <item>@string/wish_new_year_occasion</item>
+        <item>@string/wish_easter_occasion</item>
+    </string-array>
+
+    <string-array name="wish_love_occasions">
+        <item>@string/wish_valentine_day_occasion</item>
+        <item>@string/wish_anniversary_occasion</item>
+    </string-array>
+
+    <string-array name="wish_female_occasions">
+        <item>@string/wish_women_day_occasion</item>
+    </string-array>
+
+    <string-array name="wish_mother_occasions">
+        <item>@string/wish_mother_day_occasion</item>
+    </string-array>
+
+    <string-array name="wish_father_occasions">
+        <item>@string/wish_father_day_occasion</item>
+    </string-array>
+
+    <string name="wish_sorted_by_default">Time</string>
+    <string name="wish_sorted_by_occasion">Occasion</string>
+    <string-array name="wish_sort_options">
+        <item>@string/wish_sorted_by_default</item>
+        <item>@string/wish_sorted_by_occasion</item>
+    </string-array>
+    <string name="event_sorted_by_default">Time</string>
+    <string name="event_sorted_by_title">Title</string>
+    <string name="event_sorted_by_place">Place</string>
+    <string-array name="event_sort_options">
+        <item>@string/event_sorted_by_default</item>
+        <item>@string/event_sorted_by_title</item>
+        <item>@string/event_sorted_by_place</item>
+    </string-array>
+    <string name="sorted_by_title">What do you want to sort by?</string>
+    <string name="edit_sent_data">EDIT MESSAGE</string>
+    <string name="cancel_sent_data">WITHDRAW</string>
 
     <string name="play_services_alert">Without a valid Play Services installed,
         you may not receive certain notifications!</string>
@@ -168,9 +252,13 @@
     <string name="action_connection_delete">Delete connection</string>
 
     <string name="chat_hint">Type your message&#8230;</string>
+    <string name="chat_filter_hint">Search for text&#8230;</string>
 
-    <string name="chat_no_data">No chat between you! Get deep in it!</string>
-    <string name="chat_no_data_message">There is no sent message in which you could search!</string>
+    <string name="thought_no_data">You have not given any thoughts, yet!</string>
+    <string name="event_no_data">You have not reported any events, yet!</string>
+    <string name="wish_no_data">You have not sent any wishes, yet!</string>
+    <string name="chat_no_data">No messages, yet! Be the first who sends one!</string>
+    <string name="chat_no_data_search_message">There is no sent message in which you could search!</string>
 
     <string name="data_not_available">Data not available</string>
     <string name="saved_to_clipboard_1">\"</string>
@@ -178,6 +266,57 @@
     <string name="saved_to_clipboard_2">\" has been saved to clipboard!</string>
 
     <string name="share_title">Sharing your image&#8230;</string>
+    <string name="image_link_copied">Image link has been saved to clipboard!</string>
+
+    <string name="problem">Error occurred.</string>
+
+    <string name="other_people_delete_common_1">It seems\u0020</string>
+    <string name="other_people_delete_common_2">\u0020has deleted either you as a connection, or\u0020
+    </string>
+    <string name="other_people_delete_common_3">\u0020from the app.</string>
+
+    <string name="gender_representative_none">herself/himself</string>
+    <string name="gender_representative_female">herself</string>
+    <string name="gender_representative_male">himself</string>
+
+    <string name="sorted_by">Sorted by</string>
+
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+
+    <string name="wish_already_sent">This wish has already been sent!</string>
+    <string name="wish_label">Add a new wish</string>
+    <string name="wish_other_edittext_hint">Specify the occasion&#8230;</string>
+    <string name="wish_edittext_hint">Type your wish&#8230;</string>
+    <string name="wish_question_1">When should\u0020</string>
+    <string name="wish_question_2">\u0020receive this wish?</string>
+    <string name="selected_date_default">Date not selected</string>
+    <string name="selected_time_default">Time not selected</string>
+    <string name="date_selector">Select date</string>
+    <string name="time_selector">Select time</string>
+    <string name="photo_assignment">Photo assignment</string>
+    <string name="wish_photo_alert">You can append an extra photo to your wish
+    to make it more special!</string>
+    <string name="wish_alert_no_occasion">Please, select an occasion to continue!</string>
+    <string name="wish_alert_no_occasion_specified">Please, type the occasion to continue!</string>
+    <string name="wish_alert_no_text">Please, type the content of your wish to continue!</string>
+    <string name="alert_no_date">Please, select a date to continue!</string>
+    <string name="alert_no_time">Please, select a time to continue!</string>
+
+    <string name="event_already_sent">This event notification has already been sent!</string>
+    <string name="event_label">Add a new event</string>
+    <string name="event_title_hint">Type the event title&#8230;</string>
+    <string name="event_place_hint">Type the event place&#8230;</string>
+    <string name="event_message_hint">Type your message&#8230;</string>
+    <string name="event_question_1">When should\u0020</string>
+    <string name="event_question_2">\u0020receive this event notification?</string>
+    <string name="event_photo_alert">You can append an extra photo to your event notification
+    to make it more special!</string>
+    <string name="event_alert_no_title">Please, type the title of the event to continue!</string>
+    <string name="event_alert_no_place">Please, type the place of the event to continue!</string>
+    <string name="event_alert_no_message">Please, type your message regarding the event to continue!</string>
+
+    <string name="up_nav_deletion_alert">As you stepped back, the uploaded photo has been deleted!</string>
 
     <string name="facebook_application_id" translatable="false">621043098259578</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>

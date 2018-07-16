@@ -59,10 +59,11 @@ public class ConnectedPeopleAdapter
         final ConnectionDetail connectionDetail = mConnectionDetailList.get(position);
         String fromUid = connectionDetail.getFromUid();
         if (fromUid.equals(mCurrentUserUid)) {
-            ImageUtils.setUserPhoto(
+            ImageUtils.setPhoto(
                     mContext,
                     connectionDetail.getToPhotoUrl(),
-                    holder.connectedUserPhotoImageView
+                    holder.connectedUserPhotoImageView,
+                    true
             );
             holder.connectedUserNameTextView.setText(connectionDetail.getToName());
             holder.connectedUserType.setText(
@@ -75,10 +76,11 @@ public class ConnectedPeopleAdapter
                     ).toUpperCase(Locale.getDefault())
             );
         } else {
-            ImageUtils.setUserPhoto(
+            ImageUtils.setPhoto(
                     mContext,
                     connectionDetail.getFromPhotoUrl(),
-                    holder.connectedUserPhotoImageView
+                    holder.connectedUserPhotoImageView,
+                    true
             );
             holder.connectedUserNameTextView.setText(connectionDetail.getFromName());
             holder.connectedUserType.setText(

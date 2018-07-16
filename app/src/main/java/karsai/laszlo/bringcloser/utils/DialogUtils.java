@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import karsai.laszlo.bringcloser.R;
 
@@ -37,19 +38,23 @@ public class DialogUtils {
         AlertDialog dialog = builder.create();
         dialog.getWindow().getAttributes().windowAnimations = animationStyle;
         dialog.show();
-        /*int dividerId = dialog.getContext().getResources().getIdentifier(
-                "android:id/titleDivider", null, null);
-        View divider = dialog.findViewById(dividerId);
-        divider.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-        int textViewId = dialog.getContext().getResources().getIdentifier(
-                "android:id/alertTitle", null, null);
-        TextView tv = (TextView) dialog.findViewById(textViewId);
-        tv.setTextColor(context.getResources().getColor(titleColor));
-        */if (dialogView instanceof EditText) {
+        if (dialogView instanceof EditText) {
             EditText dialogText = (EditText) dialogView;
             dialogText.setHintTextColor(context.getResources().getColor(R.color.colorAccent));
             dialogText.setSelection(dialogText.getText().toString().length());
         }
+    }
+
+    public static void onDialogRequestForSorting(
+            Context context,
+            String title,
+            String [] options,
+            final DialogInterface.OnClickListener onClickListener) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle(title);
+        alertDialog.setSingleChoiceItems(options, -1, onClickListener);
+        AlertDialog alert = alertDialog.create();
+        alert.show();
     }
 
     public static void onDialogRequestForImage(

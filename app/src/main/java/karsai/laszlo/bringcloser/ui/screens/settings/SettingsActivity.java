@@ -52,7 +52,6 @@ import karsai.laszlo.bringcloser.utils.ImageUtils;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private static final String TAG_DATA_PICKER = "data_picker";
     private static final String PROFILE_PHOTO_FILE_NAME = "profile_picture";
     private static final String FIREBASE_PHOTO_IDENTIFIER = "firebasestorage";
     private static final String KEY_USER = "user";
@@ -157,7 +156,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         mSettingsDisplayedNameChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText input = new EditText(getApplicationContext());
+                final EditText input = new EditText(SettingsActivity.this);
                 String inputText = mCurrentUser.getUsername();
                 input.setText(inputText);
                 input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -168,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                         String newName = input.getText().toString();
                         if (newName.length() == 0) {
                             Toast.makeText(
-                                    getApplicationContext(),
+                                    SettingsActivity.this,
                                     getResources().getString(R.string.zero_character_name_message),
                                     Toast.LENGTH_LONG
                             ).show();
@@ -191,11 +190,11 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         mSettingsBirthdayChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment datePickerFragment = new DatePickerFragment();
+                DialogFragment datePickerFragment = new BirthdayDatePickerFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(KEY_USER, mCurrentUser);
                 datePickerFragment.setArguments(bundle);
-                datePickerFragment.show(getSupportFragmentManager(), TAG_DATA_PICKER);
+                datePickerFragment.show(getSupportFragmentManager(), ApplicationHelper.TAG_DATA_PICKER);
             }
         });
         mSettingsVerificationChange.setOnClickListener(new View.OnClickListener() {
@@ -281,7 +280,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         } else {
             mGenderOptions.setSelection(2, true);
         }
-        ImageUtils.setUserPhoto(context, photoUrl, mUserPhoto);
+        ImageUtils.setPhoto(context, photoUrl, mUserPhoto, true);
         mDisplayedName.setText(username);
         if (birthday != null) mBirthday.setText(birthday);
         if (mCurrentUser.getIsEmailVerified()) {
@@ -401,7 +400,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         Map<String, Object> updateValues = new HashMap<>();
         updateValues.put("/" + mFirebaseUser.getUid(), null);
         mUsersRootDatabaseReference.updateChildren(updateValues);
-        ApplicationHelper.deleteSingleConnection(mFirebaseUser.getUid());
+        String currUid = mFirebaseUser.getUid();
+        ApplicationHelper.deleteSingleMemoryElements(this, currUid);
+        ApplicationHelper.deleteSingleConnection(currUid);
     }
 
     private void deleteRelatedStorageData() {
@@ -413,10 +414,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment
+    public static class BirthdayDatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
-        public DatePickerFragment(){}
+        public BirthdayDatePickerFragment(){}
 
         private Calendar mActualCalendar;
         private User mCurrentUser;
@@ -463,7 +464,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             if (newCalendar.getTime().after(mActualCalendar.getTime())) {
                 Toast.makeText(
                         getContext(),
-                        getResources().getString(R.string.wrong_date_selected_message),
+                        getResources().getString(R.string.wrong_date_selected_message_before),
                         Toast.LENGTH_LONG
                 ).show();
             } else {

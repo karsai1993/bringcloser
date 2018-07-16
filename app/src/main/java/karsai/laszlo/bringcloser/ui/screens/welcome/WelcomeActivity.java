@@ -59,7 +59,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         startActivityForResult(
                                 AuthUI.getInstance()
                                         .createSignInIntentBuilder()
-                                        .setIsSmartLockEnabled(true)
+                                        .setIsSmartLockEnabled(false)
                                         .setAvailableProviders(Arrays.asList(
                                                 new AuthUI.IdpConfig.EmailBuilder().build(),
                                                 new AuthUI.IdpConfig.GoogleBuilder().build(),

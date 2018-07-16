@@ -58,30 +58,18 @@ public class ImageUtils {
 
     public static String sRequestPermissionSource;
 
-    public static void setUserPhoto(final Context context, String photoUrl, ImageView imageView) {
+    public static void setPhoto(
+            final Context context,
+            String photoUrl,
+            ImageView imageView,
+            boolean shouldBeCircle) {
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.ic_icons8_load_96_1);
         requestOptions.error(R.drawable.baseline_error_outline_black_48);
         requestOptions.fitCenter();
-        requestOptions.circleCrop();
-        if (photoUrl != null && !photoUrl.isEmpty()) {
-            Glide.with(context)
-                    .load(photoUrl)
-                    .apply(requestOptions)
-                    .into(imageView);
-        } else {
-            Glide.with(context)
-                    .load(R.drawable.baseline_face_black_48)
-                    .apply(requestOptions)
-                    .into(imageView);
+        if (shouldBeCircle) {
+            requestOptions.circleCrop();
         }
-    }
-
-    public static void displayMessagePhoto(final Context context, String photoUrl, ImageView imageView) {
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.ic_icons8_load_96_1);
-        requestOptions.error(R.drawable.baseline_error_outline_black_48);
-        requestOptions.fitCenter();
         if (photoUrl != null && !photoUrl.isEmpty()) {
             Glide.with(context)
                     .load(photoUrl)

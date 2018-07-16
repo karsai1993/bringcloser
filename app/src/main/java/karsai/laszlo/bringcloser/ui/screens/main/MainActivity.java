@@ -10,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +50,7 @@ public class MainActivity extends CommonActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
     @Inject
-    MainActivityPresenter presenter;
+    MainActivityPresenter mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
@@ -98,7 +97,7 @@ public class MainActivity extends CommonActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter.attachView(this);
+        mPresenter.attachView(this);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         onSignedInInitialize();
     }
@@ -112,7 +111,7 @@ public class MainActivity extends CommonActivity
 
     @Override
     protected void onDestroy() {
-        presenter.detachView();
+        mPresenter.detachView();
         super.onDestroy();
     }
 
@@ -213,10 +212,11 @@ public class MainActivity extends CommonActivity
                     mContentLinearLayout.setVisibility(View.VISIBLE);
                     mContentProgressBar.setVisibility(View.GONE);
                     setUserDataInNavigationDrawer();
-                    ImageUtils.setUserPhoto(
+                    ImageUtils.setPhoto(
                             getApplicationContext(),
                             mCurrentUser.getPhotoUrl(),
-                            mUserPhotoInNavDrawer
+                            mUserPhotoInNavDrawer,
+                            true
                     );
                 }
             }

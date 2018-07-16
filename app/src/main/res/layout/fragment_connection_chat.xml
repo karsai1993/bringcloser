@@ -1,19 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="@dimen/distance"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/chat_ctrl_panel_height">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_chat"
-        android:paddingTop="@dimen/chat_first_message_top_padding"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingStart="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_vertical_margin"
-        android:paddingEnd="@dimen/activity_vertical_margin"/>
+        android:id="@+id/rv_chat"/>
 
     <ProgressBar
         android:layout_width="@dimen/progress_bar_size"
@@ -30,8 +29,35 @@
         android:layout_gravity="top"
         android:gravity="center_horizontal"
         android:textStyle="bold|italic"
-        android:textSize="@dimen/header_text_size"
         android:text="@string/chat_no_data"
         android:visibility="gone"/>
 
-</FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_chat_scroll_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_margin="@dimen/distance"
+        app:srcCompat="@drawable/baseline_vertical_align_top_black_48"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:backgroundTint="@color/colorPrimary"
+        app:elevation="@dimen/fab_elevation"
+        app:pressedTranslationZ="@dimen/fab_press_translation_z"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_chat_scroll_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="@dimen/distance"
+        app:srcCompat="@drawable/baseline_vertical_align_bottom_black_48"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:backgroundTint="@color/colorPrimary"
+        app:elevation="@dimen/fab_elevation"
+        app:pressedTranslationZ="@dimen/fab_press_translation_z"
+        android:visibility="gone"/>
+
+</android.support.design.widget.CoordinatorLayout>

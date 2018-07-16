@@ -5,18 +5,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,10 +18,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
@@ -38,7 +26,6 @@ import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
-import karsai.laszlo.bringcloser.utils.NotificationUtils;
 
 /**
  * Created by Laci on 03/07/2018.
@@ -120,10 +107,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (holder.getItemViewType()) {
             case MESSAGE_OTHER_VIEW_TYPE:
                 MessageOtherViewHolder messageOtherViewHolder = (MessageOtherViewHolder) holder;
-                ImageUtils.setUserPhoto(
+                ImageUtils.setPhoto(
                         mContext,
                         fromPhotoUrl,
-                        messageOtherViewHolder.mChatFromOtherImageView);
+                        messageOtherViewHolder.mChatFromOtherImageView,
+                        true);
                 if (sentText != null && !sentText.isEmpty()) {
                     messageOtherViewHolder.mChatFromOtherTextLinearLayout.setVisibility(View.VISIBLE);
                     messageOtherViewHolder.mChatFromOtherTextView.setText(sentText);
@@ -135,7 +123,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {
-                            saveToClipBoard(finalSentText);
+                            saveToClipBoard(finalSentText, false);
                             return true;
                         }
                     });
@@ -143,17 +131,31 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     messageOtherViewHolder.mChatFromOtherTextLinearLayout.setVisibility(View.GONE);
                     messageOtherViewHolder.mView.setVisibility(View.VISIBLE);
                     messageOtherViewHolder.mChatFromOtherSentImageView.setVisibility(View.VISIBLE);
-                    ImageUtils.displayMessagePhoto(
+                    ImageUtils.setPhoto(
                             mContext,
                             sentPhotoUrl,
-                            messageOtherViewHolder.mChatFromOtherSentImageView);
+                            messageOtherViewHolder.mChatFromOtherSentImageView,
+                            false);
                     final String finalSentPhotoUrlOther = sentPhotoUrl;
                     final String finalDateAndTimeOther = dateAndTime;
+                    messageOtherViewHolder.mChatFromOtherSentImageView.setOnLongClickListener(
+                            new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View view) {
+                                    saveToClipBoard(finalSentPhotoUrlOther, true);
+                                    return true;
+                                }
+                            }
+                    );
                     messageOtherViewHolder.mChatFromOtherSentImageView.setOnClickListener(
                             new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            onImageClick(finalSentPhotoUrlOther, finalDateAndTimeOther);
+                            onImageClick(
+                                    finalSentPhotoUrlOther,
+                                    (ViewGroup)view.getParent(),
+                                    finalDateAndTimeOther
+                            );
                         }
                     });
                 }
@@ -171,7 +173,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {
-                            saveToClipBoard(finalSentText);
+                            saveToClipBoard(finalSentText, false);
                             return true;
                         }
                     });
@@ -179,17 +181,31 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     messageCurrentViewHolder.mChatFromCurrentTextLinearLayout.setVisibility(View.GONE);
                     messageCurrentViewHolder.mView.setVisibility(View.VISIBLE);
                     messageCurrentViewHolder.mChatFromCurrentSentImageView.setVisibility(View.VISIBLE);
-                    ImageUtils.displayMessagePhoto(
+                    ImageUtils.setPhoto(
                             mContext,
                             sentPhotoUrl,
-                            messageCurrentViewHolder.mChatFromCurrentSentImageView);
+                            messageCurrentViewHolder.mChatFromCurrentSentImageView,
+                            false);
                     final String finalDateAndTimeCurrent = dateAndTime;
                     final String finalSentPhotoUrlCurrent = sentPhotoUrl;
+                    messageCurrentViewHolder.mChatFromCurrentSentImageView.setOnLongClickListener(
+                            new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View view) {
+                                    saveToClipBoard(finalSentPhotoUrlCurrent, true);
+                                    return true;
+                                }
+                            }
+                    );
                     messageCurrentViewHolder.mChatFromCurrentSentImageView.setOnClickListener(
                             new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    onImageClick(finalSentPhotoUrlCurrent, finalDateAndTimeCurrent);
+                                    onImageClick(
+                                            finalSentPhotoUrlCurrent,
+                                            (ViewGroup)view.getParent(),
+                                            finalDateAndTimeCurrent
+                                    );
                                 }
                             }
                     );
@@ -197,7 +213,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 break;
             case MESSAGE_DATE_VIEW_TYPE:
                 MessageDateViewHolder messageDateViewHolder = (MessageDateViewHolder) holder;
-                messageDateViewHolder.mChatDateTextView.setText(date);
+                messageDateViewHolder.mChatDateTextView.setText(
+                        ApplicationHelper.getDisplayDateWithRespectToCurrentDate(mContext, date)
+                );
         }
     }
 
@@ -207,16 +225,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mChatDetailList.size();
     }
 
-    private void onImageClick(final String photoUrl, final String dateAndTime) {
+    private void onImageClick(final String photoUrl, ViewGroup root, final String dateAndTime) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.image, null, false);
+                .inflate(R.layout.image, root, false);
 
         final ImageView imageView = view.findViewById(R.id.iv_chat_photo_big);
         ImageView shareImageView = view.findViewById(R.id.iv_chat_photo_share);
-        ImageView downloadImageView = view.findViewById(R.id.iv_chat_photo_download);
         TextView dateAndTimeTextView = view.findViewById(R.id.tv_chat_photo_date_and_time);
 
-        ImageUtils.displayMessagePhoto(mContext, photoUrl, imageView);
+        ImageUtils.setPhoto(mContext, photoUrl, imageView, false);
         dateAndTimeTextView.setText(dateAndTime);
         shareImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,18 +241,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 shareImage(photoUrl);
             }
         });
-        downloadImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                downloadImage(photoUrl, dateAndTime);
-            }
-        });
 
         DialogUtils.onDialogRequestForImage(mContext, view, R.style.DialogLeftRightTheme);
-    }
-
-    private void downloadImage(String photoUrl, String dateAndTime) {
-
     }
 
     private void shareImage(String photoUrl) {
@@ -253,46 +260,49 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void saveToClipBoard(String message) {
-        String messagePart;
+    private void saveToClipBoard(String text, boolean isImage) {
+        String messagePart = "";
         boolean isPart = false;
-        if (message.length() > 5) {
-            messagePart = message.substring(0, 5).trim();
-            isPart = true;
-        } else {
-            messagePart = message.trim();
+        if (!isImage) {
+            if (text.length() > 5) {
+                messagePart = text.substring(0, 5).trim();
+                isPart = true;
+            } else {
+                messagePart = text.trim();
+            }
         }
         ClipboardManager clipboard
                 = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip
-                = ClipData.newPlainText("Copied Text", message);
+                = ClipData.newPlainText("Copied Text", text);
         if (clipboard != null) {
             clipboard.setPrimaryClip(clip);
-            if (isPart) {
-                Toast.makeText(
-                        mContext,
-                        new StringBuilder()
-                                .append(mContext.getResources()
-                                        .getString(R.string.saved_to_clipboard_1))
-                                .append(messagePart)
-                                .append(mContext.getResources()
-                                        .getString(R.string.saved_to_clipboard_12))
-                                .append(mContext.getResources()
-                                        .getString(R.string.saved_to_clipboard_2))
-                                .toString(),
-                        Toast.LENGTH_LONG).show();
+            String textToShow;
+            if (isImage) {
+                textToShow = mContext.getResources().getString(R.string.image_link_copied);
+            } else if (isPart) {
+                textToShow = new StringBuilder()
+                        .append(mContext.getResources()
+                                .getString(R.string.saved_to_clipboard_1))
+                        .append(messagePart)
+                        .append(mContext.getResources()
+                                .getString(R.string.saved_to_clipboard_12))
+                        .append(mContext.getResources()
+                                .getString(R.string.saved_to_clipboard_2))
+                        .toString();
             } else {
-                Toast.makeText(
-                        mContext,
-                        new StringBuilder()
-                                .append(mContext.getResources()
-                                        .getString(R.string.saved_to_clipboard_1))
-                                .append(messagePart)
-                                .append(mContext.getResources()
-                                        .getString(R.string.saved_to_clipboard_2))
-                                .toString(),
-                        Toast.LENGTH_LONG).show();
+                textToShow = new StringBuilder()
+                        .append(mContext.getResources()
+                                .getString(R.string.saved_to_clipboard_1))
+                        .append(messagePart)
+                        .append(mContext.getResources()
+                                .getString(R.string.saved_to_clipboard_2))
+                        .toString();
             }
+            Toast.makeText(
+                    mContext,
+                    textToShow,
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -304,7 +314,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         View mView;
         LinearLayout mChatFromCurrentTextLinearLayout;
 
-        public MessageCurrentViewHolder(View itemView) {
+        MessageCurrentViewHolder(View itemView) {
             super(itemView);
             mChatFromCurrentTextView = itemView.findViewById(R.id.tv_chat_from_current_text);
             mChatFromCurrentSentImageView
@@ -324,7 +334,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         View mView;
         LinearLayout mChatFromOtherTextLinearLayout;
 
-        public MessageOtherViewHolder(View itemView) {
+        MessageOtherViewHolder(View itemView) {
             super(itemView);
             mChatFromOtherImageView = itemView.findViewById(R.id.iv_chat_from_other_photo);
             mChatFromOtherTextView = itemView.findViewById(R.id.tv_chat_from_other_text);
@@ -339,7 +349,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         TextView mChatDateTextView;
 
-        public MessageDateViewHolder(View itemView) {
+        MessageDateViewHolder(View itemView) {
             super(itemView);
             mChatDateTextView = itemView.findViewById(R.id.tv_chat_date);
         }

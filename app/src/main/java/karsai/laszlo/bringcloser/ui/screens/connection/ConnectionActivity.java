@@ -31,11 +31,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -78,14 +80,8 @@ public class ConnectionActivity extends AppCompatActivity {
     ImageView mToolbarCurrentPhotoImageView;
     @BindView(R.id.tv_connection_toolbar_since)
     TextView mToolbarSinceTextView;
-    /*mSearchFab = rootView.findViewById(R.id.fab_chat_search);
-        mCameraImageView = rootView.findViewById(R.id.iv_chat_add_photo_from_camera);
-        mGalleryImageView = rootView.findViewById(R.id.iv_chat_add_photo_from_gallery);
-        mSendImageView = rootView.findViewById(R.id.iv_chat_send);
-        mMessageEditText = rootView.findViewById(R.id.et_chat);*/
-    /*@BindView(R.id.fab_chat_search)
-    FloatingActionButton mSearchFab;
-    */@BindView(R.id.iv_chat_add_photo_from_camera)
+
+    @BindView(R.id.iv_chat_add_photo_from_camera)
     ImageView mCameraImageView;
     @BindView(R.id.iv_chat_add_photo_from_gallery)
     ImageView mGalleryImageView;
@@ -95,6 +91,13 @@ public class ConnectionActivity extends AppCompatActivity {
     EditText mMessageEditText;
     @BindView(R.id.ll_chat_action_panel)
     LinearLayout mChatControlPanelLinearLayout;
+
+    @BindView(R.id.fab_plus_one_wish)
+    FloatingActionButton mPlusOneWishFab;
+    @BindView(R.id.fab_plus_one_event)
+    FloatingActionButton mPlusOneEventFab;
+    @BindView(R.id.fab_plus_one_thought)
+    FloatingActionButton mPlusOneThoughtFab;
 
     private String mCurrentUserUid;
     private FirebaseUser mFirebaseUser;
@@ -119,7 +122,6 @@ public class ConnectionActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //onSupportNavigateUp();
                 onBackPressed();
             }
         });
@@ -204,23 +206,30 @@ public class ConnectionActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                /*mSearchFab.measure(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );*/
-                //int heightFab = mSearchFab.getMeasuredHeight();
                 int heightPanel = mChatControlPanelLinearLayout.getMeasuredHeight();
                 float compOffset = 1F - positionOffset;
                 if (position == 0) {
+                    mPlusOneWishFab.setVisibility(View.GONE);
+                    mPlusOneEventFab.setVisibility(View.GONE);
+                    mPlusOneThoughtFab.setVisibility(View.GONE);
                     mChatControlPanelLinearLayout.setVisibility(View.VISIBLE);
-                    //mSearchFab.setVisibility(View.VISIBLE);
                     mChatControlPanelLinearLayout.setAlpha(compOffset);
-                    //mSearchFab.setAlpha(compOffset);
                     mChatControlPanelLinearLayout.setTranslationY(heightPanel * positionOffset);
-                    //mSearchFab.setTranslationY(heightFab * positionOffset);
                 } else {
                     mChatControlPanelLinearLayout.setVisibility(View.GONE);
-                    //mSearchFab.setVisibility(View.GONE);
+                    if (position == 1) {
+                        mPlusOneEventFab.setVisibility(View.GONE);
+                        mPlusOneThoughtFab.setVisibility(View.GONE);
+                        mPlusOneWishFab.setVisibility(View.VISIBLE);
+                    } else if (position == 2) {
+                        mPlusOneWishFab.setVisibility(View.GONE);
+                        mPlusOneThoughtFab.setVisibility(View.GONE);
+                        mPlusOneEventFab.setVisibility(View.VISIBLE);
+                    } else {
+                        mPlusOneWishFab.setVisibility(View.GONE);
+                        mPlusOneEventFab.setVisibility(View.GONE);
+                        mPlusOneThoughtFab.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -306,14 +315,6 @@ public class ConnectionActivity extends AppCompatActivity {
 
             }
         };
-    }
-
-    private void applySearchHandler() {
-        if (mChatControlPanelLinearLayout.getVisibility() == View.VISIBLE) {
-            mChatControlPanelLinearLayout.setVisibility(View.GONE);
-        } else {
-            mChatControlPanelLinearLayout.setVisibility(View.VISIBLE);
-        }
     }
 
     private void createNewMessageObject(final String text, final String photoUrl) {
@@ -441,9 +442,9 @@ public class ConnectionActivity extends AppCompatActivity {
         mToolbarTitleTextView.setText(title);
         mToolbarOtherNameTextView.setText(otherName);
         mToolbarOtherRelationshipTextView.setText(mOtherType);
-        ImageUtils.setUserPhoto(this, otherPhotoUrl, mToolbarOtherPhotoImageView);
+        ImageUtils.setPhoto(this, otherPhotoUrl, mToolbarOtherPhotoImageView, true);
         mToolbarCurrentRelationshipTextView.setText(mCurrentType);
-        ImageUtils.setUserPhoto(this, currentPhotoUrl, mToolbarCurrentPhotoImageView);
+        ImageUtils.setPhoto(this, currentPhotoUrl, mToolbarCurrentPhotoImageView, true);
         String currDateAndTimeLocal = ApplicationHelper.getLocalDateAndTime(
                 this,
                 connectionDetail.getTimestamp()
@@ -474,10 +475,10 @@ public class ConnectionActivity extends AppCompatActivity {
         DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ApplicationHelper.deletePairConnection(
+                ApplicationHelper.deletePairMemoryElements(
+                        ConnectionActivity.this,
                         fromUid,
                         mConnectionDetail.getToUid(),
-                        ConnectionActivity.this,
                         otherName
                 );
                 finish();

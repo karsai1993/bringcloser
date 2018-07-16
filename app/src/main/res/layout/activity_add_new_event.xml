@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                style="@style/AppTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_event_title"
+                android:hint="@string/event_title_hint"
+                android:inputType="textCapWords"/>
+
+            <EditText
+                style="@style/AppTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_event_place"
+                android:inputType="textCapWords"
+                android:hint="@string/event_place_hint"/>
+
+            <EditText
+                style="@style/AppTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_event_message"
+                android:inputType="textCapWords"
+                android:hint="@string/event_message_hint"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_event_question"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/small_distance">
+
+                    <TextView
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/tv_event_selected_date"
+                        android:text="@string/selected_date_default"/>
+
+
+                    <TextView
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/tv_event_selected_time"
+                        android:text="@string/selected_time_default"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/small_distance">
+
+                    <TextView
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/tv_event_date_selector"
+                        android:text="@string/date_selector"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/header_text_size"/>
+
+
+                    <TextView
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/tv_event_time_selector"
+                        android:text="@string/time_selector"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/header_text_size"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/AppTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/photo_assignment"/>
+                    
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/small_distance">
+
+                        <ImageView
+                            android:layout_width="@dimen/photo_icon_size"
+                            android:layout_height="@dimen/photo_icon_size"
+                            android:src="@drawable/baseline_photo_camera_black_48"
+                            android:id="@+id/iv_event_add_photo_from_camera"
+                            android:layout_marginEnd="@dimen/small_distance"
+                            android:layout_marginRight="@dimen/small_distance"/>
+
+
+                        <ImageView
+                            android:layout_width="@dimen/photo_icon_size"
+                            android:layout_height="@dimen/photo_icon_size"
+                            android:src="@drawable/baseline_photo_black_48"
+                            android:id="@+id/iv_event_add_photo_from_gallery"/>
+                        
+                    </LinearLayout>
+
+                </LinearLayout>
+                
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/tv_event_photo_alert"
+                    android:text="@string/event_photo_alert"/>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/ll_event_add_extra_photo"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/big_photo_size"
+                        android:layout_weight="1"
+                        android:id="@+id/iv_event_added_extra_photo"
+                        android:layout_gravity="center"
+                        android:scaleType="centerInside"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/photo_icon_size"
+                        android:layout_height="@dimen/photo_icon_size"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/small_distance"
+                        android:id="@+id/iv_event_added_extra_photo_delete"
+                        android:src="@drawable/baseline_delete_black_48"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_approve_add_new_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/baseline_done_black_48"
+        android:elevation="@dimen/fab_elevation"
+        android:translationZ="@dimen/fab_press_translation_z" />
+
+</android.support.design.widget.CoordinatorLayout>

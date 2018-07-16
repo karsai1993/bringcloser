@@ -50,10 +50,11 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.AllUse
     public void onBindViewHolder(@NonNull final AllUsersViewHolder holder, int position) {
         final User currentUser = mUserList.get(position);
         holder.nameTextView.setText(currentUser.getUsername());
-        ImageUtils.setUserPhoto(
+        ImageUtils.setPhoto(
                 mAppContext,
                 currentUser.getPhotoUrl(),
-                holder.photoImageView
+                holder.photoImageView,
+                true
         );
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

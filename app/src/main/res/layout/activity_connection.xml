@@ -170,46 +170,12 @@
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout_connection_details"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 app:tabMode="scrollable"/>
 
         </android.support.design.widget.AppBarLayout>
-
-        <!--android.support.v4.view.ViewPager
-            android:id="@+id/viewpager_connection_details"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/-->
-
-        <!--LinearLayout
-            android:id="@+id/ll_connection_details"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager_connection_details"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white" />
-
-        </LinearLayout-->
-
-        <!--ProgressBar
-            android:layout_width="@dimen/progress_bar_size"
-            android:layout_height="@dimen/progress_bar_size"
-            android:id="@+id/pb_connection_details"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/-->
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager_connection_details"
@@ -217,78 +183,6 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-        <!--android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/connection_nested_scroll"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:contekarsai.laszlo.bringcloser.ui.screens.connection.ConnectionActivityvity">
-
-                <LinearLayout
-                    android:id="@+id/ll_connection_details"
-                    android:visibility="visible"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tab_layout_connection_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        app:tabMode="scrollable" />
-
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/viewpager_connection_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/white"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-                </LinearLayout>
-
-                <ProgressBar
-                    android:layout_width="@dimen/progress_bar_size"
-                    android:layout_height="@dimen/progress_bar_size"
-                    android:id="@+id/pb_connection_details"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v4.widget.NestedScrollView-->
-
-        <!--android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_chat_search"
-            android:layout_width="@dimen/fab_size"
-            android:layout_height="@dimen/fab_size"
-            android:layout_gravity="bottom|start|left"
-            android:layout_marginTop="@dimen/fab_margin"
-            android:layout_marginStart="@dimen/fab_margin"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_bottom_margin_chat_ctrl_panel_height"
-            app:srcCompat="@drawable/baseline_search_black_48"
-            app:borderWidth="0dp"
-            app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_press_translation_z"/-->
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -298,57 +192,113 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/cl_ctrl_panel">
 
-        <karsai.laszlo.bringcloser.CustomLinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_vertical_margin"
-            android:paddingStart="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_vertical_margin"
-            android:paddingEnd="@dimen/activity_vertical_margin"
             android:id="@+id/ll_chat_action_panel"
-            android:background="@android:color/white">
+            android:background="@android:color/white"
+            android:paddingBottom="@dimen/distance"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="@dimen/chat_control_panel_icon_size"
                 android:layout_height="@dimen/chat_control_panel_icon_size"
-                android:layout_gravity="center"
+                android:layout_gravity="bottom"
                 android:src="@drawable/baseline_search_black_48"
                 android:id="@+id/iv_chat_search"/>
-
-            <ImageView
-                android:layout_width="@dimen/chat_control_panel_icon_size"
-                android:layout_height="@dimen/chat_control_panel_icon_size"
-                android:layout_gravity="center"
-                android:src="@drawable/baseline_photo_camera_black_48"
-                android:id="@+id/iv_chat_add_photo_from_camera"/>
-
-
-            <ImageView
-                android:layout_width="@dimen/chat_control_panel_icon_size"
-                android:layout_height="@dimen/chat_control_panel_icon_size"
-                android:layout_gravity="center"
-                android:src="@drawable/baseline_photo_black_48"
-                android:id="@+id/iv_chat_add_photo_from_gallery"/>
 
             <EditText
                 style="@style/AppTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_chat"
-                android:hint="@string/chat_hint"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:layout_width="@dimen/chat_control_panel_icon_size"
-                android:layout_height="@dimen/chat_control_panel_icon_size"
-                android:layout_gravity="center"
-                android:src="@drawable/baseline_send_black_48"
-                android:id="@+id/iv_chat_send"
+                android:layout_gravity="bottom"
+                android:id="@+id/et_chat_filter"
+                android:hint="@string/chat_filter_hint"
+                android:layout_weight="1"
                 android:visibility="gone"/>
 
-        </karsai.laszlo.bringcloser.CustomLinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/ll_chat_action_panel_inner">
+
+                <ImageView
+                    android:layout_width="@dimen/chat_control_panel_icon_size"
+                    android:layout_height="@dimen/chat_control_panel_icon_size"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/baseline_photo_camera_black_48"
+                    android:id="@+id/iv_chat_add_photo_from_camera"/>
+
+
+                <ImageView
+                    android:layout_width="@dimen/chat_control_panel_icon_size"
+                    android:layout_height="@dimen/chat_control_panel_icon_size"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/baseline_photo_black_48"
+                    android:id="@+id/iv_chat_add_photo_from_gallery"/>
+
+                <EditText
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/et_chat"
+                    android:hint="@string/chat_hint"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="@dimen/chat_control_panel_icon_size"
+                    android:layout_height="@dimen/chat_control_panel_icon_size"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/baseline_send_black_48"
+                    android:id="@+id/iv_chat_send"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_plus_one_wish"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_plus_one_black_48"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:visibility="gone"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_plus_one_event"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_plus_one_black_48"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:visibility="gone"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_plus_one_thought"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_plus_one_black_48"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:visibility="gone"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

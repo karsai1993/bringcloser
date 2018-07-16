@@ -17,17 +17,16 @@
         android:required="true" />
 
     <application
+        android:name=".BringCloserApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".BringCloserApp"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".ui.screens.welcome.WelcomeActivity"
+        <activity
+            android:name=".ui.screens.welcome.WelcomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +37,7 @@
             android:name=".ui.screens.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.screens.settings.SettingsActivity"
             android:label="@string/settings_activity"
@@ -75,6 +74,13 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:exported="false"
+            android:name=".service.UpdateStateService">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -86,9 +92,26 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ui.screens.connection.ConnectionActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/ConnectionActivityTheme"/>
+        <activity
+            android:name=".ui.screens.connection.ConnectionActivity"
+            android:theme="@style/ConnectionActivityTheme"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name=".ui.screens.addnewwishactivity.AddNewWishActivity"
+            android:label="@string/wish_label"
+            android:parentActivityName=".ui.screens.connection.ConnectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.screens.connection.ConnectionActivity" />
+        </activity>
+        <activity android:name=".ui.screens.addneweventactivity.AddNewEventActivity"
+            android:label="@string/event_label"
+            android:parentActivityName=".ui.screens.connection.ConnectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.screens.connection.ConnectionActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -23,8 +23,12 @@
           }
         },
         {
-          "client_id": "8187963515-dvcgmt3gsgpjoi186teqq71sjf6sp92e.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "8187963515-fbnje82kuerv303n4t6qklputak122lt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "karsai.laszlo.bringcloser",
+            "certificate_hash": "20bb9a9f67eab051ca0edd82d6043b4da6825e44"
+          }
         },
         {
           "client_id": "8187963515-dvcgmt3gsgpjoi186teqq71sjf6sp92e.apps.googleusercontent.com",

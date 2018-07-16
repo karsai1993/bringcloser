@@ -8,17 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_width"
         android:background="@color/colorPrimary"
-        android:layout_centerInParent="true"/>
+        android:layout_below="@+id/tv_chat_date"/>
 
     <TextView
         android:id="@+id/tv_chat_date"
         style="@style/AppTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/small_distance"
         android:layout_centerInParent="true"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold|italic"
-        android:background="@drawable/message_date_background"
         android:text="2018 JUN 23"/>
 
 </RelativeLayout>

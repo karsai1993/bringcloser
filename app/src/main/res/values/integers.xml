@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="rv_span_count">3</integer>
+    <integer name="rv_connection_detail_span_count">1</integer>
     <integer name="connected_rv_span_count">3</integer>
     <integer name="requested_rv_span_count">2</integer>
     <integer name="dialog_animation_duration">500</integer>

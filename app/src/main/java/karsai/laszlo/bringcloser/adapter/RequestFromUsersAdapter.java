@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,10 +63,11 @@ public class RequestFromUsersAdapter
     @Override
     public void onBindViewHolder(@NonNull final RequestToUsersViewHolder holder, final int position) {
         final ConnectionDetail connectionDetail = mConnectionDetailList.get(position);
-        ImageUtils.setUserPhoto(
+        ImageUtils.setPhoto(
                 mContext,
                 connectionDetail.getFromPhotoUrl(),
-                holder.requestFromUserPhotoImageView
+                holder.requestFromUserPhotoImageView,
+                true
         );
         holder.requestFromUserNameTextView.setText(connectionDetail.getFromName());
         holder.requestFromUserTypeTextView.setText(
