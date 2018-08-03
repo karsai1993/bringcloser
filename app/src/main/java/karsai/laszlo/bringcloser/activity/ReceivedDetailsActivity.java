@@ -74,8 +74,6 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
     TextView mNoResultTextView;
     @BindView(R.id.tv_received_details_no_selection)
     TextView mNoSelectionTextView;
-    @BindView(R.id.fab_received_details_add_extra)
-    FloatingActionButton mFab;
     @BindView(R.id.tv_no_internet)
     TextView mNoInternetAlertTextView;
 
@@ -279,29 +277,30 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                         ListIterator<HashMap<String, Object>> wishListIterator
                                 = wishMapList.listIterator();
                         while (wishListIterator.hasNext()) {
-                            HashMap<String, Object> currThought = wishListIterator.next();
+                            HashMap<String, Object> currWish = wishListIterator.next();
+                            Object hasArrived = currWish.get(
+                                    ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                             Wish wish = new Wish(
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_WHEN_TO_ARRIVE_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper.RECEIVED_DETAIL_OCCASION_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currWish.get(
                                             ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
-                                    (boolean) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER),
-                                    (String) currThought.get(
+                                    hasArrived != null && (boolean) hasArrived,
+                                    (String) currWish.get(
                                             ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );
                             if (!wish.getFromUid().equals(mCurrentUserUid)
@@ -312,31 +311,32 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                         ListIterator<HashMap<String, Object>> eventListIterator
                                 = eventMapList.listIterator();
                         while (eventListIterator.hasNext()) {
-                            HashMap<String, Object> currThought = eventListIterator.next();
+                            HashMap<String, Object> currEvent = eventListIterator.next();
+                            Object hasArrived = currEvent.get(
+                                    ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                             Event event = new Event(
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper
                                                     .RECEIVED_DETAIL_WHEN_TO_ARRIVE_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper.RECEIVED_DETAIL_TITLE_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper.RECEIVED_DETAIL_PLACE_IDENTIFIER),
-                                    (String) currThought.get(
+                                    (String) currEvent.get(
                                             ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
-                                    (boolean) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER),
-                                    (String) currThought.get(
+                                    hasArrived != null && (boolean) hasArrived,
+                                    (String) currEvent.get(
                                             ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );
                             if (!event.getFromUid().equals(mCurrentUserUid)
@@ -348,6 +348,8 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                 = thoughtMapList.listIterator();
                         while (thoughtListIterator.hasNext()) {
                             HashMap<String, Object> currThought = thoughtListIterator.next();
+                            Object hasArrived = currThought.get(
+                                    ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                             Thought thought = new Thought(
                                     (String) currThought.get(
                                             ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
@@ -364,8 +366,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                             ApplicationHelper.RECEIVED_DETAIL_TIMESTAMP_IDENTIFIER),
                                     (String) currThought.get(
                                             ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
-                                    (boolean) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER),
+                                    hasArrived != null && (boolean) hasArrived,
                                     (String) currThought.get(
                                             ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );

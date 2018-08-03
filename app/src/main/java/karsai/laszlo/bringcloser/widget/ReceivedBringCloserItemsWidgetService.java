@@ -63,6 +63,8 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
         private List<Event> mEventList;
         private List<Thought> mThoughtList;
         private CountDownLatch mCountDownLatch;
+        private ValueEventListener mConnectionsValueEventListener;
+        private ValueEventListener mUsersValueEventListener;
 
         public ReceivedBringCloserItemsRemoteViewFactory(Context context) {
             this.mContext = context;
@@ -70,30 +72,14 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
         }
 
         @Override
-        public void onCreate() {}
-
-        private void init() {
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (firebaseUser == null) {
-                mCountDownLatch.countDown();
-                Intent welcomeIntent = new Intent(mContext, WelcomeActivity.class);
-                mContext.startActivity(welcomeIntent);
-            } else {
-                loadData();
-            }
-        }
-
-        private void loadData() {
+        public void onCreate() {
             mCurrentUserUid = FirebaseAuth.getInstance().getUid();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mConnectionsDatabaseRef = mFirebaseDatabase.getReference()
                     .child(ApplicationHelper.CONNECTIONS_NODE);
             mUsersDatabaseRef = mFirebaseDatabase.getReference()
                     .child(ApplicationHelper.USERS_NODE);
-            mReceivedWishDetailList = new ArrayList<>();
-            mReceivedEventDetailList = new ArrayList<>();
-            mReceivedThoughtDetailList = new ArrayList<>();
-            mConnectionsDatabaseRef.addValueEventListener(new ValueEventListener() {
+            mConnectionsValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     mWishList = new ArrayList<>();
@@ -151,29 +137,30 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                             ListIterator<HashMap<String, Object>> wishListIterator
                                     = wishMapList.listIterator();
                             while (wishListIterator.hasNext()) {
-                                HashMap<String, Object> currThought = wishListIterator.next();
+                                HashMap<String, Object> currWish = wishListIterator.next();
+                                Object hasArrived = currWish.get(
+                                        ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                                 Wish wish = new Wish(
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_WHEN_TO_ARRIVE_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_OCCASION_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currWish.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
-                                        (boolean) currThought.get(
-                                                ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER),
-                                        (String) currThought.get(
+                                        hasArrived != null && (boolean) hasArrived,
+                                        (String) currWish.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
                                 );
                                 if (!wish.getFromUid().equals(mCurrentUserUid)
@@ -184,31 +171,32 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                             ListIterator<HashMap<String, Object>> eventListIterator
                                     = eventMapList.listIterator();
                             while (eventListIterator.hasNext()) {
-                                HashMap<String, Object> currThought = eventListIterator.next();
+                                HashMap<String, Object> currEvent = eventListIterator.next();
+                                Object hasArrived = currEvent.get(
+                                        ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                                 Event event = new Event(
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper
                                                         .RECEIVED_DETAIL_WHEN_TO_ARRIVE_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_TITLE_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_PLACE_IDENTIFIER),
-                                        (String) currThought.get(
+                                        (String) currEvent.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
-                                        (boolean) currThought.get(
-                                                ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER),
-                                        (String) currThought.get(
+                                        hasArrived != null && (boolean) hasArrived,
+                                        (String) currEvent.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
                                 );
                                 if (!event.getFromUid().equals(mCurrentUserUid)
@@ -220,6 +208,8 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                                     = thoughtMapList.listIterator();
                             while (thoughtListIterator.hasNext()) {
                                 HashMap<String, Object> currThought = thoughtListIterator.next();
+                                Object hasArrived = currThought.get(
+                                        ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                                 Thought thought = new Thought(
                                         (String) currThought.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
@@ -236,8 +226,7 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                                                 ApplicationHelper.RECEIVED_DETAIL_TIMESTAMP_IDENTIFIER),
                                         (String) currThought.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
-                                        (boolean) currThought.get(
-                                                ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER),
+                                        hasArrived != null && (boolean) hasArrived,
                                         (String) currThought.get(
                                                 ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
                                 );
@@ -255,12 +244,8 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
-        }
-
-        private void matchDataWithUserInfo() {
-            final List<String> uidList = getRelevantUidList();
-            mUsersDatabaseRef.addValueEventListener(new ValueEventListener() {
+            };
+            mUsersValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     mReceivedWishDetailList.clear();
@@ -273,6 +258,7 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                             Timber.wtf("uid null widget getting user info");
                             continue;
                         }
+                        List<String> uidList = getRelevantUidList();
                         if (uidList.contains(uid)) {
                             User user = snapshot.getValue(User.class);
                             if (user == null) {
@@ -380,7 +366,35 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
+            };
+        }
+
+        private void init() {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (firebaseUser == null) {
+                mCountDownLatch.countDown();
+                Intent welcomeIntent = new Intent(mContext, WelcomeActivity.class);
+                mContext.startActivity(welcomeIntent);
+            } else {
+                if (mConnectionsDatabaseRef != null && mConnectionsValueEventListener != null) {
+                    mConnectionsDatabaseRef.removeEventListener(mConnectionsValueEventListener);
+                }
+                if (mUsersDatabaseRef != null && mUsersValueEventListener != null) {
+                    mUsersDatabaseRef.removeEventListener(mUsersValueEventListener);
+                }
+                loadData();
+            }
+        }
+
+        private void loadData() {
+            mReceivedWishDetailList = new ArrayList<>();
+            mReceivedEventDetailList = new ArrayList<>();
+            mReceivedThoughtDetailList = new ArrayList<>();
+            mConnectionsDatabaseRef.addValueEventListener(mConnectionsValueEventListener);
+        }
+
+        private void matchDataWithUserInfo() {
+            mUsersDatabaseRef.addValueEventListener(mUsersValueEventListener);
         }
 
         private void onLoadFinished() {
@@ -430,7 +444,12 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
 
         @Override
         public void onDestroy() {
-
+            if (mConnectionsDatabaseRef != null && mConnectionsValueEventListener != null) {
+                mConnectionsDatabaseRef.removeEventListener(mConnectionsValueEventListener);
+            }
+            if (mUsersDatabaseRef != null && mUsersValueEventListener != null) {
+                mUsersDatabaseRef.removeEventListener(mUsersValueEventListener);
+            }
         }
 
         @Override
