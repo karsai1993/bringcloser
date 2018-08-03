@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -47,7 +48,7 @@ import timber.log.Timber;
 public class AddNewConnectionActivity extends CommonActivity {
 
     @BindView(R.id.et_filter_users)
-    EditText mFilterUsersEditText;
+    TextInputEditText mFilterUsersEditText;
     @BindView(R.id.rv_all_users)
     RecyclerView mAllUsersRecyclerView;
     @BindView(R.id.tv_info_connection)
@@ -71,7 +72,6 @@ public class AddNewConnectionActivity extends CommonActivity {
     private String mInitFilter;
     private List<User> mFilteredUserList;
     private int mPos;
-    private TextWatcher mTextWatcher;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -186,7 +186,7 @@ public class AddNewConnectionActivity extends CommonActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
 
-        mTextWatcher = new TextWatcher() {
+        mFilterUsersEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -201,7 +201,7 @@ public class AddNewConnectionActivity extends CommonActivity {
             @Override
             public void afterTextChanged(Editable editable) {
             }
-        };
+        });
 
         mFilterUsersEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -211,7 +211,7 @@ public class AddNewConnectionActivity extends CommonActivity {
                 } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
                     onSupportNavigateUp();
                 }
-                return true;
+                return false;
             }
         });
     }
@@ -242,7 +242,6 @@ public class AddNewConnectionActivity extends CommonActivity {
             mFilterUsersEditText.setVisibility(View.VISIBLE);
             mAllUsersRecyclerView.setVisibility(View.VISIBLE);
             mFilterProgressBar.setVisibility(View.GONE);
-            mFilterUsersEditText.addTextChangedListener(mTextWatcher);
             mInitFilter = mFilterUsersEditText.getText().toString();
             if (mInitFilter.isEmpty()) {
                 showFoundResultsNumber(

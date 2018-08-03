@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -46,7 +47,7 @@ import timber.log.Timber;
 public class AddNewThoughtActivity extends CommonActivity {
 
     @BindView(R.id.et_thought_message)
-    EditText mMessageEditText;
+    TextInputEditText mMessageEditText;
     @BindView(R.id.tv_thought_question)
     TextView mQuestionTextView;
     @BindView(R.id.tv_thought_status)

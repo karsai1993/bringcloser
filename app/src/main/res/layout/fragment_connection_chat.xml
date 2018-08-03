@@ -44,7 +44,8 @@
         app:backgroundTint="@color/colorAccent"
         app:elevation="@dimen/fab_elevation"
         app:pressedTranslationZ="@dimen/fab_press_translation_z"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/fab_content_description_scroll_up"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_chat_scroll_down"
@@ -58,6 +59,7 @@
         app:backgroundTint="@color/colorAccent"
         app:elevation="@dimen/fab_elevation"
         app:pressedTranslationZ="@dimen/fab_press_translation_z"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/fab_content_description_scroll_down"/>
 
 </android.support.design.widget.CoordinatorLayout>

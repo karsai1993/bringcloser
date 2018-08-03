@@ -182,7 +182,8 @@
             android:layout_margin="@dimen/fab_margin"
             app:borderWidth="0dp"
             app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_press_translation_z" />
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:contentDescription="@string/fab_content_description_gallery"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_user_photo_add_camera"
@@ -193,7 +194,8 @@
             android:layout_margin="@dimen/fab_margin"
             app:borderWidth="0dp"
             app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_press_translation_z"/>
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:contentDescription="@string/fab_content_description_camera"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

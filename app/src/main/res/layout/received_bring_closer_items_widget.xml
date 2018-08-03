@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/widget_background"
-    android:padding="@dimen/widget_margin">
+    android:background="@drawable/widget_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +46,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/empty_view_text"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_margin="@dimen/small_distance"/>
 
         <ListView
             android:layout_width="match_parent"

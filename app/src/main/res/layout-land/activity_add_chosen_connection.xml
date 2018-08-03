@@ -89,5 +89,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/baseline_done_black_48"
         android:elevation="@dimen/fab_elevation"
-        android:translationZ="@dimen/fab_press_translation_z" />
+        android:translationZ="@dimen/fab_press_translation_z"
+        android:contentDescription="@string/fab_content_description_approve"/>
 </android.support.design.widget.CoordinatorLayout>

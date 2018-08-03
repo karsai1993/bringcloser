@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -69,9 +71,11 @@ public class AddNewWishActivity extends CommonActivity {
     @BindView(R.id.spinner_wish)
     Spinner mSpinner;
     @BindView(R.id.et_wish)
-    EditText mWishEditText;
+    TextInputEditText mWishEditText;
     @BindView(R.id.et_wish_other)
-    EditText mWishOtherEditText;
+    TextInputEditText mWishOtherEditText;
+    @BindView(R.id.til_wish_other)
+    TextInputLayout mWishOtherTextInputLayout;
     @BindView(R.id.tv_wish_question)
     TextView mWishQuestionTextView;
     @BindView(R.id.tv_wish_selected_date)
@@ -608,7 +612,7 @@ public class AddNewWishActivity extends CommonActivity {
             mWishEditText.setText(content);
             boolean isOtherEditTextVisible = bundle.getBoolean(SAVE_OTHER_EDIT_TEXT_VISIBILITY);
             if (isOtherEditTextVisible) {
-                mWishOtherEditText.setVisibility(View.VISIBLE);
+                mWishOtherTextInputLayout.setVisibility(View.VISIBLE);
                 String otherEditTextContent = bundle.getString(SAVE_OTHER_EDIT_TEXT_CONTENT);
                 mWishOtherEditText.setText(otherEditTextContent);
                 if (bundle.getBoolean(SAVE_OTHER_EDIT_TEXT_FOCUSED)) {
@@ -702,16 +706,18 @@ public class AddNewWishActivity extends CommonActivity {
         }
         if (dateAndTimeToSet.before(currDate)) {
             dateAndTimeToSetAsText = nextYear + "-" + month + "-" + day;
+        } else {
+            dateAndTimeToSetAsText = currYear + "-" + month + "-" + day;
         }
         return dateAndTimeToSetAsText;
     }
 
     private void applySpinnerSelectionHandler(String selectedItem, String name) {
-        mWishOtherEditText.setVisibility(View.GONE);
+        mWishOtherTextInputLayout.setVisibility(View.GONE);
         if (selectedItem.equals(getString(R.string.wish_default_occasion))) {
             mWishEditText.setText("");
         } else if (selectedItem.equals(getString(R.string.wish_other_occasion))) {
-            mWishOtherEditText.setVisibility(View.VISIBLE);
+            mWishOtherTextInputLayout.setVisibility(View.VISIBLE);
             mWishOtherEditText.setText("");
             mWishOtherEditText.requestFocus();
             mWishEditText.setText("");
@@ -775,7 +781,7 @@ public class AddNewWishActivity extends CommonActivity {
                 message = getString(R.string.wish_default_message_father_day);
             }
             mWishEditText.setText(message);
-            if (mWishOtherEditText.getVisibility() != View.VISIBLE) {
+            if (mWishOtherTextInputLayout.getVisibility() != View.VISIBLE) {
                 mWishEditText.setSelection(message.length());
             }
         }
@@ -837,7 +843,7 @@ public class AddNewWishActivity extends CommonActivity {
         if (isExtraPhotoVisible) {
             mPausedData.putString(SAVE_PHOTO_URL, mChosenPhotoUrl);
         }
-        boolean isOtherEditTextVisible = mWishOtherEditText.getVisibility() == View.VISIBLE;
+        boolean isOtherEditTextVisible = mWishOtherTextInputLayout.getVisibility() == View.VISIBLE;
         mPausedData.putBoolean(SAVE_OTHER_EDIT_TEXT_VISIBILITY, isOtherEditTextVisible);
         if (isOtherEditTextVisible) {
             mPausedData.putString(SAVE_OTHER_EDIT_TEXT_CONTENT, mWishOtherEditText.getText().toString());
@@ -861,7 +867,7 @@ public class AddNewWishActivity extends CommonActivity {
         if (isExtraPhotoVisible) {
             outState.putString(SAVE_PHOTO_URL, mChosenPhotoUrl);
         }
-        boolean isOtherEditTextVisible = mWishOtherEditText.getVisibility() == View.VISIBLE;
+        boolean isOtherEditTextVisible = mWishOtherTextInputLayout.getVisibility() == View.VISIBLE;
         outState.putBoolean(SAVE_OTHER_EDIT_TEXT_VISIBILITY, isOtherEditTextVisible);
         if (isOtherEditTextVisible) {
             outState.putString(SAVE_OTHER_EDIT_TEXT_CONTENT, mWishOtherEditText.getText().toString());

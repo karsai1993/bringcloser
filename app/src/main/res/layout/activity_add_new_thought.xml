@@ -23,13 +23,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <EditText
-                    style="@style/AppTheme"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_thought_message"
-                    android:hint="@string/thought_message_hint"
-                    android:inputType="textCapSentences"/>
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/et_thought_message"
+                        android:hint="@string/thought_message_hint"
+                        android:inputType="textCapSentences"/>
+
+                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,7 +154,8 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/baseline_done_black_48"
             android:elevation="@dimen/fab_elevation"
-            android:translationZ="@dimen/fab_press_translation_z" />
+            android:translationZ="@dimen/fab_press_translation_z"
+            android:contentDescription="@string/fab_content_description_approve"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

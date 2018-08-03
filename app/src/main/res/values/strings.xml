@@ -54,7 +54,7 @@
     <string name="dialog_thought_withdraw_title">You\'re about to delete the following thought!</string>
     <string name="dialog_thought_send_title">You\'re about to send the following thought!</string>
     <string name="dialog_settings_positive_btn">OK</string>
-    <string name="dialog_settings_negative_btn">@android:string/cancel</string>
+    <string name="dialog_settings_negative_btn">CANCEL</string>
     <string name="dialog_settings_back_btn">BACK</string>
     <string name="settings_change_btn">CHANGE</string>
     <string name="settings_verification_btn">VERIFY</string>
@@ -342,7 +342,7 @@
     <string name="thought_message_hint">Type your thought&#8230;</string>
     <string name="thought_photo_alert">You can append an extra photo to your thought
     to make it more special!</string>
-    <string name="thought_question_1">Would like\u0020</string>
+    <string name="thought_question_1">Would you like\u0020</string>
     <string name="thought_question_2">\u0020to receive it immediately?</string>
     <string name="thought_status_no">No</string>
     <string name="thought_status_yes">Yes</string>
@@ -363,7 +363,7 @@
     <string name="received_details_no_selection_alert">
         Please, select at least one out of the three options above!</string>
     <string name="received_details_no_result_alert">
-        There are no results found based on the checked item(s)!</string>
+        There are no results found based on the checked item!</string>
     <string name="dot">\u2022</string>
 
     <string name="facebook_application_id" translatable="false">621043098259578</string>
@@ -467,4 +467,11 @@
     <string name="about_icons_content_google_icons">https://material.io/tools/icons/?style=baseline</string>
     <string name="delete_account_conn_number_1">Deleting\u0020</string>
     <string name="delete_account_conn_number_2">\u0020connections&#8230;</string>
+    <string name="fab_content_description_approve">Approve Button</string>
+    <string name="fab_content_description_plus_one">Plus One Button</string>
+    <string name="fab_content_description_gallery">Open Gallery Button</string>
+    <string name="fab_content_description_camera">Open Camera Button</string>
+    <string name="fab_content_description_add_connection">Add Connection Button</string>
+    <string name="fab_content_description_scroll_up">Scroll Up Button</string>
+    <string name="fab_content_description_scroll_down">Scroll Down Button</string>
 </resources>

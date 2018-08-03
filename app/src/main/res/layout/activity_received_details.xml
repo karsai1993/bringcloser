@@ -127,17 +127,6 @@
             android:text="@string/received_details_no_selection_alert"
             android:visibility="gone"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_received_details_add_extra"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/baseline_add_black_48"
-            android:elevation="@dimen/fab_elevation"
-            android:translationZ="@dimen/fab_press_translation_z"
-            android:visibility="gone"/>
-
     </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>
