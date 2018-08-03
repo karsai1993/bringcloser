@@ -24,6 +24,7 @@ import karsai.laszlo.bringcloser.utils.ImageUtils;
 
 /**
  * Created by Laci on 11/06/2018.
+ * Adapter to handle request to users related information
  */
 
 public class RequestToUsersAdapter

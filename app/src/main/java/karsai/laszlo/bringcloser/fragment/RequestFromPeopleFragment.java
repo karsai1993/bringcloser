@@ -1,5 +1,7 @@
 package karsai.laszlo.bringcloser.fragment;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.CustomFastScroller;
@@ -32,9 +35,10 @@ import karsai.laszlo.bringcloser.adapter.RequestFromUsersAdapter;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
+import timber.log.Timber;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment to handle request from users related information
  */
 public class RequestFromPeopleFragment extends Fragment {
 
@@ -56,8 +60,9 @@ public class RequestFromPeopleFragment extends Fragment {
     private int mPos = -1;
     private CustomFastScroller mFastScroller;
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_request_from_people, container, false);
         mRequestFromUsersRecyclerView = rootView.findViewById(R.id.rv_request_from_users);
@@ -71,7 +76,7 @@ public class RequestFromPeopleFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
                 getContext(),
-                getContext().getResources().getInteger(R.integer.requested_rv_span_count));
+                Objects.requireNonNull(getContext()).getResources().getInteger(R.integer.requested_rv_span_count));
         mRequestFromUsersRecyclerView.setLayoutManager(layoutManager);
         mRequestFromUsersRecyclerView.setHasFixedSize(true);
 
@@ -88,6 +93,10 @@ public class RequestFromPeopleFragment extends Fragment {
                 mRequestFromConnectionList = new ArrayList<>();
                 for (DataSnapshot connSnapshot : dataSnapshot.getChildren()) {
                     Connection connection = connSnapshot.getValue(Connection.class);
+                    if (connection == null) {
+                        Timber.wtf("connection null request from");
+                        continue;
+                    }
                     if (connection.getConnectionBit() == 0
                             && connection.getToUid().equals(mFirebaseUser.getUid())) {
                         mRequestFromConnectionList.add(connection);
@@ -107,6 +116,10 @@ public class RequestFromPeopleFragment extends Fragment {
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 String uid = userSnapshot.getKey();
                                 User user = userSnapshot.getValue(User.class);
+                                if (user == null) {
+                                    Timber.wtf("user null request from");
+                                    continue;
+                                }
                                 if (fromUid.equals(uid)) {
                                     connectionDetail.setFromUid(uid);
                                     connectionDetail.setFromGender(user.getGender());

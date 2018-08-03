@@ -4,7 +4,5 @@
     <integer name="rv_connection_detail_span_count">2</integer>
     <integer name="connected_rv_span_count">6</integer>
     <integer name="requested_rv_span_count">4</integer>
-    <integer name="dialog_animation_duration">500</integer>
-    <integer name="rv_animation_duration">500</integer>
     <integer name="collapsing_threshold">-163</integer>
 </resources>

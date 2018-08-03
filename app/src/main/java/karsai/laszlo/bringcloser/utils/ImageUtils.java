@@ -5,24 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -35,16 +28,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.security.auth.callback.Callback;
-
 import karsai.laszlo.bringcloser.R;
+import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Laci on 06/06/2018.
+ * Util to handle image requests
  */
-
 public class ImageUtils {
 
     private static final String PHOTO_PICKER_TITLE = "Complete action using";
@@ -56,7 +48,7 @@ public class ImageUtils {
     private static final String FROM_FILE_ID = "file";
     private static final String FROM_CAMERA_ID = "camera";
 
-    public static String sRequestPermissionSource;
+    private static String sRequestPermissionSource;
 
     public static void setPhoto(
             final Context context,
@@ -181,13 +173,17 @@ public class ImageUtils {
                     if (extras != null) {
                         Bitmap image = (Bitmap) extras.get(CAMERA_DATA_KEY);
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        if (image == null) {
+                            Timber.wtf("image null imageutils");
+                            break;
+                        }
                         image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                         File destination = new File(
                                 Environment.getExternalStorageDirectory(),
                                 System.currentTimeMillis() + CAMERA_IMAGE_EXTENSION);
                         FileOutputStream fo;
                         try {
-                            destination.createNewFile();
+                            //destination.createNewFile();
                             fo = new FileOutputStream(destination);
                             fo.write(bytes.toByteArray());
                             fo.close();
@@ -200,10 +196,9 @@ public class ImageUtils {
                                         storageReference,
                                         onSuccessListener
                                 );
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Timber.wtf("creating image ioexception");
+                            return;
                         }
                     }
                     break;

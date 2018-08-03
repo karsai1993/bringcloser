@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -16,6 +15,9 @@ import karsai.laszlo.bringcloser.adapter.MessageAdapter;
 import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 
+/**
+ * Background task to handle filtering in chat messages
+ */
 public class SearchChatMessageAsyncTask extends AsyncTask<String, Void, List<ChatDetail>> {
 
     private RecyclerView mRecyclerView;

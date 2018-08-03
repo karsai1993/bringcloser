@@ -1,16 +1,19 @@
 package karsai.laszlo.bringcloser.fragment;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,18 +33,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.WishAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Wish;
-import karsai.laszlo.bringcloser.ui.screens.addnewwishactivity.AddNewWishActivity;
+import karsai.laszlo.bringcloser.activity.AddNewWishActivity;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
+import timber.log.Timber;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment to handle connection wishes related information
  */
 public class ConnectionWishFragment extends Fragment implements Comparator<Wish>{
 
@@ -69,8 +75,9 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
 
     public ConnectionWishFragment() {}
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView
                 = inflater.inflate(R.layout.fragment_connection_wish, container, false);
@@ -88,7 +95,7 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
         }
 
         mWishRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
-                getContext().getResources().getInteger(R.integer.rv_connection_detail_span_count),
+                Objects.requireNonNull(getContext()).getResources().getInteger(R.integer.rv_connection_detail_span_count),
                 StaggeredGridLayoutManager.VERTICAL
         ));
         mWishRecyclerView.setHasFixedSize(true);
@@ -140,7 +147,30 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
                     startActivity(intent);
                 }
             });
+            mPlusOneWishFab.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if (keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                            && keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+                        mWishRecyclerView.requestFocus();
+                    }
+                    return false;
+                }
+            });
         }
+
+        mWishRecyclerView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN
+                        && mPlusOneWishFab != null) {
+                    mPlusOneWishFab.requestFocus();
+                }
+                return false;
+            }
+        });
+
         mWishSortingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -172,60 +202,35 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
                     String key = connectionSnapshot.getKey();
-                    if (dataSnapshot
+                    if (key == null) {
+                        Timber.wtf("key null connection wish from uid");
+                        continue;
+                    }
+                    String toUidValue = dataSnapshot
                             .child(key)
                             .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                            .getValue(String.class)
-                            .equals(mConnectionDetail.getToUid())) {
+                            .getValue(String.class);
+                    if (toUidValue == null) {
+                        Timber.wtf("to uid null connection wish");
+                        continue;
+                    }
+                    if (toUidValue.equals(mConnectionDetail.getToUid())) {
                         mWishesDatabaseRef = mConnectionsDatabaseReference
                                 .child(key)
                                 .child(ApplicationHelper.WISHES_NODE);
                         mWishesDatabaseRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                int prevWishNum = mWishList.size();
-                                if (prevWishNum > 1 && !dataSnapshot.exists()) {
-                                    String otherName;
-                                    String otherGender;
-                                    if (mConnectionDetail.getFromUid().equals(mCurrentUserUid)) {
-                                        otherName = mConnectionDetail.getToName();
-                                        otherGender = mConnectionDetail.getToGender();
-                                    } else {
-                                        otherGender = mConnectionDetail.getFromGender();
-                                        otherName = mConnectionDetail.getFromName();
-                                    }
-                                    String genderRepresentative;
-                                    if (otherGender.equals(mSavedContext.getString(R.string.gender_female))) {
-                                        genderRepresentative
-                                                = mSavedContext.getString(R.string.gender_representative_female);
-                                    } else if (otherGender.equals(mSavedContext.getString(R.string.gender_male))) {
-                                        genderRepresentative
-                                                = mSavedContext.getString(R.string.gender_representative_male);
-                                    } else {
-                                        genderRepresentative
-                                                = mSavedContext.getString(R.string.gender_representative_none);
-                                    }
-                                    Toast.makeText(
-                                            mSavedContext,
-                                            new StringBuilder()
-                                                    .append(mSavedContext.getString(R.string
-                                                            .other_people_delete_common_1))
-                                                    .append(otherName)
-                                                    .append(mSavedContext.getString(R.string
-                                                            .other_people_delete_common_2))
-                                                    .append(genderRepresentative)
-                                                    .append(mSavedContext.getString(R.string
-                                                            .other_people_delete_common_3))
-                                                    .toString(),
-                                            Toast.LENGTH_LONG).show();
-                                    if (mActivity != null) {
-                                        mActivity.finish();
-                                    }
-                                }
                                 mWishList.clear();
                                 for (DataSnapshot wishSnapshot : dataSnapshot.getChildren()) {
                                     Wish wish = wishSnapshot.getValue(Wish.class);
-                                    mWishList.add(wish);
+                                    if (wish == null) {
+                                        Timber.wtf("connection wish null");
+                                        continue;
+                                    }
+                                    if (wish.getFromUid().equals(mCurrentUserUid)) {
+                                        mWishList.add(wish);
+                                    }
                                 }
 
                                 Collections.sort(mWishList, ConnectionWishFragment.this);
@@ -291,8 +296,29 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
         if (context == null) {
             context = mSavedContext;
         }
-        if (order.equals(context.getResources().getString(R.string.wish_sorted_by_default))) {
-            return wishOne.getWhenToArrive().compareTo(wishTwo.getWhenToArrive());
+        if (order.equals(context.getResources().getString(R.string.sorted_by_default))) {
+            Date dateOne = ApplicationHelper.getDateAndTime(
+                    wishOne.getWhenToArrive()
+            );
+            Date dateTwo = ApplicationHelper.getDateAndTime(
+                    wishTwo.getWhenToArrive()
+            );
+            if (dateOne == null || dateTwo == null) {
+                return wishOne.getWhenToArrive().compareTo(wishTwo.getWhenToArrive());
+            }
+            return dateOne.compareTo(dateTwo);
+        } else if (order.equals(context.getResources()
+                .getString(R.string.sorted_by_time_descending))) {
+            Date dateOne = ApplicationHelper.getDateAndTime(
+                    wishOne.getWhenToArrive()
+            );
+            Date dateTwo = ApplicationHelper.getDateAndTime(
+                    wishTwo.getWhenToArrive()
+            );
+            if (dateOne == null || dateTwo == null) {
+                return wishTwo.getWhenToArrive().compareTo(wishOne.getWhenToArrive());
+            }
+            return dateTwo.compareTo(dateOne);
         } else {
             return wishOne.getOccasion().compareToIgnoreCase(wishTwo.getOccasion());
         }

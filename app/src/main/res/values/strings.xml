@@ -17,12 +17,17 @@
 
     <string name="welcome_start">Hi,</string>
 
-    <string name="nav_received_items">Received Items</string>
+    <string name="nav_received_items">Received Memories</string>
     <string name="nav_profile_settings">Profile Settings</string>
-    <string name="nav_about">About</string>
+    <string name="nav_about">About App</string>
+    <string name="nav_birthday_base">Birthday:\u0020</string>
+    <string name="nav_gender_base">Gender:\u0020</string>
 
     <string name="no_internet_message">You are currently offline!
-        Please, check your connection, and open the app again.</string>
+        Please, check your network connection, and try again.</string>
+    <string name="no_internet_message_general">You are currently offline!
+        Please, note that the changes will be synced when you will be online again!</string>
+    <string name="retry">RETRY</string>
     <string name="zero_character_name_message">It is not recommended to leave it empty!</string>
     <string name="wrong_date_selected_message_before">Selected day should be before today!</string>
     <string name="wrong_date_selected_message_after">Selected day should be today or after!</string>
@@ -34,8 +39,10 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="gender_none">I do not want to specify</string>
-    <string name="settings_name_warning">Name should not contain line break(s)!</string>
-    <string name="settings_activity">Profile Settings</string>
+    <string name="settings_activity">Profile settings</string>
+    <string name="about_activity">About BringCloser</string>
+    <string name="received_details_activity_label">Your received memories</string>
+    <string name="received_details_widget_label">Your received memories</string>
     <string name="add_new_connection_activity">Search for a new connection</string>
     <string name="add_chosen_connection_activity">Add the chosen connection</string>
     <string name="settings_birthday_default">Data not provided</string>
@@ -44,22 +51,22 @@
     <string name="dialog_title">Type the desired message</string>
     <string name="dialog_wish_withdraw_title">You\'re about to withdraw the following wish!</string>
     <string name="dialog_event_withdraw_title">You\'re about to withdraw the following event notification!</string>
+    <string name="dialog_thought_withdraw_title">You\'re about to delete the following thought!</string>
+    <string name="dialog_thought_send_title">You\'re about to send the following thought!</string>
     <string name="dialog_settings_positive_btn">OK</string>
-    <string name="dialog_settings_negative_btn">CANCEL</string>
+    <string name="dialog_settings_negative_btn">@android:string/cancel</string>
     <string name="dialog_settings_back_btn">BACK</string>
     <string name="settings_change_btn">CHANGE</string>
     <string name="settings_verification_btn">VERIFY</string>
     <string name="settings_verification_positive">Verified</string>
     <string name="settings_verification_negative">Not verified</string>
     <string name="settings_verification_ongoing">Checking mail box, verifying, re-authenticating</string>
-    <string name="nav_drawer_verification_required">Email verification required</string>
+    <string name="nav_drawer_verification_required">Email verification required!</string>
     <string name="starting_toolbar_title">Loading&#8230;</string>
     <string name="no_suitable_app_message">Your phone has no app to perform the request!</string>
-    <string name="take_photo_error_message">Photo file can\'t be created, please try again!</string>
     <string name="permission_needed">The following permissions are necessary to continue&#8230;</string>
     <string name="permission_needed_message">Read and write external storage permissions are needed!</string>
-    <string name="denied_permission_message">You cannot add camera picture or image from
-        your device without granting permissions!</string>
+    <string name="denied_permission_message">You cannot continue without granting permissions!</string>
     <string name="re_authenticate_request">Please, re-authenticate, and then
         try again to complete the deletion of account.</string>
     <string name="delete_account_dialog_title">You\'re about to delete your account!</string>
@@ -121,6 +128,7 @@
     <string name="relationship_type_niece">Niece</string>
     <string name="relationship_type_other">Other</string>
     <string name="relationship_type_acquaintanceship">Acquaintanceship</string>
+    <string name="relationship_type_relative">Relative</string>
     <string name="relationship_type_not_selected">Please, select a valid relationship type!</string>
 
     <string name="wish_default_occasion">Select an occasion&#8230;</string>
@@ -186,23 +194,40 @@
         <item>@string/wish_father_day_occasion</item>
     </string-array>
 
-    <string name="wish_sorted_by_default">Time</string>
+    <string name="sorted_by_default">Time - Ascending</string>
+    <string name="sorted_by_time_descending">Time - Descending</string>
     <string name="wish_sorted_by_occasion">Occasion</string>
     <string-array name="wish_sort_options">
-        <item>@string/wish_sorted_by_default</item>
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
         <item>@string/wish_sorted_by_occasion</item>
     </string-array>
-    <string name="event_sorted_by_default">Time</string>
     <string name="event_sorted_by_title">Title</string>
     <string name="event_sorted_by_place">Place</string>
     <string-array name="event_sort_options">
-        <item>@string/event_sorted_by_default</item>
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
         <item>@string/event_sorted_by_title</item>
         <item>@string/event_sorted_by_place</item>
+    </string-array>
+    <string name="thought_sorted_by_message">Message</string>
+    <string-array name="thought_sort_options">
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
+        <item>@string/thought_sorted_by_message</item>
+    </string-array>
+    <string name="received_detail_sorted_by_type">Type</string>
+    <string name="received_detail_sorted_by_sender">Sender</string>
+    <string-array name="received_detail_sort_options">
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
+        <item>@string/received_detail_sorted_by_type</item>
+        <item>@string/received_detail_sorted_by_sender</item>
     </string-array>
     <string name="sorted_by_title">What do you want to sort by?</string>
     <string name="edit_sent_data">EDIT MESSAGE</string>
     <string name="cancel_sent_data">WITHDRAW</string>
+    <string name="thought_cancel_sent_data">DELETE</string>
 
     <string name="play_services_alert">Without a valid Play Services installed,
         you may not receive certain notifications!</string>
@@ -227,22 +252,18 @@
         the following request!</string>
 
     <string name="congrats_on_accepted_request_start">Congrats! Your new connection is</string>
-    <string name="request_is_sent">Your request has been sent to</string>
-    <string name="request_deleted_1">The request relating to</string>
-    <string name="request_deleted_2">has been deleted</string>
-
-    <string name="found_connections">Found connections</string>
-    <string name="found_sent_requests">Found sent requests</string>
-    <string name="found_received_requests">Found received requests</string>
-
-    <string name="search_title">Search by:</string>
-    <string name="search_radio_btn_name">Name</string>
-    <string name="search_radio_btn_type">Relationship type</string>
+    <string name="request_deleted_1">The deletion relating to</string>
+    <string name="request_deleted_2">has been performed!</string>
 
     <string name="new_request_title">New contact request!</string>
-    <string name="new_request_body">wants to connect you.</string>
+    <string name="new_request_body">\u0020wants to connect you.</string>
     <string name="new_approval_title">Congrats for new contact!</string>
-    <string name="new_approval_body">and you are connected.</string>
+    <string name="new_approval_body">\u0020and you are connected.</string>
+    <string name="new_wish_title">New wish -\u0020</string>
+    <string name="new_event_title">New event -\u0020</string>
+    <string name="new_thought_title">New thought -\u0020</string>
+    <string name="new_message_title">New message -\u0020</string>
+    <string name="new_message_image_body">You have received an image in chat.</string>
 
     <string name="already_got_request">You already have received a request from</string>
 
@@ -266,6 +287,7 @@
     <string name="saved_to_clipboard_2">\" has been saved to clipboard!</string>
 
     <string name="share_title">Sharing your image&#8230;</string>
+
     <string name="image_link_copied">Image link has been saved to clipboard!</string>
 
     <string name="problem">Error occurred.</string>
@@ -284,7 +306,7 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
 
-    <string name="wish_already_sent">This wish has already been sent!</string>
+    <!--string name="wish_already_sent">This wish has already been sent!</string-->
     <string name="wish_label">Add a new wish</string>
     <string name="wish_other_edittext_hint">Specify the occasion&#8230;</string>
     <string name="wish_edittext_hint">Type your wish&#8230;</string>
@@ -303,7 +325,7 @@
     <string name="alert_no_date">Please, select a date to continue!</string>
     <string name="alert_no_time">Please, select a time to continue!</string>
 
-    <string name="event_already_sent">This event notification has already been sent!</string>
+    <!--string name="event_already_sent">This event notification has already been sent!</string-->
     <string name="event_label">Add a new event</string>
     <string name="event_title_hint">Type the event title&#8230;</string>
     <string name="event_place_hint">Type the event place&#8230;</string>
@@ -316,8 +338,133 @@
     <string name="event_alert_no_place">Please, type the place of the event to continue!</string>
     <string name="event_alert_no_message">Please, type your message regarding the event to continue!</string>
 
+    <string name="thought_label">Add a new thought</string>
+    <string name="thought_message_hint">Type your thought&#8230;</string>
+    <string name="thought_photo_alert">You can append an extra photo to your thought
+    to make it more special!</string>
+    <string name="thought_question_1">Would like\u0020</string>
+    <string name="thought_question_2">\u0020to receive it immediately?</string>
+    <string name="thought_status_no">No</string>
+    <string name="thought_status_yes">Yes</string>
+    <string name="thought_status_message_no">This thought is not sent!</string>
+    <!--string name="thought_status_message_yes">This thought has already been sent!</string-->
+    <string name="thought_alert_no_message">Please, type your message regarding the thought to continue!</string>
+
     <string name="up_nav_deletion_alert">As you stepped back, the uploaded photo has been deleted!</string>
+
+    <string name="received_detail_wish">Wish</string>
+    <string name="received_detail_event">Event</string>
+    <string name="received_detail_thought">Thought</string>
+    <string name="share_title_received_item_1">Sharing your received\u0020</string>
+    <string name="share_title_received_item_2">&#8230;</string>
+    <string name="share_content_received_item_1">I got the following\u0020</string>
+    <string name="share_content_received_item_2">\u0020from\u0020</string>
+    <string name="share_content_received_item_3">\u0020at\u0020</string>
+    <string name="received_details_no_selection_alert">
+        Please, select at least one out of the three options above!</string>
+    <string name="received_details_no_result_alert">
+        There are no results found based on the checked item(s)!</string>
+    <string name="dot">\u2022</string>
 
     <string name="facebook_application_id" translatable="false">621043098259578</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>
+    <string name="empty_view_text">You have no received items, yet!\n
+        Let others know the BringCloser app!</string>
+
+    <string name="about_mission_label">Mission</string>
+    <string name="about_mission_1">BringCloser\'s mission is to help you remember all your memories
+        relating to your close people.\n
+        Fresh up your and your close people’s lives by giving and/or receiving:</string>
+    <string name="about_mission_2">
+        \u2022 wish on a specific occurrence (e.g. birthday, name day, international women’s day, mother’s day,
+        father’s day, etc.)\n
+        \u2022 reminder on a scheduled event (e.g. school leaving exam, interview for
+        the dream job, etc.)\n
+        \u2022 private thought on a key happening (e.g. first date, first
+        anniversary, first flowers to buy someone, etc.)</string>
+    <string name="about_mission_3">
+        This app focuses on your memories (interactions with close people) from your everyday life,
+        and to give it back in a smooth manner.</string>
+    <string name="about_used_libraries_label">Used third party libraries</string>
+    <string name="about_used_libraries_firebase_common_name">com.google.firebase:firebase-common</string>
+    <string name="about_used_libraries_firebase_common_version">16.0.0</string>
+    <string name="about_used_libraries_firebase_core_name">com.google.firebase:firebase-core</string>
+    <string name="about_used_libraries_firebase_core_version">16.0.1</string>
+    <string name="about_used_libraries_firebase_auth_name">com.google.firebase:firebase-auth</string>
+    <string name="about_used_libraries_firebase_auth_version">16.0.2</string>
+    <string name="about_used_libraries_firebase_database_name">com.google.firebase:firebase-database</string>
+    <string name="about_used_libraries_firebase_databasae_version">16.0.1</string>
+    <string name="about_used_libraries_firebase_storage_name">com.google.firebase:firebase-storage</string>
+    <string name="about_used_libraries_firebase_storage_version">16.0.1</string>
+    <string name="about_used_libraries_firebase_messaging_name">com.google.firebase:firebase-messaging</string>
+    <string name="about_used_libraries_firebase_messaging_version">17.1.0</string>
+    <string name="about_used_libraries_firebase_ui_auth_name">com.firebaseui:firebase-ui-auth</string>
+    <string name="about_used_libraries_firebase_ui_auth_version">4.0.0</string>
+    <string name="about_used_libraries_glide_name">com.github.bumptech.glide:glide</string>
+    <string name="about_used_libraries_glide_version">4.7.1</string>
+    <string name="about_used_libraries_glide_compiler_name">com.github.bumptech.glide:compiler</string>
+    <string name="about_used_libraries_glide_compiler_version">4.7.1</string>
+    <string name="about_used_libraries_butterknife_name">com.jakewharton:butterknife</string>
+    <string name="about_used_libraries_butterknife_version">8.8.1</string>
+    <string name="about_used_libraries_butterknife_compiler_name">com.jakewharton:butterknife-compiler</string>
+    <string name="about_used_libraries_butterknife_compiler_version">8.8.1</string>
+    <string name="about_used_libraries_fastscroller_name">com.futuremind.recyclerfastscroll:fastscroll</string>
+    <string name="about_used_libraries_fastscroller_version">0.2.5</string>
+    <string name="about_used_libraries_facebook_login_name">com.facebook.android:facebook-login</string>
+    <string name="about_used_libraries_facebook_login_version">4.34.0</string>
+    <string name="about_used_libraries_firebase_jobdispatcher_name">com.firebase:firebase-jobdispatcher</string>
+    <string name="about_used_libraries_firebase_jobdispatcher_version">0.8.5</string>
+    <string name="about_used_libraries_timber_name">com.jakewharton.timber:timber</string>
+    <string name="about_used_libraries_timber_version">4.7.1</string>
+    <string name="about_license_label">License</string>
+    <string name="about_license_content">Copyright 2018 László Karsai\n
+        \n
+        Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at\n
+        \n
+        http://www.apache.org/licenses/LICENSE-2.0\n
+        \n
+        Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.</string>
+    <string name="about_logo_content_description">About Logo</string>
+    <string name="add_chosen_photo_content_description">Add Chosen Photo</string>
+    <string name="camera_content_description">Take Camera Photo</string>
+    <string name="gallery_content_description">Add Photo From Gallery</string>
+    <string name="added_extra_photo_content_description">Added Extra Photo</string>
+    <string name="delete_added_extra_photo_content_description">Delete Added Extra Photo</string>
+    <string name="connection_activity_current_photo">Current Photo</string>
+    <string name="connection_activity_other_photo">Other Photo</string>
+    <string name="search_content_description">Search</string>
+    <string name="send_content_description">Send</string>
+    <string name="settings_photo_content_description">Profile Settings Photo</string>
+    <string name="big_photo_content_description">Big Photo</string>
+    <string name="share_content_description">Share</string>
+    <string name="all_users_image_content_description">All Users Photo</string>
+    <string name="connected_users_photo_content_description">Connected Users Photo</string>
+    <string name="event_extra_photo_content_description">Event Extra Photo</string>
+    <string name="message_from_current_share_content_description">Message From Current Share</string>
+    <string name="message_from_current_photo_content_description">Message From Current Photo</string>
+    <string name="message_from_other_face_photo_content_description">Message From Other Face Photo</string>
+    <string name="message_from_other_photo_content_description">Message From Other Photo</string>
+    <string name="message_from_other_share_content_description">Message From Other Share</string>
+    <string name="go_to_chat_content_description">Go To Chat</string>
+    <string name="from_photo_content_description">From Photo</string>
+    <string name="extra_photo_content_description">Extra Photo</string>
+    <string name="request_from_users_photo_content_description">Request From Users Photo</string>
+    <string name="delete_content_description">Delete Connection</string>
+    <string name="approve_content_description">Approve Connection</string>
+    <string name="request_to_users_photo_content_description">Request To Users Photo</string>
+    <string name="user_face_content_description">User Face Photo</string>
+    <string name="widget_logo_content_description">Widget Logo</string>
+    <string name="about_license_open_in_browser_content_description">Open In Browser License</string>
+    <string name="about_icons_label">Icons</string>
+    <string name="about_icons_content">The app icons are from the following sources:</string>
+    <string name="about_icons_content_icons8">https://icons8.com</string>
+    <string name="about_icons_content_google_icons">https://material.io/tools/icons/?style=baseline</string>
+    <string name="delete_account_conn_number_1">Deleting\u0020</string>
+    <string name="delete_account_conn_number_2">\u0020connections&#8230;</string>
 </resources>

@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="@dimen/distance"
+    android:paddingTop="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -41,7 +41,7 @@
         app:srcCompat="@drawable/baseline_vertical_align_top_black_48"
         app:borderWidth="0dp"
         app:fabSize="mini"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccent"
         app:elevation="@dimen/fab_elevation"
         app:pressedTranslationZ="@dimen/fab_press_translation_z"
         android:visibility="gone"/>
@@ -55,7 +55,7 @@
         app:srcCompat="@drawable/baseline_vertical_align_bottom_black_48"
         app:borderWidth="0dp"
         app:fabSize="mini"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccent"
         app:elevation="@dimen/fab_elevation"
         app:pressedTranslationZ="@dimen/fab_press_translation_z"
         android:visibility="gone"/>

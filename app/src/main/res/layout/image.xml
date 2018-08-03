@@ -14,7 +14,8 @@
             android:scaleType="centerInside"
             android:layout_margin="@dimen/small_distance"
             android:id="@+id/iv_chat_photo_big"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="@string/big_photo_content_description"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +28,8 @@
                 android:layout_weight="1"
                 android:id="@+id/iv_chat_photo_share"
                 android:src="@drawable/baseline_share_black_48"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:contentDescription="@string/share_content_description"/>
 
             <TextView
                 style="@style/AppTheme"
@@ -36,7 +38,6 @@
                 android:layout_weight="1"
                 android:textStyle="bold|italic"
                 android:id="@+id/tv_chat_photo_date_and_time"
-                android:text="2018 jun 8 22:13"
                 android:layout_gravity="center"
                 android:gravity="center"/>
 

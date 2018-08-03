@@ -3,35 +3,53 @@ package karsai.laszlo.bringcloser.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Thought implements Parcelable {
+import java.util.Comparator;
+
+/**
+ * Class to create object for thought
+ */
+public class Thought implements Parcelable, Comparator<Thought> {
 
     String fromUid;
+    String connectionFromUid;
+    String connectionToUid;
     String extraPhotoUrl;
     String timestamp;
-    String content;
-    boolean shouldBeSent;
-
-    public Thought(
-            String fromUid,
-            String extraPhotoUrl,
-            String timestamp,
-            String content,
-            boolean shouldBeSent) {
-        this.fromUid = fromUid;
-        this.extraPhotoUrl = extraPhotoUrl;
-        this.timestamp = timestamp;
-        this.content = content;
-        this.shouldBeSent = shouldBeSent;
-    }
+    String text;
+    boolean hasArrived;
+    String key;
+    Comparator<Thought> listComparator;
 
     public Thought() {}
 
+    public Thought(
+            String fromUid,
+            String connectionFromUid,
+            String connectionToUid,
+            String extraPhotoUrl,
+            String timestamp,
+            String text,
+            boolean hasArrived,
+            String key) {
+        this.fromUid = fromUid;
+        this.connectionFromUid = connectionFromUid;
+        this.connectionToUid = connectionToUid;
+        this.extraPhotoUrl = extraPhotoUrl;
+        this.timestamp = timestamp;
+        this.text = text;
+        this.hasArrived = hasArrived;
+        this.key = key;
+    }
+
     protected Thought(Parcel in) {
         fromUid = in.readString();
+        connectionFromUid = in.readString();
+        connectionToUid = in.readString();
         extraPhotoUrl = in.readString();
         timestamp = in.readString();
-        content = in.readString();
-        shouldBeSent = in.readByte() != 0;
+        text = in.readString();
+        hasArrived = in.readByte() != 0;
+        key = in.readString();
     }
 
     public static final Creator<Thought> CREATOR = new Creator<Thought>() {
@@ -54,6 +72,22 @@ public class Thought implements Parcelable {
         this.fromUid = fromUid;
     }
 
+    public String getConnectionFromUid() {
+        return connectionFromUid;
+    }
+
+    public void setConnectionFromUid(String connectionFromUid) {
+        this.connectionFromUid = connectionFromUid;
+    }
+
+    public String getConnectionToUid() {
+        return connectionToUid;
+    }
+
+    public void setConnectionToUid(String connectionToUid) {
+        this.connectionToUid = connectionToUid;
+    }
+
     public String getExtraPhotoUrl() {
         return extraPhotoUrl;
     }
@@ -70,20 +104,28 @@ public class Thought implements Parcelable {
         this.timestamp = timestamp;
     }
 
-    public String getContent() {
-        return content;
+    public String getText() {
+        return text;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public boolean isShouldBeSent() {
-        return shouldBeSent;
+    public boolean hasArrived() {
+        return hasArrived;
     }
 
-    public void setShouldBeSent(boolean shouldBeSent) {
-        this.shouldBeSent = shouldBeSent;
+    public void setHasArrived(boolean hasArrived) {
+        this.hasArrived = hasArrived;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     @Override
@@ -94,9 +136,17 @@ public class Thought implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(fromUid);
+        parcel.writeString(connectionFromUid);
+        parcel.writeString(connectionToUid);
         parcel.writeString(extraPhotoUrl);
         parcel.writeString(timestamp);
-        parcel.writeString(content);
-        parcel.writeByte((byte) (shouldBeSent ? 1 : 0));
+        parcel.writeString(text);
+        parcel.writeByte((byte) (hasArrived ? 1 : 0));
+        parcel.writeString(key);
+    }
+
+    @Override
+    public int compare(Thought thoughtOne, Thought thoughtTwo) {
+        return listComparator.compare(thoughtOne, thoughtTwo);
     }
 }

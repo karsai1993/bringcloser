@@ -21,7 +21,8 @@
                 android:layout_height="@dimen/wish_extra_photo_size"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:id="@+id/iv_wish_extra_photo"/>
+                android:id="@+id/iv_wish_extra_photo"
+                android:contentDescription="@string/extra_photo_content_description"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,7 +42,7 @@
                     android:textStyle="bold"
                     android:textSize="@dimen/header_text_size"
                     android:id="@+id/tv_wish_occasion"
-                    android:text="Birthday"/>
+                    android:textColor="@android:color/white"/>
 
                 <TextView
                     style="@style/AppTheme"
@@ -52,7 +53,7 @@
                     android:gravity="center"
                     android:textStyle="bold"
                     android:id="@+id/tv_wish_when"
-                    android:text="2018 júl. 14 14:00"/>
+                    android:textColor="@android:color/white"/>
 
             </LinearLayout>
 
@@ -65,13 +66,11 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/tv_wish_text"
-            android:layout_margin="@dimen/small_distance"
-            android:text="Hi László! Happy birthday!"/>
+            android:layout_margin="@dimen/small_distance"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ll_wish_action">
+            android:layout_height="wrap_content">
 
             <TextView
                 style="@style/AppTheme"

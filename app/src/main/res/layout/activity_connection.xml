@@ -7,11 +7,10 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout
-
         android:id="@+id/connection_root_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="karsai.laszlo.bringcloser.ui.screens.connection.ConnectionActivity"
+        tools:context="karsai.laszlo.bringcloser.activity.ConnectionActivity"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
@@ -51,6 +50,7 @@
                         android:layout_gravity="bottom"
                         android:gravity="bottom"
                         android:orientation="horizontal"
+                        android:baselineAligned="false"
                         android:layout_margin="@dimen/distance">
 
                         <LinearLayout
@@ -73,14 +73,14 @@
                                 android:id="@+id/iv_connection_toolbar_current_photo"
                                 android:layout_width="@dimen/nav_drawer_photo_size"
                                 android:layout_height="@dimen/nav_drawer_photo_size"
-                                android:src="@drawable/baseline_face_black_48"/>
+                                android:src="@drawable/baseline_face_black_48"
+                                android:contentDescription="@string/connection_activity_current_photo"/>
 
                             <TextView
                                 style="@style/AppTheme"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/tv_connection_toolbar_current_relationship"
-                                android:text="FRIEND"
                                 android:textStyle="bold|italic"
                                 android:background="@drawable/action_background"/>
 
@@ -99,7 +99,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/tv_connection_toolbar_other_name"
-                                android:text="Norbert"
                                 android:textStyle="bold"
                                 android:background="@drawable/action_background"/>
 
@@ -107,14 +106,14 @@
                                 android:id="@+id/iv_connection_toolbar_other_photo"
                                 android:layout_width="@dimen/nav_drawer_photo_size"
                                 android:layout_height="@dimen/nav_drawer_photo_size"
-                                android:src="@drawable/baseline_face_black_48"/>
+                                android:src="@drawable/baseline_face_black_48"
+                                android:contentDescription="@string/connection_activity_other_photo"/>
 
                             <TextView
                                 style="@style/AppTheme"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/tv_connection_toolbar_other_relationship"
-                                android:text="FRIEND"
                                 android:textStyle="bold|italic"
                                 android:background="@drawable/action_background"/>
 
@@ -140,8 +139,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:id="@+id/tv_connection_toolbar_since"
-                            android:text="2018 JUN 29"/>
+                            android:id="@+id/tv_connection_toolbar_since"/>
 
                     </LinearLayout>
 
@@ -167,6 +165,10 @@
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.CollapsingToolbarLayout>
+
+            <include
+                layout="@layout/no_internet_general"
+                android:visibility="gone"/>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout_connection_details"
@@ -210,7 +212,8 @@
                 android:layout_height="@dimen/chat_control_panel_icon_size"
                 android:layout_gravity="bottom"
                 android:src="@drawable/baseline_search_black_48"
-                android:id="@+id/iv_chat_search"/>
+                android:id="@+id/iv_chat_search"
+                android:contentDescription="@string/search_content_description"/>
 
             <EditText
                 style="@style/AppTheme"
@@ -219,6 +222,7 @@
                 android:layout_gravity="bottom"
                 android:id="@+id/et_chat_filter"
                 android:hint="@string/chat_filter_hint"
+                android:inputType="none"
                 android:layout_weight="1"
                 android:visibility="gone"/>
 
@@ -233,7 +237,8 @@
                     android:layout_height="@dimen/chat_control_panel_icon_size"
                     android:layout_gravity="bottom"
                     android:src="@drawable/baseline_photo_camera_black_48"
-                    android:id="@+id/iv_chat_add_photo_from_camera"/>
+                    android:id="@+id/iv_chat_add_photo_from_camera"
+                    android:contentDescription="@string/camera_content_description"/>
 
 
                 <ImageView
@@ -241,7 +246,8 @@
                     android:layout_height="@dimen/chat_control_panel_icon_size"
                     android:layout_gravity="bottom"
                     android:src="@drawable/baseline_photo_black_48"
-                    android:id="@+id/iv_chat_add_photo_from_gallery"/>
+                    android:id="@+id/iv_chat_add_photo_from_gallery"
+                    android:contentDescription="@string/gallery_content_description"/>
 
                 <EditText
                     style="@style/AppTheme"
@@ -250,6 +256,7 @@
                     android:layout_gravity="bottom"
                     android:id="@+id/et_chat"
                     android:hint="@string/chat_hint"
+                    android:inputType="textCapSentences"
                     android:layout_weight="1"/>
 
                 <ImageView
@@ -258,7 +265,8 @@
                     android:layout_gravity="bottom"
                     android:src="@drawable/baseline_send_black_48"
                     android:id="@+id/iv_chat_send"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:contentDescription="@string/send_content_description"/>
 
             </LinearLayout>
 

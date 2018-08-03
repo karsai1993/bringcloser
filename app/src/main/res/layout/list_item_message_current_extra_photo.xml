@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true">
+
+        <ImageView
+            android:layout_width="@dimen/photo_icon_size"
+            android:layout_height="@dimen/photo_icon_size"
+            android:id="@+id/iv_chat_from_current_photo_share"
+            android:src="@drawable/baseline_share_black_48"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/small_distance"
+            android:contentDescription="@string/message_from_current_share_content_description"/>
+
+        <FrameLayout
+            android:layout_width="@dimen/chat_sent_image_size"
+            android:layout_height="@dimen/chat_sent_image_size">
+
+            <ImageView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/baseline_face_black_48"
+                android:layout_marginTop="@dimen/small_distance"
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                android:id="@+id/iv_chat_from_current_sent_photo"
+                android:contentDescription="@string/message_from_current_photo_content_description"/>
+
+            <TextView
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:id="@+id/tv_chat_from_current_time"
+                android:background="@drawable/message_from_current_background"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/time_text_size"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

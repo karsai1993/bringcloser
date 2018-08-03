@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/no_internet_general"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_thought_message"
+                    android:hint="@string/thought_message_hint"
+                    android:inputType="textCapSentences"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/small_distance">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_thought_question"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="@dimen/small_distance"/>
+
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_thought_status"
+                            android:textStyle="italic"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_thought"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/small_distance"/>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@string/photo_assignment"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/small_distance">
+
+                    <ImageView
+                        android:layout_width="@dimen/photo_icon_size"
+                        android:layout_height="@dimen/photo_icon_size"
+                        android:src="@drawable/baseline_photo_camera_black_48"
+                        android:id="@+id/iv_thought_add_photo_from_camera"
+                        android:layout_marginEnd="@dimen/small_distance"
+                        android:contentDescription="@string/camera_content_description"/>
+
+
+                    <ImageView
+                        android:layout_width="@dimen/photo_icon_size"
+                        android:layout_height="@dimen/photo_icon_size"
+                        android:src="@drawable/baseline_photo_black_48"
+                        android:id="@+id/iv_thought_add_photo_from_gallery"
+                        android:contentDescription="@string/gallery_content_description"/>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/tv_thought_photo_alert"
+                    android:text="@string/thought_photo_alert"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/ll_thought_add_extra_photo"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/big_photo_size"
+                        android:layout_weight="1"
+                        android:id="@+id/iv_thought_added_extra_photo"
+                        android:layout_gravity="center"
+                        android:scaleType="centerInside"
+                        android:contentDescription="@string/added_extra_photo_content_description"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/photo_icon_size"
+                        android:layout_height="@dimen/photo_icon_size"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/small_distance"
+                        android:id="@+id/iv_thought_added_extra_photo_delete"
+                        android:src="@drawable/baseline_delete_black_48"
+                        android:contentDescription="@string/delete_added_extra_photo_content_description"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_approve_add_new_thought"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_done_black_48"
+            android:elevation="@dimen/fab_elevation"
+            android:translationZ="@dimen/fab_press_translation_z" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

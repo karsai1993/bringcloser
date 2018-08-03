@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    style="@style/AppTheme"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:textStyle="bold|italic"
+    android:background="@android:color/holo_red_light"
+    android:textColor="@android:color/white"
+    android:id="@+id/tv_no_internet"
+    android:text="@string/no_internet_message_general"/>

@@ -16,7 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
+import timber.log.Timber;
 
+/**
+ * Service to update database with the new token
+ */
 public class UpdateStateService extends JobService {
     @Override
     public boolean onStartJob(JobParameters job) {
@@ -89,12 +93,20 @@ public class UpdateStateService extends JobService {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
                                 String key = connectionSnapshot.getKey();
-                                if (dataSnapshot
+                                if (key == null) {
+                                    Timber.wtf("key null connection from update service");
+                                    continue;
+                                }
+                                String toUidValue = dataSnapshot
                                         .child(key)
                                         .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                                        .getValue(String.class)
-                                        .equals(toUid)) {
-                                    DatabaseReference databaseReference;
+                                        .getValue(String.class);
+                                if (toUidValue == null) {
+                                    Timber.wtf("to uid null connections update service");
+                                    continue;
+                                }
+                                if (toUidValue.equals(toUid)) {
+                                    final DatabaseReference databaseReference;
                                     if (type.equals(ApplicationHelper.SERVICE_TYPE_WISH)) {
                                         databaseReference = connectionsDatabaseRef
                                                 .child(key)
@@ -106,12 +118,25 @@ public class UpdateStateService extends JobService {
                                     } else {
                                         return;
                                     }
-                                    Map<String, Object> updateValueMap = new HashMap<>();
+                                    final Map<String, Object> updateValueMap = new HashMap<>();
                                     updateValueMap.put(
                                             "/" + ApplicationHelper.OBJECT_HAS_ARRIVED_IDENTIFIER,
                                             true
                                     );
-                                    databaseReference.updateChildren(updateValueMap);
+                                    databaseReference.addListenerForSingleValueEvent(
+                                            new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                databaseReference.updateChildren(updateValueMap);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
                                 }
                             }
                         }

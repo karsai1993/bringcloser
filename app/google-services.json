@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "8187963515-ciok2hdpaam9n5qfpl2ndm70s2582n6g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "karsai.laszlo.bringcloser",
-            "certificate_hash": "2ddf2662e4c5cbd8c3b53ec6144edbf9e0ee8737"
-          }
-        },
-        {
-          "client_id": "8187963515-fbnje82kuerv303n4t6qklputak122lt.apps.googleusercontent.com",
+          "client_id": "8187963515-v89hilbq0sa97fad8nietndsgo6897kn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "karsai.laszlo.bringcloser",
             "certificate_hash": "20bb9a9f67eab051ca0edd82d6043b4da6825e44"
+          }
+        },
+        {
+          "client_id": "8187963515-57jaevumdvhucruu490fr6b8ia6gas2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "karsai.laszlo.bringcloser",
+            "certificate_hash": "8200d929f74854c8d4d02e80abf0b24f6332cdf2"
           }
         },
         {

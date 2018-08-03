@@ -5,8 +5,8 @@ import android.os.Parcelable;
 
 /**
  * Created by Laci on 13/06/2018.
+ * Class to create object for connection
  */
-
 public class Connection implements Parcelable {
 
     private String fromUid;

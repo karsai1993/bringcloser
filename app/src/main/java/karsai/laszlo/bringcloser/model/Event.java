@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import java.util.Comparator;
 
+/**
+ * Class to create object for event
+ */
 public class Event implements Parcelable, Comparator<Event> {
 
     String fromUid;

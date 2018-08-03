@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/widget_list_item_sizes"
+    android:layout_height="@dimen/widget_list_item_sizes"
+    android:padding="@dimen/small_distance"
+    android:id="@+id/rl_widget_item">
+
+    <TextView
+        style="@style/AppTheme"
+        android:id="@+id/tv_widget_item_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_message_background"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/widget_list_message_item_dist"
+        android:gravity="center"
+        android:textStyle="bold|italic"
+        android:textColor="@color/colorAccent"
+        android:ellipsize="end"
+        android:maxLines="4"/>
+
+    <TextView
+        style="@style/AppTheme"
+        android:id="@+id/tv_widget_item_type"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/widget_list_type_and_name_item_sizes"
+        android:background="@drawable/widget_type_and_name_background"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@android:color/white"
+        android:padding="@dimen/action_padding"
+        android:layout_marginStart="@dimen/widget_list_type_and_name_dist"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+    <TextView
+        style="@style/AppTheme"
+        android:id="@+id/tv_widget_item_from_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/widget_type_and_name_background"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/action_padding"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="@dimen/widget_list_type_and_name_dist"/>
+
+
+</RelativeLayout>

@@ -5,62 +5,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            layout="@layout/no_internet_general"
+            android:visibility="gone"/>
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/screen_regular_distance"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_photo_height"
-                android:src="@drawable/baseline_face_black_48"
-                android:transitionName="image_transition"
-                android:id="@+id/iv_chosen_photo"
-                android:scaleType="centerInside"/>
-
-            <TextView
-                style="@style/AppTheme"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_chosen_name"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textSize="@dimen/nav_drawer_user_name_text_size"
-                android:textStyle="bold|italic"/>
+                android:padding="@dimen/screen_regular_distance"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/divider_width"
-                android:background="@color/colorAccent"
-                android:layout_marginTop="@dimen/divider_margin"
-                android:layout_marginBottom="@dimen/divider_margin"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_photo_height"
+                    android:src="@drawable/baseline_face_black_48"
+                    android:transitionName="image_transition"
+                    android:id="@+id/iv_chosen_photo"
+                    android:scaleType="centerInside"
+                    android:contentDescription="@string/add_chosen_photo_content_description"/>
 
-            <TextView
-                style="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:id="@+id/tv_chosen_question"/>
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_chosen_name"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/nav_drawer_user_name_text_size"
+                    android:textStyle="bold|italic"/>
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner_chosen_relationship"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_width"
+                    android:background="@color/colorAccent"
+                    android:layout_marginTop="@dimen/divider_margin"
+                    android:layout_marginBottom="@dimen/divider_margin"/>
 
-        </LinearLayout>
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:id="@+id/tv_chosen_question"/>
 
-    </ScrollView>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_chosen_relationship"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_approve_add_new_connection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right|end"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/baseline_done_black_48"
         android:elevation="@dimen/fab_elevation"

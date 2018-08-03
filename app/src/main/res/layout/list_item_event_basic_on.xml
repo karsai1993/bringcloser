@@ -33,8 +33,8 @@
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="@dimen/header_text_size"
-                    android:id="@+id/tv_event_title"
-                    android:text="Birthday"/>
+                    android:textColor="@android:color/white"
+                    android:id="@+id/tv_event_title"/>
 
                 <TextView
                     style="@style/AppTheme"
@@ -45,8 +45,8 @@
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="@dimen/header_text_size"
-                    android:id="@+id/tv_event_place"
-                    android:text="Budapesti Műszaki és Gazdaságtudományi Egyetem"/>
+                    android:textColor="@android:color/white"
+                    android:id="@+id/tv_event_place"/>
 
                 <TextView
                     style="@style/AppTheme"
@@ -56,8 +56,8 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:id="@+id/tv_event_when"
-                    android:text="2018 júl. 14 14:00"/>
+                    android:textColor="@android:color/white"
+                    android:id="@+id/tv_event_when"/>
 
             </LinearLayout>
 
@@ -70,8 +70,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/tv_event_message"
-            android:layout_margin="@dimen/small_distance"
-            android:text="Hi László! Happy birthday!"/>
+            android:layout_margin="@dimen/small_distance"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -2,11 +2,10 @@ package karsai.laszlo.bringcloser.fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,9 +44,10 @@ import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Message;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 import karsai.laszlo.bringcloser.model.User;
+import timber.log.Timber;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment to handle connection chat messages related information
  */
 public class ConnectionChatFragment extends Fragment {
 
@@ -56,12 +55,7 @@ public class ConnectionChatFragment extends Fragment {
 
     private RecyclerView mChatRecyclerView;
     private ProgressBar mProgressBar;
-    /*private FloatingActionButton mSearchFab;
-    private ImageView mCameraImageView;
-    private ImageView mGalleryImageView;
-    private ImageView mSendImageView;
-    private EditText mMessageEditText;
-    */private String mCurrentUserUid;
+    private String mCurrentUserUid;
     private ConnectionDetail mConnectionDetail;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mConnectionsDatabaseReference;
@@ -69,6 +63,8 @@ public class ConnectionChatFragment extends Fragment {
     private DatabaseReference mMessagesDatabaseRef;
     private Query mConnectionsQuery;
     private ValueEventListener mConnectionMessagesValueEventListener;
+    private DatabaseReference mConnectionTypingDatabaseRef;
+    private ValueEventListener mConnectionTypingValueEventListener;
     private List<MessageDetail> mMessageDetailList;
     private List<Message> mMessageList;
     private MessageAdapter mMessageAdapter;
@@ -77,19 +73,15 @@ public class ConnectionChatFragment extends Fragment {
     private FloatingActionButton mScrollUpFab;
     private FloatingActionButton mScrollDownFab;
     private ImageView mSearchImageView;
-    private ImageView mCameraImageView;
-    private ImageView mGalleryImageView;
-    private ImageView mSendImageView;
-    private EditText mMessageEditText;
     private EditText mMessageFilterEditText;
-    private LinearLayout mChatControlLayout;
     private LinearLayout mChatInnerControlLayout;
     private TextWatcher mTextWatcher;
     private Activity mActivity;
     private Bundle mSavedInstanceState;
+    private String mOtherUid;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         mSavedInstanceState = savedInstanceState;
         View rootView
@@ -99,6 +91,7 @@ public class ConnectionChatFragment extends Fragment {
         mChatNoDataTextView = rootView.findViewById(R.id.tv_chat_no_data);
         mScrollUpFab = rootView.findViewById(R.id.fab_chat_scroll_up);
         mScrollDownFab = rootView.findViewById(R.id.fab_chat_scroll_down);
+
         mChatRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), OrientationHelper.VERTICAL, false));
         mChatRecyclerView.setHasFixedSize(true);
@@ -154,6 +147,15 @@ public class ConnectionChatFragment extends Fragment {
         );
         mChatRecyclerView.setAdapter(mMessageAdapter);
 
+        if (mCurrentUserUid.equals(mConnectionDetail.getFromUid())) {
+            mOtherUid = mConnectionDetail.getToUid();
+        } else {
+            mOtherUid = mConnectionDetail.getFromUid();
+        }
+        mConnectionTypingDatabaseRef = mFirebaseDatabase.getReference()
+                .child(ApplicationHelper.CHAT_TYPING_NODE)
+                .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
+                .child(mOtherUid);
         mConnectionsQuery = mConnectionsDatabaseReference
                 .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mConnectionDetail.getFromUid());
@@ -162,56 +164,32 @@ public class ConnectionChatFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
                     String key = connectionSnapshot.getKey();
-                    if (dataSnapshot
+                    if (key == null) {
+                        Timber.wtf("key null connection from chat");
+                        continue;
+                    }
+                    String toUidValue = dataSnapshot
                             .child(key)
                             .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                            .getValue(String.class)
-                            .equals(mConnectionDetail.getToUid())) {
+                            .getValue(String.class);
+                    if (toUidValue == null) {
+                        Timber.wtf("to uid null chat");
+                        continue;
+                    }
+                    if (toUidValue.equals(mConnectionDetail.getToUid())) {
                         mMessagesDatabaseRef = mConnectionsDatabaseReference
                                 .child(key)
                                 .child(ApplicationHelper.MESSAGES_NODE);
                         mMessagesDatabaseRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                int prevMessageNum = mMessageList.size();
-                                if (prevMessageNum > 0 && !dataSnapshot.exists()) {
-                                    String otherName;
-                                    String otherGender;
-                                    if (mConnectionDetail.getFromUid().equals(mCurrentUserUid)) {
-                                        otherName = mConnectionDetail.getToName();
-                                        otherGender = mConnectionDetail.getToGender();
-                                    } else {
-                                        otherGender = mConnectionDetail.getFromGender();
-                                        otherName = mConnectionDetail.getFromName();
-                                    }
-                                    String genderRepresentative;
-                                    if (otherGender.equals(getContext().getString(R.string.gender_female))) {
-                                        genderRepresentative
-                                                = getContext().getString(R.string.gender_representative_female);
-                                    } else if (otherGender.equals(getContext().getString(R.string.gender_male))) {
-                                        genderRepresentative
-                                                = getContext().getString(R.string.gender_representative_male);
-                                    } else {
-                                        genderRepresentative
-                                                = getContext().getString(R.string.gender_representative_none);
-                                    }
-                                    Toast.makeText(
-                                            getContext(),
-                                            new StringBuilder()
-                                            .append(getContext().getString(R.string.other_people_delete_common_1))
-                                            .append(otherName)
-                                            .append(getContext().getString(R.string.other_people_delete_common_2))
-                                            .append(genderRepresentative)
-                                            .append(getContext().getString(R.string.other_people_delete_common_3))
-                                            .toString(),
-                                            Toast.LENGTH_LONG).show();
-                                    if (mActivity != null) {
-                                        mActivity.finish();
-                                    }
-                                }
                                 mMessageList.clear();
                                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                                     Message message = messageSnapshot.getValue(Message.class);
+                                    if (message == null) {
+                                        Timber.wtf("message null");
+                                        continue;
+                                    }
                                     mMessageList.add(message);
                                 }
                                 mUsersDatabaseReference
@@ -219,6 +197,8 @@ public class ConnectionChatFragment extends Fragment {
                                             @Override
                                             public void onDataChange(
                                                     @NonNull DataSnapshot dataSnapshot) {
+                                                Context contextForUserChange = getContext();
+                                                if (contextForUserChange == null) return;
                                                 int prevCount = mChatDetailList.size();
                                                 mChatDetailList.clear();
                                                 mMessageDetailList.clear();
@@ -228,6 +208,10 @@ public class ConnectionChatFragment extends Fragment {
                                                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                                         String uid = userSnapshot.getKey();
                                                         User user = userSnapshot.getValue(User.class);
+                                                        if (user == null) {
+                                                            Timber.wtf("user null collecting messagedetails");
+                                                            continue;
+                                                        }
                                                         if (message.getFrom().equals(uid)) {
                                                             String fromPhotoUrl
                                                                     = user.getPhotoUrl();
@@ -246,7 +230,7 @@ public class ConnectionChatFragment extends Fragment {
                                                 }
                                                 mChatDetailList.addAll(
                                                         ApplicationHelper.getDateInfoNextToMessageData(
-                                                                getContext(),
+                                                                contextForUserChange,
                                                                 mMessageDetailList
                                                         )
                                                 );
@@ -256,26 +240,17 @@ public class ConnectionChatFragment extends Fragment {
                                                     mMessageAdapter.notifyDataSetChanged();
                                                     mChatNoDataTextView.setVisibility(View.GONE);
                                                     mChatRecyclerView.setVisibility(View.VISIBLE);
-                                                    /*if (mSavedInstanceState == null
-                                                            || (prevCount > 0
-                                                            && messageNum > prevCount)) {
-                                                        mChatRecyclerView
-                                                                .smoothScrollToPosition(
-                                                                        messageNum - 1);
-                                                        mScrollDownFab.setVisibility(View.VISIBLE);
-                                                    } else {
-                                                        mSavedInstanceState = null;
-                                                    }*/
                                                 } else {
                                                     mChatRecyclerView.setVisibility(View.GONE);
                                                     mChatNoDataTextView.setVisibility(View.VISIBLE);
                                                 }
+                                                assignTypingListener();
                                                 mMessageFilterEditText
                                                         .addTextChangedListener(mTextWatcher);
                                                 String filter = mMessageFilterEditText.getText().toString();
                                                 if (!filter.isEmpty()) {
                                                     mSearchImageView.setImageDrawable(
-                                                            getContext().getResources()
+                                                            contextForUserChange.getResources()
                                                                     .getDrawable(R.drawable.baseline_clear_black_48)
                                                     );
                                                     mChatInnerControlLayout.setVisibility(View.GONE);
@@ -289,25 +264,12 @@ public class ConnectionChatFragment extends Fragment {
                                                             mMessageDetailList
                                                     ).execute(filter);
                                                 }
-                                                /*int pos = ((LinearLayoutManager)
-                                                        mChatRecyclerView.getLayoutManager())
-                                                        .findLastCompletelyVisibleItemPosition();
-                                                while (pos != mMessageAdapter.getItemCount() - 1) {
-                                                    mChatRecyclerView.scrollToPosition(++pos);
-                                                }*/
                                                 if (mSavedInstanceState == null
                                                         || (prevCount > 0
                                                         && messageNum > prevCount)) {
-                                                    /*mChatRecyclerView
-                                                            .scrollToPosition(
-                                                                    messageNum - 1);
-                                                    mScrollDownFab.setVisibility(View.VISIBLE);*/
-                                                    int pos = ((LinearLayoutManager)
-                                                            mChatRecyclerView.getLayoutManager())
-                                                            .findLastCompletelyVisibleItemPosition();
-                                                    while (pos != mMessageAdapter.getItemCount() - 1) {
-                                                        mChatRecyclerView.scrollToPosition(++pos);
-                                                    }
+                                                    mChatRecyclerView.scrollToPosition(
+                                                            mMessageAdapter.getItemCount() - 1
+                                                    );
                                                 } else {
                                                     mSavedInstanceState = null;
                                                 }
@@ -340,27 +302,28 @@ public class ConnectionChatFragment extends Fragment {
         mActivity = getActivity();
         if (mActivity != null) {
             mChatInnerControlLayout = mActivity.findViewById(R.id.ll_chat_action_panel_inner);
-            mChatControlLayout = mActivity.findViewById(R.id.ll_chat_action_panel);
             mSearchImageView = mActivity.findViewById(R.id.iv_chat_search);
-            mCameraImageView = mActivity.findViewById(R.id.iv_chat_add_photo_from_camera);
-            mGalleryImageView = mActivity.findViewById(R.id.iv_chat_add_photo_from_gallery);
-            mSendImageView = mActivity.findViewById(R.id.iv_chat_send);
-            mMessageEditText = mActivity.findViewById(R.id.et_chat);
             mMessageFilterEditText = mActivity.findViewById(R.id.et_chat_filter);
+
             mSearchImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Drawable.ConstantState currConstantState
-                        = mSearchImageView.getDrawable().getConstantState();
+                            = mSearchImageView.getDrawable().getConstantState();
+                    Context context = getContext();
+                    if (context == null) {
+                        Timber.wtf("context null for chat search");
+                        return;
+                    }
                     Drawable.ConstantState baseConstantState
-                            = getContext()
+                            = context
                             .getResources()
                             .getDrawable(R.drawable.baseline_search_black_48)
                             .getConstantState();
                     if (currConstantState == baseConstantState
                             && mMessageAdapter.getItemCount() == 0) {
                         Toast.makeText(
-                                getContext(),
+                                context,
                                 getString(R.string.chat_no_data_search_message),
                                 Toast.LENGTH_LONG
                         ).show();
@@ -368,7 +331,7 @@ public class ConnectionChatFragment extends Fragment {
                         if (currConstantState == baseConstantState) {
                             mSearchImageView.animate().rotation(90).start();
                             mSearchImageView.setImageDrawable(
-                                    getContext().getResources()
+                                    context.getResources()
                                             .getDrawable(R.drawable.baseline_clear_black_48)
                             );
                             mChatInnerControlLayout.setVisibility(View.GONE);
@@ -377,7 +340,7 @@ public class ConnectionChatFragment extends Fragment {
                         } else {
                             mSearchImageView.animate().rotation(0).start();
                             mSearchImageView.setImageDrawable(
-                                    getContext().getResources()
+                                    context.getResources()
                                             .getDrawable(R.drawable.baseline_search_black_48)
                             );
                             mMessageFilterEditText.setText("");
@@ -421,7 +384,96 @@ public class ConnectionChatFragment extends Fragment {
 
             }
         };
+        mConnectionTypingValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Boolean isTyping = dataSnapshot.getValue(Boolean.class);
+                    if (isTyping != null) {
+                        applyTypingHandling(isTyping);
+                    } else {
+                        applyTypingHandling(false);
+                    }
+                } else {
+                    applyTypingHandling(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
         return rootView;
+    }
+
+    private void applyTypingHandling(final boolean isTyping) {
+        mUsersDatabaseReference
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(
+                            @NonNull DataSnapshot dataSnapshot) {
+                        mChatDetailList.clear();
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            String uid = userSnapshot.getKey();
+                            User user = userSnapshot.getValue(User.class);
+                            if (user == null) continue;
+                            if (mOtherUid.equals(uid)) {
+                                String fromPhotoUrl
+                                        = user.getPhotoUrl();
+                                if (isTyping) {
+                                    mMessageDetailList.add(
+                                            new MessageDetail(
+                                                    null,
+                                                    fromPhotoUrl,
+                                                    null,
+                                                    null,
+                                                    ApplicationHelper.getCurrentUTCDateAndTime()
+                                            )
+                                    );
+                                } else {
+                                    int lastPos = mMessageDetailList.size() - 1;
+                                    if (lastPos >= 0) {
+                                        MessageDetail lastItem = mMessageDetailList.get(lastPos);
+                                        if (lastItem.getText() == null && lastItem.getPhotoUrl() == null) {
+                                            mMessageDetailList.remove(lastPos);
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        mChatDetailList.addAll(
+                                ApplicationHelper.getDateInfoNextToMessageData(
+                                        getContext(),
+                                        mMessageDetailList
+                                )
+                        );
+                        int messageNum = mChatDetailList.size();
+                        if (messageNum > 0) {
+                            mMessageAdapter.notifyDataSetChanged();
+                            mChatNoDataTextView.setVisibility(View.GONE);
+                            mChatRecyclerView.setVisibility(View.VISIBLE);
+                        } else {
+                            mChatRecyclerView.setVisibility(View.GONE);
+                            mChatNoDataTextView.setVisibility(View.VISIBLE);
+                        }
+                        if (isTyping) {
+                            int lastPos = ((LinearLayoutManager)mChatRecyclerView.getLayoutManager())
+                                    .findLastVisibleItemPosition();
+                            if (lastPos == mMessageAdapter.getItemCount() - 2) {
+                                mChatRecyclerView.scrollToPosition(
+                                        mMessageAdapter.getItemCount() - 1);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(
+                            @NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @Override
@@ -433,8 +485,19 @@ public class ConnectionChatFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        unAssignTypingListener();
         if (mConnectionMessagesValueEventListener != null) {
             mConnectionsQuery.removeEventListener(mConnectionMessagesValueEventListener);
         }
+    }
+
+    private void unAssignTypingListener() {
+        if (mConnectionTypingValueEventListener != null) {
+            mConnectionTypingDatabaseRef.removeEventListener(mConnectionTypingValueEventListener);
+        }
+    }
+    private void assignTypingListener() {
+        unAssignTypingListener();
+        mConnectionTypingDatabaseRef.addValueEventListener(mConnectionTypingValueEventListener);
     }
 }

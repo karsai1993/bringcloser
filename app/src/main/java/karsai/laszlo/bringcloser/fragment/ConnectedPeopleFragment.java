@@ -1,16 +1,19 @@
 package karsai.laszlo.bringcloser.fragment;
 
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,18 +34,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.CustomFastScroller;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.ui.screens.addnewconnection.AddNewConnectionActivity;
+import karsai.laszlo.bringcloser.activity.AddNewConnectionActivity;
 import karsai.laszlo.bringcloser.adapter.ConnectedPeopleAdapter;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
+import timber.log.Timber;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment to handle connected people related information
  */
 public class ConnectedPeopleFragment extends Fragment {
 
@@ -66,8 +71,9 @@ public class ConnectedPeopleFragment extends Fragment {
     private CustomFastScroller mFastScroller;
     private String mCurrentUserUid;
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater
                 .inflate(R.layout.fragment_connected_people, container, false);
@@ -83,15 +89,21 @@ public class ConnectedPeopleFragment extends Fragment {
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mAddFab.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
                 if (mFirebaseUser.isEmailVerified()) {
-                    getContext().startActivity(
-                            new Intent(getContext(), AddNewConnectionActivity.class));
+                    Context context = getContext();
+                    if (context == null) {
+                        Timber.wtf("context null for connected add fab");
+                        return;
+                    }
+                    context.startActivity(
+                            new Intent(context, AddNewConnectionActivity.class));
                 } else {
                     Snackbar.make(
                             view,
-                            getContext().getResources()
+                            Objects.requireNonNull(getContext()).getResources()
                                     .getString(R.string.not_verified_email_address_message),
                             Snackbar.LENGTH_LONG
                     ).show();
@@ -101,7 +113,7 @@ public class ConnectedPeopleFragment extends Fragment {
 
         GridLayoutManager layoutManager = new GridLayoutManager(
                 getContext(),
-                getContext().getResources().getInteger(R.integer.connected_rv_span_count));
+                Objects.requireNonNull(getContext()).getResources().getInteger(R.integer.connected_rv_span_count));
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mConnectedUsersRecyclerView.setLayoutManager(layoutManager);
         mConnectedUsersRecyclerView.setHasFixedSize(true);
@@ -145,6 +157,10 @@ public class ConnectedPeopleFragment extends Fragment {
                 mConnectionList = new ArrayList<>();
                 for (DataSnapshot connSnapshot : dataSnapshot.getChildren()) {
                     Connection connection = connSnapshot.getValue(Connection.class);
+                    if (connection == null) {
+                        Timber.wtf("connection null connected people");
+                        continue;
+                    }
                     if (connection.getConnectionBit() == 1
                             && (connection.getToUid().equals(mCurrentUserUid)
                             || connection.getFromUid().equals(mCurrentUserUid))) {
@@ -166,6 +182,10 @@ public class ConnectedPeopleFragment extends Fragment {
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 String uid = userSnapshot.getKey();
                                 User user = userSnapshot.getValue(User.class);
+                                if (user == null) {
+                                    Timber.wtf("user null connected people");
+                                    continue;
+                                }
                                 if (fromUid.equals(uid)) {
                                     connectionDetail.setFromUid(uid);
                                     connectionDetail.setFromGender(user.getGender());

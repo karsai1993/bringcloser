@@ -8,8 +8,9 @@ import com.futuremind.recyclerviewfastscroll.FastScroller;
 
 /**
  * Created by Laci on 28/06/2018.
+ * Class to handle recyclerview when it is null
+ * No other changes were made compared to the FastScoller class
  */
-
 public class CustomFastScroller extends FastScroller {
 
     private RecyclerView mRecyclerView;
@@ -33,7 +34,6 @@ public class CustomFastScroller extends FastScroller {
     public void setRecyclerView(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;
         super.setRecyclerView(recyclerView);
-
         requestLayout();
     }
 }

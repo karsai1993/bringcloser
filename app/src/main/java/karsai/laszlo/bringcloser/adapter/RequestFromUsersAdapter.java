@@ -28,11 +28,12 @@ import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
+import timber.log.Timber;
 
 /**
  * Created by Laci on 11/06/2018.
+ * Adapter to handle request from users related information
  */
-
 public class RequestFromUsersAdapter
         extends RecyclerView.Adapter<RequestFromUsersAdapter.RequestToUsersViewHolder>
         implements SectionTitleProvider {
@@ -41,12 +42,10 @@ public class RequestFromUsersAdapter
     private List<ConnectionDetail> mConnectionDetailList;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mConnectionsDatabaseReference;
-    private List<Integer> mSelectedPosList;
 
     public RequestFromUsersAdapter(Context context, List<ConnectionDetail> connectionDetailList) {
         this.mContext = context;
         this.mConnectionDetailList = connectionDetailList;
-        this.mSelectedPosList = new ArrayList<>();
     }
 
     public RequestFromUsersAdapter() {}
@@ -156,10 +155,19 @@ public class RequestFromUsersAdapter
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
                             String key = connectionSnapshot.getKey();
-                            if (dataSnapshot
+                            if (key == null) {
+                                Timber.wtf("key null connection from request from adapter");
+                                continue;
+                            }
+                            String toUidValue = dataSnapshot
                                     .child(key)
                                     .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                                    .getValue(String.class).equals(connectionDetail.getToUid())) {
+                                    .getValue(String.class);
+                            if (toUidValue == null) {
+                                Timber.wtf("to uid null request from adapter");
+                                continue;
+                            }
+                            if (toUidValue.equals(connectionDetail.getToUid())) {
                                 mConnectionsDatabaseReference
                                         .child(key)
                                         .child(ApplicationHelper.CONNECTION_CONNECTED_IDENTIFIER)
@@ -168,9 +176,7 @@ public class RequestFromUsersAdapter
                                         .child(key)
                                         .child(ApplicationHelper.CONNECTION_TIMESTAMP_IDENTIFIER)
                                         .setValue(ApplicationHelper
-                                                .getCurrentUTCDateAndTime(
-                                                        ApplicationHelper.DATE_PATTERN_FULL
-                                                )
+                                                .getCurrentUTCDateAndTime()
                                         );
                             }
                         }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="karsai.laszlo.bringcloser.ui.screens.main.MainActivity"
+    tools:context="karsai.laszlo.bringcloser.activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
@@ -19,14 +19,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <include
+            layout="@layout/no_internet_general"
+            android:visibility="gone"/>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout_connection_types"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:tabMode="scrollable" />
-
-        <!--include layout="@layout/search" /-->
+            app:tabMode="scrollable"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager_connection_types"

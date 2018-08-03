@@ -16,14 +16,14 @@ import java.util.List;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.ui.screens.addchosenconnection.AddChosenConnectionActivity;
+import karsai.laszlo.bringcloser.activity.AddChosenConnectionActivity;
 import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
 
 /**
  * Created by Laci on 07/06/2018.
+ * Adapter to handle all user related information
  */
-
 public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.AllUsersViewHolder>{
 
     private Context mContext;
@@ -68,7 +68,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.AllUse
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(
                                 (Activity) mContext,
-                                (View)holder.photoImageView,
+                                holder.photoImageView,
                                 "image_transition");
                 mContext.startActivity(addChosenConnectionIntent, options.toBundle());
             }

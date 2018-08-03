@@ -18,14 +18,14 @@ import java.util.Locale;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.ui.screens.connection.ConnectionActivity;
+import karsai.laszlo.bringcloser.activity.ConnectionActivity;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
 
 /**
  * Created by Laci on 15/06/2018.
+ * Adapter to handle connected users related information
  */
-
 public class ConnectedPeopleAdapter
         extends RecyclerView.Adapter<ConnectedPeopleAdapter.ConnectedPeopleViewHolder>
         implements SectionTitleProvider{
@@ -42,7 +42,7 @@ public class ConnectedPeopleAdapter
             List<ConnectionDetail> connectionDetailList) {
         this.mContext = context;
         this.mConnectionDetailList = connectionDetailList;
-        this.mCurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.mCurrentUserUid = FirebaseAuth.getInstance().getUid();
     }
 
     @NonNull

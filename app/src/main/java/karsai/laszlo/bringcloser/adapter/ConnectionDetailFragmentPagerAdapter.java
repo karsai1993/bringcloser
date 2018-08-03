@@ -9,19 +9,16 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.fragment.ConnectedPeopleFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionChatFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionEventFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionThoughtFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionWishFragment;
-import karsai.laszlo.bringcloser.fragment.RequestFromPeopleFragment;
-import karsai.laszlo.bringcloser.fragment.RequestToPeopleFragment;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 
 /**
  * Created by Laci on 28/05/2018.
+ * Adapter to handle connection detail view pager related information
  */
-
 public class ConnectionDetailFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final int CONNECTION_TYPE_NUMBER = 4;

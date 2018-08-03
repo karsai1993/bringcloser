@@ -1,7 +1,9 @@
 package karsai.laszlo.bringcloser.fragment;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -28,18 +30,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.CustomFastScroller;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.ui.screens.addnewconnection.AddNewConnectionActivity;
+import karsai.laszlo.bringcloser.activity.AddNewConnectionActivity;
 import karsai.laszlo.bringcloser.adapter.RequestToUsersAdapter;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
+import timber.log.Timber;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment to handle request to users related information
  */
 public class RequestToPeopleFragment extends Fragment {
 
@@ -62,8 +66,9 @@ public class RequestToPeopleFragment extends Fragment {
     private int mPos = -1;
     private CustomFastScroller mFastScroller;
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater
                 .inflate(R.layout.fragment_request_to_people, container, false);
@@ -79,15 +84,16 @@ public class RequestToPeopleFragment extends Fragment {
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mAddFab.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
                 if (mFirebaseUser.isEmailVerified()) {
-                    getContext().startActivity(
+                    Objects.requireNonNull(getContext()).startActivity(
                             new Intent(getContext(), AddNewConnectionActivity.class));
                 } else {
                     Snackbar.make(
                             view,
-                            getContext().getResources()
+                            Objects.requireNonNull(getContext()).getResources()
                                     .getString(R.string.not_verified_email_address_message),
                             Snackbar.LENGTH_LONG
                     ).show();
@@ -97,7 +103,7 @@ public class RequestToPeopleFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
                 getContext(),
-                getContext().getResources().getInteger(R.integer.requested_rv_span_count));
+                Objects.requireNonNull(getContext()).getResources().getInteger(R.integer.requested_rv_span_count));
         mRequestToUsersRecyclerView.setLayoutManager(layoutManager);
         mRequestToUsersRecyclerView.setHasFixedSize(true);
 
@@ -113,6 +119,10 @@ public class RequestToPeopleFragment extends Fragment {
                 mRequestToConnectionList = new ArrayList<>();
                 for (DataSnapshot connSnapshot : dataSnapshot.getChildren()) {
                     Connection connection = connSnapshot.getValue(Connection.class);
+                    if (connection == null) {
+                        Timber.wtf("connection null request to");
+                        continue;
+                    }
                     if (connection.getConnectionBit() == 0
                             && connection.getFromUid().equals(mFirebaseUser.getUid())) {
                         mRequestToConnectionList.add(connection);
@@ -132,6 +142,10 @@ public class RequestToPeopleFragment extends Fragment {
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 String uid = userSnapshot.getKey();
                                 User user = userSnapshot.getValue(User.class);
+                                if (user == null) {
+                                    Timber.wtf("user null request to");
+                                    continue;
+                                }
                                 if (fromUid.equals(uid)) {
                                     connectionDetail.setFromUid(uid);
                                     connectionDetail.setFromGender(user.getGender());

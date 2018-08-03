@@ -2,8 +2,8 @@ package karsai.laszlo.bringcloser.model;
 
 /**
  * Created by Laci on 07/07/2018.
+ * Class to create detailed object for chat
  */
-
 public class ChatDetail {
     private MessageDetail messageDetail;
     private String date;

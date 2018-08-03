@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/small_distance"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:scaleType="centerInside"
+        android:src="@drawable/baseline_face_black_48"
+        android:id="@+id/iv_chat_from_other_photo"
+        android:contentDescription="@string/message_from_other_face_photo_content_description"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/small_distance">
+
+        <FrameLayout
+            android:layout_width="@dimen/chat_sent_image_size"
+            android:layout_height="@dimen/chat_sent_image_size">
+
+            <ImageView
+                android:layout_width="@dimen/chat_sent_image_size"
+                android:layout_height="@dimen/chat_sent_image_size"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_face_black_48"
+                android:id="@+id/iv_chat_from_other_sent_photo"
+                android:contentDescription="@string/message_from_other_photo_content_description"/>
+
+            <TextView
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:id="@+id/tv_chat_from_other_time"
+                android:background="@drawable/message_from_other_background"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/time_text_size"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="@dimen/photo_icon_size"
+            android:layout_height="@dimen/photo_icon_size"
+            android:id="@+id/iv_chat_from_other_photo_share"
+            android:src="@drawable/baseline_share_black_48"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/small_distance"
+            android:contentDescription="@string/message_from_other_share_content_description"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

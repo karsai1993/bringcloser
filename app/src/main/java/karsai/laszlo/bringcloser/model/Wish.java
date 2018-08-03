@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import java.util.Comparator;
 
+/**
+ * Class to create object for wish
+ */
 public class Wish implements Parcelable, Comparator<Wish> {
 
     String fromUid;

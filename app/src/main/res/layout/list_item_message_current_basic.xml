@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/small_distance"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/ll_chat_text_field"
+        android:background="@drawable/message_from_current_background">
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_chat_from_current_text"
+            android:layout_gravity="end"/>
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_chat_from_current_time"
+            android:textColor="@android:color/white"
+            android:layout_gravity="end"
+            android:textSize="@dimen/time_text_size"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

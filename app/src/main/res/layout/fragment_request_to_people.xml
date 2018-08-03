@@ -3,10 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginRight="@dimen/distance"
-    android:layout_marginEnd="@dimen/distance"
-    android:layout_marginLeft="@dimen/distance"
-    android:layout_marginStart="@dimen/distance"
+    android:layout_margin="@dimen/distance"
     android:animateLayoutChanges="true"
     tools:context="karsai.laszlo.bringcloser.fragment.RequestToPeopleFragment">
 
@@ -24,7 +21,6 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             app:fastscroll__handleColor="@color/colorPrimaryDark"
             app:fastscroll__bubbleColor="@color/colorPrimary"
@@ -55,7 +51,7 @@
         android:id="@+id/fab_add_new_connection_request_to"
         android:layout_width="@dimen/fab_size"
         android:layout_height="@dimen/fab_size"
-        android:layout_gravity="bottom|right|end"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/baseline_person_add_black_48"
         app:borderWidth="0dp"

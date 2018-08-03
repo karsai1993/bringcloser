@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:orientation="vertical">
 
-    <ScrollView
+    <include
+        layout="@layout/no_internet_general"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="@dimen/activity_horizontal_margin">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner_wish"/>
-
-            <EditText
-                style="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_wish_other"
-                android:hint="@string/wish_other_edittext_hint"
-                android:inputType="textCapWords"
-                android:visibility="gone"/>
-
-            <EditText
-                style="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_wish"
-                android:inputType="textCapWords"
-                android:hint="@string/wish_edittext_hint"/>
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_wish"/>
+
+                <EditText
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_wish_other"
+                    android:hint="@string/wish_other_edittext_hint"
+                    android:inputType="textCapSentences"
+                    android:visibility="gone"/>
+
+                <EditText
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_wish"
+                    android:inputType="textCapSentences"
+                    android:hint="@string/wish_edittext_hint"/>
 
                 <TextView
                     style="@style/AppTheme"
@@ -112,42 +116,36 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:textStyle="bold"
+                    android:text="@string/photo_assignment"/>
 
-                    <TextView
-                        style="@style/AppTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/photo_assignment"/>
-                    
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/small_distance">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/small_distance">
 
-                        <ImageView
-                            android:layout_width="@dimen/photo_icon_size"
-                            android:layout_height="@dimen/photo_icon_size"
-                            android:src="@drawable/baseline_photo_camera_black_48"
-                            android:id="@+id/iv_wish_add_photo_from_camera"
-                            android:layout_marginEnd="@dimen/small_distance"
-                            android:layout_marginRight="@dimen/small_distance"/>
+                    <ImageView
+                        android:layout_width="@dimen/photo_icon_size"
+                        android:layout_height="@dimen/photo_icon_size"
+                        android:src="@drawable/baseline_photo_camera_black_48"
+                        android:id="@+id/iv_wish_add_photo_from_camera"
+                        android:layout_marginEnd="@dimen/small_distance"
+                        android:contentDescription="@string/camera_content_description"/>
 
 
-                        <ImageView
-                            android:layout_width="@dimen/photo_icon_size"
-                            android:layout_height="@dimen/photo_icon_size"
-                            android:src="@drawable/baseline_photo_black_48"
-                            android:id="@+id/iv_wish_add_photo_from_gallery"/>
-                        
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="@dimen/photo_icon_size"
+                        android:layout_height="@dimen/photo_icon_size"
+                        android:src="@drawable/baseline_photo_black_48"
+                        android:id="@+id/iv_wish_add_photo_from_gallery"
+                        android:contentDescription="@string/gallery_content_description"/>
 
                 </LinearLayout>
-                
+
                 <TextView
                     style="@style/AppTheme"
                     android:layout_width="match_parent"
@@ -156,7 +154,7 @@
                     android:gravity="center"
                     android:id="@+id/tv_wish_photo_alert"
                     android:text="@string/wish_photo_alert"/>
-                
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -170,7 +168,8 @@
                         android:layout_weight="1"
                         android:id="@+id/iv_wish_added_extra_photo"
                         android:layout_gravity="center"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside"
+                        android:contentDescription="@string/added_extra_photo_content_description"/>
 
                     <ImageView
                         android:layout_width="@dimen/photo_icon_size"
@@ -178,24 +177,24 @@
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/small_distance"
                         android:id="@+id/iv_wish_added_extra_photo_delete"
-                        android:src="@drawable/baseline_delete_black_48"/>
+                        android:src="@drawable/baseline_delete_black_48"
+                        android:contentDescription="@string/delete_added_extra_photo_content_description"/>
 
                 </LinearLayout>
-
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
-    </ScrollView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_approve_add_new_wish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_done_black_48"
+            android:elevation="@dimen/fab_elevation"
+            android:translationZ="@dimen/fab_press_translation_z" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_approve_add_new_wish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/baseline_done_black_48"
-        android:elevation="@dimen/fab_elevation"
-        android:translationZ="@dimen/fab_press_translation_z" />
+    </android.support.design.widget.CoordinatorLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

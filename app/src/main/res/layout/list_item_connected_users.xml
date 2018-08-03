@@ -2,11 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/distance"
-    android:layout_marginRight="@dimen/distance"
-    android:layout_marginBottom="@dimen/distance"
-    android:layout_marginStart="@dimen/distance"
-    android:layout_marginLeft="@dimen/distance"
+    android:layout_margin="@dimen/distance"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center">
@@ -16,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_connected_user_name"
-        android:text="asdgg"
         android:layout_gravity="center"
         android:textSize="@dimen/nav_drawer_user_name_text_size"
         android:textColor="@color/colorPrimary"
@@ -28,13 +23,13 @@
         android:layout_width="@dimen/list_photo_size"
         android:layout_height="@dimen/list_photo_size"
         android:id="@+id/iv_connected_user_photo"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:contentDescription="@string/connected_users_photo_content_description"/>
 
     <TextView
         style="@style/AppTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="asgaqf23"
         android:layout_gravity="center"
         android:gravity="center"
         android:id="@+id/tv_connected_user_type"

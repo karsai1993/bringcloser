@@ -3,13 +3,12 @@ package karsai.laszlo.bringcloser.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Laci on 28/05/2018.
+ * Class to create object for user
  */
-
 public class User implements Parcelable {
 
     private boolean mIsEmailVerified;
@@ -37,7 +36,8 @@ public class User implements Parcelable {
         this.mUid = uid;
     }
 
-    public User () {}
+    public User() {
+    }
 
     public String getUid() {
         return mUid;
@@ -96,7 +96,7 @@ public class User implements Parcelable {
     }
 
     protected User(Parcel in) {
-        this.mIsEmailVerified = in.readInt() == 1 ? true : false;
+        this.mIsEmailVerified = in.readInt() == 1;
         this.mUsername = in.readString();
         this.mPhotoUrl = in.readString();
         this.mBirthday = in.readString();

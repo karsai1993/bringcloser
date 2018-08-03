@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/small_distance"
+    android:layout_marginBottom="@dimen/small_distance"
+    android:orientation="horizontal"
+    android:id="@+id/ll_typing">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:src="@drawable/baseline_face_black_48"
+        android:id="@+id/iv_chat_from_other_photo"
+        android:layout_marginEnd="@dimen/small_distance"
+        android:contentDescription="@string/message_from_other_face_photo_content_description"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_chat_from_other_typing_one"
+            android:textSize="@dimen/typing_dot_size"
+            android:textStyle="bold"
+            android:text="@string/dot"/>
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_chat_from_other_typing_two"
+            android:textSize="@dimen/typing_dot_size"
+            android:textStyle="bold"
+            android:text="@string/dot"/>
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_chat_from_other_typing_three"
+            android:textSize="@dimen/typing_dot_size"
+            android:textStyle="bold"
+            android:text="@string/dot"/>
+
+    </LinearLayout>
+
+</LinearLayout>

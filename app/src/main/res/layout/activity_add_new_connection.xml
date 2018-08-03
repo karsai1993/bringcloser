@@ -3,37 +3,47 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/screen_regular_distance"
-    android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:orientation="vertical">
 
-    <EditText
-        style="@style/AppTheme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_filter_users"
-        android:hint="@string/filter_hint"
-        android:layout_marginBottom="@dimen/distance"/>
+    <include
+        layout="@layout/no_internet_general"
+        android:visibility="gone"/>
 
-    <TextView
-        style="@style/AppTheme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_info_connection"
-        android:textStyle="bold"
-        android:layout_marginBottom="@dimen/distance"/>
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_all_users"/>
+        android:orientation="vertical"
+        android:padding="@dimen/screen_regular_distance">
 
-    <ProgressBar
-        android:layout_width="@dimen/progress_bar_size"
-        android:layout_height="@dimen/progress_bar_size"
-        android:id="@+id/pb_filter_all_users"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+        <EditText
+            style="@style/AppTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_filter_users"
+            android:hint="@string/filter_hint"
+            android:inputType="none"
+            android:layout_marginBottom="@dimen/distance"/>
+
+        <TextView
+            style="@style/AppTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_info_connection"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/distance"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rv_all_users"/>
+
+        <ProgressBar
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:id="@+id/pb_filter_all_users"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package karsai.laszlo.bringcloser.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -22,21 +23,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
+import timber.log.Timber;
 
+/**
+ * Adapter to handle event related information
+ */
 public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int BASIC_ON = 1;
@@ -48,7 +48,6 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private List<Event> mEventList;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mConnectionsDatabaseRef;
-    private SimpleDateFormat mSimpleDateFormat;
 
     public EventAdapter(Context context, List<Event> eventList) {
         this.mContext = context;
@@ -56,9 +55,6 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mFirebaseDatabase = FirebaseDatabase.getInstance();
         this.mConnectionsDatabaseRef = this.mFirebaseDatabase.getReference()
                 .child(ApplicationHelper.CONNECTIONS_NODE);
-        mSimpleDateFormat
-                = new SimpleDateFormat(ApplicationHelper.DATE_PATTERN_FULL, Locale.getDefault());
-        mSimpleDateFormat.setTimeZone(TimeZone.getDefault());
     }
 
     @NonNull
@@ -92,21 +88,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemViewType(int position) {
         Event event = mEventList.get(position);
         String photoUrl = event.getExtraPhotoUrl();
-        boolean hasArrived = event.hasArrived();
-        String targetTime = event.getWhenToArrive();
-        boolean isExpired;
-        try {
-            Date targetDate = mSimpleDateFormat.parse(targetTime);
-            Date currentDate = new Date();
-            if (currentDate.after(targetDate)) {
-                isExpired = true;
-            } else {
-                isExpired = false;
-            }
-        } catch (ParseException e) {
-            isExpired = false;
-        }
-        boolean isSent = hasArrived || isExpired;
+        boolean isSent = ApplicationHelper.isSent(event);
         if (photoUrl != null && !photoUrl.isEmpty()) {
             if (isSent) {
                 return EXTRA_PHOTO_OFF;
@@ -133,15 +115,17 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 basicOnViewHolder.titleTextView.setAlpha(1F);
                 basicOnViewHolder.placeTextView.setText(event.getPlace());
                 basicOnViewHolder.placeTextView.setAlpha(1F);
-                basicOnViewHolder.whenTextView.setText(
-                        event.getWhenToArrive().replaceAll(ApplicationHelper.DATE_SPLITTER, " ")
+                final String dateAndTimeBasicOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        mContext,
+                        event.getWhenToArrive()
                 );
+                basicOnViewHolder.whenTextView.setText(dateAndTimeBasicOn);
                 basicOnViewHolder.whenTextView.setAlpha(1F);
                 basicOnViewHolder.messageTextView.setText(event.getText());
                 basicOnViewHolder.dismissTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        withdraw(event);
+                        withdraw(event, dateAndTimeBasicOn);
                     }
                 });
                 basicOnViewHolder.customizeTextView.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +143,10 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 basicOffViewHolder.placeTextView.setText(event.getPlace());
                 basicOffViewHolder.placeTextView.setAlpha(1F);
                 basicOffViewHolder.whenTextView.setText(
-                        event.getWhenToArrive().replaceAll(ApplicationHelper.DATE_SPLITTER, " ")
+                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                                mContext,
+                                event.getWhenToArrive()
+                        )
                 );
                 basicOffViewHolder.whenTextView.setAlpha(1F);
                 basicOffViewHolder.messageTextView.setText(event.getText());
@@ -178,15 +165,17 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 withExtraPhotoOnViewHolder.titleTextView.setAlpha(1F);
                 withExtraPhotoOnViewHolder.placeTextView.setText(event.getPlace());
                 withExtraPhotoOnViewHolder.placeTextView.setAlpha(1F);
-                withExtraPhotoOnViewHolder.whenTextView.setText(
-                        event.getWhenToArrive().replaceAll(ApplicationHelper.DATE_SPLITTER, " ")
+                final String dateAndTimePhotoOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        mContext,
+                        event.getWhenToArrive()
                 );
+                withExtraPhotoOnViewHolder.whenTextView.setText(dateAndTimePhotoOn);
                 withExtraPhotoOnViewHolder.whenTextView.setAlpha(1F);
                 withExtraPhotoOnViewHolder.messageTextView.setText(event.getText());
                 withExtraPhotoOnViewHolder.dismissTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        withdraw(event);
+                        withdraw(event, dateAndTimePhotoOn);
                     }
                 });
                 withExtraPhotoOnViewHolder.customizeTextView.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +200,10 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 withExtraPhotoOffViewHolder.placeTextView.setText(event.getPlace());
                 withExtraPhotoOffViewHolder.placeTextView.setAlpha(1F);
                 withExtraPhotoOffViewHolder.whenTextView.setText(
-                        event.getWhenToArrive().replaceAll(ApplicationHelper.DATE_SPLITTER, " ")
+                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                                mContext,
+                                event.getWhenToArrive()
+                        )
                 );
                 withExtraPhotoOffViewHolder.whenTextView.setAlpha(1F);
                 withExtraPhotoOffViewHolder.messageTextView.setText(event.getText());
@@ -219,15 +211,14 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private void withdraw(final Event event) {
-        View view = LayoutInflater.from(mContext)
+    private void withdraw(final Event event, String dateAndTime) {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.withdraw_given_info, null, false);
         TextView textViewOne = view.findViewById(R.id.tv_info_one);
         TextView textViewTwo = view.findViewById(R.id.tv_info_two);
         TextView textViewThree = view.findViewById(R.id.tv_info_three);
         textViewOne.setText(event.getTitle());
-        textViewTwo.setText(
-                event.getWhenToArrive().replaceAll(ApplicationHelper.DATE_SPLITTER, " "));
+        textViewTwo.setText(dateAndTime);
         textViewThree.setText(event.getText());
         DialogInterface.OnClickListener dialogOnPositiveBtnClickListener
                 = new DialogInterface.OnClickListener() {
@@ -263,11 +254,19 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
                             String key = connectionSnapshot.getKey();
-                            if (dataSnapshot
+                            if (key == null) {
+                                Timber.wtf("key null connection from event adapter delete from db");
+                                continue;
+                            }
+                            String toUidValue = dataSnapshot
                                     .child(key)
                                     .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                                    .getValue(String.class)
-                                    .equals(event.getConnectionToUid())) {
+                                    .getValue(String.class);
+                            if (toUidValue == null) {
+                                Timber.wtf("to uid null event adapter delete from db");
+                                continue;
+                            }
+                            if (toUidValue.equals(event.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
                                         .child(ApplicationHelper.EVENTS_NODE).child(event.getKey());
@@ -325,11 +324,19 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot connectionSnapshot : dataSnapshot.getChildren()) {
                             String key = connectionSnapshot.getKey();
-                            if (dataSnapshot
+                            if (key == null) {
+                                Timber.wtf("key null connection from event adapter update db");
+                                continue;
+                            }
+                            String toUidValue = dataSnapshot
                                     .child(key)
                                     .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
-                                    .getValue(String.class)
-                                    .equals(event.getConnectionToUid())) {
+                                    .getValue(String.class);
+                            if (toUidValue == null) {
+                                Timber.wtf("to uid null event adapter update db");
+                                continue;
+                            }
+                            if (toUidValue.equals(event.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
                                         .child(ApplicationHelper.EVENTS_NODE).child(event.getKey());

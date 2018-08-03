@@ -14,8 +14,8 @@ import karsai.laszlo.bringcloser.R;
 
 /**
  * Created by Laci on 05/06/2018.
+ * Util to handle permission requests
  */
-
 public class PermissionUtils {
     public static final int REQUEST_EXTERNAL_STORAGE = 3;
 

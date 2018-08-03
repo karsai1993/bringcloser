@@ -9,61 +9,73 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/screen_regular_distance"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="176dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_photo_height"
-                android:src="@drawable/baseline_face_black_48"
-                android:transitionName="image_transition"
-                android:id="@+id/iv_chosen_photo"
-                android:scaleType="centerInside"/>
-
-            <TextView
-                style="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tv_chosen_name"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="asdgfaf"
-                android:textSize="@dimen/nav_drawer_user_name_text_size"
-                android:textStyle="bold|italic"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="@dimen/divider_width"
-            android:layout_height="match_parent"
-            android:background="@color/colorAccent"
-            android:layout_marginLeft="@dimen/divider_margin"
-            android:layout_marginStart="@dimen/divider_margin"
-            android:layout_marginRight="@dimen/divider_margin"
-            android:layout_marginEnd="@dimen/divider_margin"/>
+        <include
+            layout="@layout/no_internet_general"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="@dimen/screen_regular_distance">
 
-            <TextView
-                style="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:id="@+id/tv_chosen_question"
-                android:text="Who?"/>
+            <LinearLayout
+                android:layout_width="176dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Spinner
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_photo_height"
+                    android:src="@drawable/baseline_face_black_48"
+                    android:transitionName="image_transition"
+                    android:id="@+id/iv_chosen_photo"
+                    android:scaleType="centerInside"
+                    android:contentDescription="@string/add_chosen_photo_content_description"/>
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tv_chosen_name"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/nav_drawer_user_name_text_size"
+                    android:textStyle="bold|italic"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/divider_width"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:layout_marginLeft="@dimen/divider_margin"
+                android:layout_marginStart="@dimen/divider_margin"
+                android:layout_marginRight="@dimen/divider_margin"
+                android:layout_marginEnd="@dimen/divider_margin"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner_chosen_relationship"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:id="@+id/tv_chosen_question"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_chosen_relationship"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -73,7 +85,7 @@
         android:id="@+id/fab_approve_add_new_connection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right|end"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/baseline_done_black_48"
         android:elevation="@dimen/fab_elevation"

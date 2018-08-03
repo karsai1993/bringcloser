@@ -13,8 +13,8 @@ import karsai.laszlo.bringcloser.fragment.RequestToPeopleFragment;
 
 /**
  * Created by Laci on 28/05/2018.
+ * Adapter to handle connection view pager related information
  */
-
 public class ConnectionFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final int CONNECTION_TYPE_NUMBER = 3;
@@ -47,27 +47,11 @@ public class ConnectionFragmentPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            /*return getPageTitleWithCount(
-                    mContext.getResources().getString(R.string.connected_people_fragment_title),
-                    mConnectedConnectionDetailList.size()
-            );*/
             return mContext.getResources().getString(R.string.connected_people_fragment_title);
         } else if (position == 1){
-            /*return getPageTitleWithCount(
-                    mContext.getResources().getString(R.string.request_to_people_fragment_title),
-                    mRequestToConnectionDetailList.size()
-            );*/
             return mContext.getResources().getString(R.string.request_to_people_fragment_title);
         } else {
-            /*return getPageTitleWithCount(
-                    mContext.getResources().getString(R.string.request_from_people_fragment_title),
-                    mRequestFromConnectionDetailList.size()
-            );*/
             return mContext.getResources().getString(R.string.request_from_people_fragment_title);
         }
     }
-
-    /*private String getPageTitleWithCount(String title, int count) {
-        return new StringBuilder().append(title).append(" (").append(count).append(")").toString();
-    }*/
 }

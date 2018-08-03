@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.CycleInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +21,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
@@ -26,16 +34,20 @@ import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
+import timber.log.Timber;
 
 /**
  * Created by Laci on 03/07/2018.
+ * Adapter to handle message related information
  */
-
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int MESSAGE_OTHER_VIEW_TYPE = 0;
-    private static final int MESSAGE_CURRENT_VIEW_TYPE = 1;
-    private static final int MESSAGE_DATE_VIEW_TYPE = 2;
+    private static final int MESSAGE_OTHER_BASIC_VIEW_TYPE = 0;
+    private static final int MESSAGE_OTHER_EXTRA_PHOTO_VIEW_TYPE = 1;
+    private static final int MESSAGE_CURRENT_BASIC_VIEW_TYPE = 2;
+    private static final int MESSAGE_CURRENT_EXTRA_PHOTO_VIEW_TYPE = 3;
+    private static final int MESSAGE_DATE_VIEW_TYPE = 4;
+    private static final int MESSAGE_OTHER_TYPING_TYPE = 5;
 
     private List<ChatDetail> mChatDetailList;
     private Context mContext;
@@ -50,20 +62,35 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == MESSAGE_OTHER_VIEW_TYPE) {
-            return new MessageOtherViewHolder(
+        if (viewType == MESSAGE_OTHER_BASIC_VIEW_TYPE) {
+            return new MessageOtherBasicViewHolder(
                     LayoutInflater.from(mContext)
-                            .inflate(R.layout.list_item_message_other, parent, false)
+                            .inflate(R.layout.list_item_message_other_basic, parent, false)
             );
-        } else if (viewType == MESSAGE_CURRENT_VIEW_TYPE) {
-            return new MessageCurrentViewHolder(
+        } else if (viewType == MESSAGE_OTHER_EXTRA_PHOTO_VIEW_TYPE) {
+            return new MessageOtherExtraPhotoViewHolder(
                     LayoutInflater.from(mContext)
-                            .inflate(R.layout.list_item_message_current, parent, false)
+                            .inflate(R.layout.list_item_message_other_extra_photo, parent, false)
             );
-        } else {
+        } else if (viewType == MESSAGE_CURRENT_BASIC_VIEW_TYPE) {
+            return new MessageCurrentBasicViewHolder(
+                    LayoutInflater.from(mContext)
+                            .inflate(R.layout.list_item_message_current_basic, parent, false)
+            );
+        } else if (viewType == MESSAGE_CURRENT_EXTRA_PHOTO_VIEW_TYPE) {
+            return new MessageCurrentExtraPhotoViewHolder(
+                    LayoutInflater.from(mContext)
+                            .inflate(R.layout.list_item_message_current_extra_photo, parent, false)
+            );
+        } else if (viewType == MESSAGE_DATE_VIEW_TYPE) {
             return new MessageDateViewHolder(
                     LayoutInflater.from(mContext)
                             .inflate(R.layout.list_item_message_date, parent, false)
+            );
+        } else {
+            return new MessageOtherTypingViewHolder(
+                    LayoutInflater.from(mContext)
+                            .inflate(R.layout.list_item_message_typing, parent, false)
             );
         }
     }
@@ -75,10 +102,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return MESSAGE_DATE_VIEW_TYPE;
         } else {
             MessageDetail messageDetail = chatDetail.getMessageDetail();
-            if (mCurrentUserUid.equals(messageDetail.getFrom())) {
-                return MESSAGE_CURRENT_VIEW_TYPE;
+            if (messageDetail.getFrom() == null) {
+                return MESSAGE_OTHER_TYPING_TYPE;
+            } else if (mCurrentUserUid.equals(messageDetail.getFrom())) {
+                if (messageDetail.getPhotoUrl() == null) {
+                    return MESSAGE_CURRENT_BASIC_VIEW_TYPE;
+                } else {
+                    return MESSAGE_CURRENT_EXTRA_PHOTO_VIEW_TYPE;
+                }
             } else {
-                return MESSAGE_OTHER_VIEW_TYPE;
+                if (messageDetail.getPhotoUrl() == null) {
+                    return MESSAGE_OTHER_BASIC_VIEW_TYPE;
+                } else {
+                    return MESSAGE_OTHER_EXTRA_PHOTO_VIEW_TYPE;
+                }
             }
         }
     }
@@ -96,126 +133,228 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (messageDetail != null) {
             sentText = messageDetail.getText();
             dateAndTime = chatDetail.getTime();
-            String [] parts = dateAndTime.split(ApplicationHelper.DATE_SPLITTER);
-            time = parts[1];
-            dateAndTime = dateAndTime.replace(ApplicationHelper.DATE_SPLITTER, " ");
+            String [] parts = dateAndTime.split(" ");
+            try {
+                time = parts[3];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Timber.wtf("array index out of bounds - time");
+            }
             sentPhotoUrl = messageDetail.getPhotoUrl();
             fromPhotoUrl = messageDetail.getFromPhotoUrl();
         } else {
             date = chatDetail.getDate();
         }
+        final String finalSentText = sentText;
+        final String finalSentPhotoUrl = sentPhotoUrl;
+        final String finalDateAndTime = dateAndTime;
         switch (holder.getItemViewType()) {
-            case MESSAGE_OTHER_VIEW_TYPE:
-                MessageOtherViewHolder messageOtherViewHolder = (MessageOtherViewHolder) holder;
+            case MESSAGE_OTHER_BASIC_VIEW_TYPE:
+                MessageOtherBasicViewHolder messageOtherBasicViewHolder
+                        = (MessageOtherBasicViewHolder) holder;
                 ImageUtils.setPhoto(
                         mContext,
                         fromPhotoUrl,
-                        messageOtherViewHolder.mChatFromOtherImageView,
+                        messageOtherBasicViewHolder.fromImageView,
                         true);
-                if (sentText != null && !sentText.isEmpty()) {
-                    messageOtherViewHolder.mChatFromOtherTextLinearLayout.setVisibility(View.VISIBLE);
-                    messageOtherViewHolder.mChatFromOtherTextView.setText(sentText);
-                    messageOtherViewHolder.mChatFromOtherTimeTextView.setText(time);
-                    messageOtherViewHolder.mChatFromOtherSentImageView.setVisibility(View.GONE);
-                    messageOtherViewHolder.mView.setVisibility(View.GONE);
-                    final String finalSentText = sentText;
-                    messageOtherViewHolder.mChatFromOtherTextLinearLayout.setOnLongClickListener(
-                            new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View view) {
-                            saveToClipBoard(finalSentText, false);
-                            return true;
-                        }
-                    });
-                } else {
-                    messageOtherViewHolder.mChatFromOtherTextLinearLayout.setVisibility(View.GONE);
-                    messageOtherViewHolder.mView.setVisibility(View.VISIBLE);
-                    messageOtherViewHolder.mChatFromOtherSentImageView.setVisibility(View.VISIBLE);
-                    ImageUtils.setPhoto(
-                            mContext,
-                            sentPhotoUrl,
-                            messageOtherViewHolder.mChatFromOtherSentImageView,
-                            false);
-                    final String finalSentPhotoUrlOther = sentPhotoUrl;
-                    final String finalDateAndTimeOther = dateAndTime;
-                    messageOtherViewHolder.mChatFromOtherSentImageView.setOnLongClickListener(
-                            new View.OnLongClickListener() {
-                                @Override
-                                public boolean onLongClick(View view) {
-                                    saveToClipBoard(finalSentPhotoUrlOther, true);
-                                    return true;
-                                }
+                messageOtherBasicViewHolder.messageTextView.setText(sentText);
+                messageOtherBasicViewHolder.timeTextView.setText(time);
+                messageOtherBasicViewHolder.textFieldLinearLayout.setOnLongClickListener(
+                        new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                saveToClipBoard(finalSentText, false);
+                                return true;
                             }
-                    );
-                    messageOtherViewHolder.mChatFromOtherSentImageView.setOnClickListener(
-                            new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            onImageClick(
-                                    finalSentPhotoUrlOther,
-                                    (ViewGroup)view.getParent(),
-                                    finalDateAndTimeOther
-                            );
-                        }
-                    });
-                }
+                        });
                 break;
-            case MESSAGE_CURRENT_VIEW_TYPE:
-                MessageCurrentViewHolder messageCurrentViewHolder = (MessageCurrentViewHolder) holder;
-                if (sentText != null && !sentText.isEmpty()) {
-                    messageCurrentViewHolder.mChatFromCurrentTextLinearLayout.setVisibility(View.VISIBLE);
-                    messageCurrentViewHolder.mChatFromCurrentTextView.setText(sentText);
-                    messageCurrentViewHolder.mChatFromCurrentTimeTextView.setText(time);
-                    messageCurrentViewHolder.mChatFromCurrentSentImageView.setVisibility(View.GONE);
-                    messageCurrentViewHolder.mView.setVisibility(View.GONE);
-                    final String finalSentText = sentText;
-                    messageCurrentViewHolder.mChatFromCurrentTextLinearLayout.setOnLongClickListener(
-                            new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View view) {
-                            saveToClipBoard(finalSentText, false);
-                            return true;
+            case MESSAGE_OTHER_EXTRA_PHOTO_VIEW_TYPE:
+                MessageOtherExtraPhotoViewHolder messageOtherExtraPhotoViewHolder
+                        = (MessageOtherExtraPhotoViewHolder) holder;
+                ImageUtils.setPhoto(
+                        mContext,
+                        fromPhotoUrl,
+                        messageOtherExtraPhotoViewHolder.fromImageView,
+                        true);
+                ImageUtils.setPhoto(
+                        mContext,
+                        sentPhotoUrl,
+                        messageOtherExtraPhotoViewHolder.imageView,
+                        false);
+                messageOtherExtraPhotoViewHolder.timeTextView.setText(time);
+                messageOtherExtraPhotoViewHolder.timeTextView.setAlpha(0.75F);
+                messageOtherExtraPhotoViewHolder.shareImageView.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                shareImage(finalSentPhotoUrl);
+                            }
                         }
-                    });
-                } else {
-                    messageCurrentViewHolder.mChatFromCurrentTextLinearLayout.setVisibility(View.GONE);
-                    messageCurrentViewHolder.mView.setVisibility(View.VISIBLE);
-                    messageCurrentViewHolder.mChatFromCurrentSentImageView.setVisibility(View.VISIBLE);
-                    ImageUtils.setPhoto(
-                            mContext,
-                            sentPhotoUrl,
-                            messageCurrentViewHolder.mChatFromCurrentSentImageView,
-                            false);
-                    final String finalDateAndTimeCurrent = dateAndTime;
-                    final String finalSentPhotoUrlCurrent = sentPhotoUrl;
-                    messageCurrentViewHolder.mChatFromCurrentSentImageView.setOnLongClickListener(
-                            new View.OnLongClickListener() {
-                                @Override
-                                public boolean onLongClick(View view) {
-                                    saveToClipBoard(finalSentPhotoUrlCurrent, true);
-                                    return true;
-                                }
+                );
+                messageOtherExtraPhotoViewHolder.imageView.setOnLongClickListener(
+                        new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        saveToClipBoard(finalSentPhotoUrl, true);
+                        return true;
+                    }
+                });
+                messageOtherExtraPhotoViewHolder.imageView.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onImageClick(
+                                        finalSentPhotoUrl,
+                                        (ViewGroup)view.getParent(),
+                                        finalDateAndTime
+                                );
                             }
-                    );
-                    messageCurrentViewHolder.mChatFromCurrentSentImageView.setOnClickListener(
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    onImageClick(
-                                            finalSentPhotoUrlCurrent,
-                                            (ViewGroup)view.getParent(),
-                                            finalDateAndTimeCurrent
-                                    );
-                                }
+                        });
+                break;
+            case MESSAGE_CURRENT_BASIC_VIEW_TYPE:
+                MessageCurrentBasicViewHolder messageCurrentBasicViewHolder
+                        = (MessageCurrentBasicViewHolder) holder;
+                messageCurrentBasicViewHolder.messageTextView.setText(sentText);
+                messageCurrentBasicViewHolder.timeTextView.setText(time);
+                messageCurrentBasicViewHolder.textFieldLinearLayout.setOnLongClickListener(
+                        new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                saveToClipBoard(finalSentText, false);
+                                return true;
                             }
-                    );
-                }
+                        }
+                );
+                break;
+            case MESSAGE_CURRENT_EXTRA_PHOTO_VIEW_TYPE:
+                MessageCurrentExtraPhotoViewHolder messageCurrentExtraPhotoViewHolder
+                        = (MessageCurrentExtraPhotoViewHolder) holder;
+                ImageUtils.setPhoto(
+                        mContext,
+                        sentPhotoUrl,
+                        messageCurrentExtraPhotoViewHolder.imageView,
+                        false);
+                messageCurrentExtraPhotoViewHolder.timeTextView.setText(time);
+                messageCurrentExtraPhotoViewHolder.timeTextView.setAlpha(0.75F);
+                messageCurrentExtraPhotoViewHolder.shareImageView.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                shareImage(finalSentPhotoUrl);
+                            }
+                        }
+                );
+                messageCurrentExtraPhotoViewHolder.imageView.setOnLongClickListener(
+                        new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                saveToClipBoard(finalSentPhotoUrl, true);
+                                return true;
+                            }
+                        });
+                messageCurrentExtraPhotoViewHolder.imageView.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onImageClick(
+                                        finalSentPhotoUrl,
+                                        (ViewGroup)view.getParent(),
+                                        finalDateAndTime
+                                );
+                            }
+                        });
                 break;
             case MESSAGE_DATE_VIEW_TYPE:
                 MessageDateViewHolder messageDateViewHolder = (MessageDateViewHolder) holder;
                 messageDateViewHolder.mChatDateTextView.setText(
-                        ApplicationHelper.getDisplayDateWithRespectToCurrentDate(mContext, date)
+                        getDisplayDateWithRespectToCurrentDate(date)
                 );
+                break;
+            case MESSAGE_OTHER_TYPING_TYPE:
+                final MessageOtherTypingViewHolder messageOtherTypingViewHolder
+                        = (MessageOtherTypingViewHolder) holder;
+                ImageUtils.setPhoto(
+                        mContext,
+                        fromPhotoUrl,
+                        messageOtherTypingViewHolder.fromImageView,
+                        true);
+                messageOtherTypingViewHolder.typingLayout.setTranslationX(-10f);
+                messageOtherTypingViewHolder.typingLayout.setAlpha(0f);
+                messageOtherTypingViewHolder.typingLayout.animate().translationX(0.0F)
+                        .alpha(1f)
+                        .setDuration(300)
+                        .setStartDelay(50)
+                        .start();
+                Animation animationOne = new TranslateAnimation(
+                        TranslateAnimation.ABSOLUTE, 0f,
+                        TranslateAnimation.ABSOLUTE, 0f,
+                        TranslateAnimation.ABSOLUTE, -15f,
+                        TranslateAnimation.ABSOLUTE, 0f);
+                animationOne.setDuration(2500);
+                animationOne.setStartOffset(200);
+                animationOne.setRepeatCount(-1);
+                animationOne.setRepeatMode(Animation.INFINITE);
+                animationOne.setInterpolator(new CycleInterpolator(1f));
+                messageOtherTypingViewHolder.textViewOne.setAnimation(animationOne);
+                Animation animationTwo = new TranslateAnimation(
+                        TranslateAnimation.ABSOLUTE, 0f,
+                        TranslateAnimation.ABSOLUTE, 0f,
+                        TranslateAnimation.ABSOLUTE, -15f,
+                        TranslateAnimation.ABSOLUTE, 0f);
+                animationTwo.setDuration(2300);
+                animationTwo.setStartOffset(400);
+                animationTwo.setRepeatCount(-1);
+                animationTwo.setRepeatMode(Animation.INFINITE);
+                animationTwo.setInterpolator(new CycleInterpolator(1f));
+                messageOtherTypingViewHolder.textViewTwo.setAnimation(animationTwo);
+                Animation animationThree = new TranslateAnimation(
+                        TranslateAnimation.ABSOLUTE, 0f,
+                        TranslateAnimation.ABSOLUTE, 0f,
+                        TranslateAnimation.ABSOLUTE, -15f,
+                        TranslateAnimation.ABSOLUTE, 0f);
+                animationThree.setDuration(2100);
+                animationThree.setStartOffset(600);
+                animationThree.setRepeatCount(-1);
+                animationThree.setRepeatMode(Animation.INFINITE);
+                animationThree.setInterpolator(new CycleInterpolator(1f));
+                messageOtherTypingViewHolder.textViewThree.setAnimation(animationThree);
+                break;
+        }
+    }
+
+    private String getDisplayDateWithRespectToCurrentDate(String dateToCompare) {
+        String currentLocalDateAndTime = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                mContext,
+                ApplicationHelper.getCurrentUTCDateAndTime()
+        );
+        if (currentLocalDateAndTime.equals(mContext.getResources().getString(R.string.data_not_available))) {
+            Timber.wtf( "currentLocalDateAndTime problem occurred");
+            return "";
+        }
+        String currentLocalDateParts [] = currentLocalDateAndTime.split(" ");
+        String currentLocalDate
+                = currentLocalDateParts[0]
+                + " " + currentLocalDateParts[1]
+                + " " + currentLocalDateParts[2];
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        calendar.add(Calendar.DATE, -1);
+        Date yesterdayDateAndTime = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat(
+                ApplicationHelper.DISPLAY_DATE_PATTERN,
+                Locale.getDefault()
+        );
+        sdf.setTimeZone(TimeZone.getDefault());
+        String yesterdayDateAndTimeAsText = sdf.format(yesterdayDateAndTime);
+        String yesterdayDateAndTimeParts [] = yesterdayDateAndTimeAsText.split(" ");
+        String yesterdayLocalDate
+                = yesterdayDateAndTimeParts[0]
+                + " " + yesterdayDateAndTimeParts[1]
+                + " " + yesterdayDateAndTimeParts[2];
+        if (dateToCompare.equals(currentLocalDate)) {
+            return mContext.getString(R.string.today);
+        } else if (dateToCompare.equals(yesterdayLocalDate)) {
+            return mContext.getString(R.string.yesterday);
+        } else {
+            return dateToCompare;
         }
     }
 
@@ -306,42 +445,63 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    class MessageCurrentViewHolder extends RecyclerView.ViewHolder{
+    class MessageCurrentBasicViewHolder extends RecyclerView.ViewHolder{
 
-        TextView mChatFromCurrentTextView;
-        TextView mChatFromCurrentTimeTextView;
-        ImageView mChatFromCurrentSentImageView;
-        View mView;
-        LinearLayout mChatFromCurrentTextLinearLayout;
+        TextView messageTextView;
+        TextView timeTextView;
+        LinearLayout textFieldLinearLayout;
 
-        MessageCurrentViewHolder(View itemView) {
+        MessageCurrentBasicViewHolder(View itemView) {
             super(itemView);
-            mChatFromCurrentTextView = itemView.findViewById(R.id.tv_chat_from_current_text);
-            mChatFromCurrentSentImageView
-                    = itemView.findViewById(R.id.iv_chat_from_current_sent_photo);
-            mView = itemView.findViewById(R.id.v_chat_from_current_placeholder);
-            mChatFromCurrentTextLinearLayout = itemView.findViewById(R.id.ll_chat_from_current_text);
-            mChatFromCurrentTimeTextView = itemView.findViewById(R.id.tv_chat_from_current__time);
+            messageTextView = itemView.findViewById(R.id.tv_chat_from_current_text);
+            timeTextView = itemView.findViewById(R.id.tv_chat_from_current_time);
+            textFieldLinearLayout = itemView.findViewById(R.id.ll_chat_text_field);
         }
     }
 
-    class MessageOtherViewHolder extends RecyclerView.ViewHolder{
+    class MessageCurrentExtraPhotoViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView mChatFromOtherImageView;
-        TextView mChatFromOtherTextView;
-        TextView mChatFromOtherTimeTextView;
-        ImageView mChatFromOtherSentImageView;
-        View mView;
-        LinearLayout mChatFromOtherTextLinearLayout;
+        ImageView imageView;
+        ImageView shareImageView;
+        TextView timeTextView;
 
-        MessageOtherViewHolder(View itemView) {
+        MessageCurrentExtraPhotoViewHolder(View itemView) {
             super(itemView);
-            mChatFromOtherImageView = itemView.findViewById(R.id.iv_chat_from_other_photo);
-            mChatFromOtherTextView = itemView.findViewById(R.id.tv_chat_from_other_text);
-            mChatFromOtherSentImageView = itemView.findViewById(R.id.iv_chat_from_other_sent_photo);
-            mView = itemView.findViewById(R.id.v_chat_from_other_placeholder);
-            mChatFromOtherTimeTextView = itemView.findViewById(R.id.tv_chat_from_other_time);
-            mChatFromOtherTextLinearLayout = itemView.findViewById(R.id.ll_chat_from_other_text);
+            imageView = itemView.findViewById(R.id.iv_chat_from_current_sent_photo);
+            shareImageView = itemView.findViewById(R.id.iv_chat_from_current_photo_share);
+            timeTextView = itemView.findViewById(R.id.tv_chat_from_current_time);
+        }
+    }
+
+    class MessageOtherBasicViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView fromImageView;
+        TextView messageTextView;
+        TextView timeTextView;
+        LinearLayout textFieldLinearLayout;
+
+        MessageOtherBasicViewHolder(View itemView) {
+            super(itemView);
+            fromImageView = itemView.findViewById(R.id.iv_chat_from_other_photo);
+            messageTextView = itemView.findViewById(R.id.tv_chat_from_other_text);
+            timeTextView = itemView.findViewById(R.id.tv_chat_from_other_time);
+            textFieldLinearLayout = itemView.findViewById(R.id.ll_chat_text_field);
+        }
+    }
+
+    class MessageOtherExtraPhotoViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView fromImageView;
+        ImageView imageView;
+        ImageView shareImageView;
+        TextView timeTextView;
+
+        MessageOtherExtraPhotoViewHolder(View itemView) {
+            super(itemView);
+            fromImageView = itemView.findViewById(R.id.iv_chat_from_other_photo);
+            imageView = itemView.findViewById(R.id.iv_chat_from_other_sent_photo);
+            shareImageView = itemView.findViewById(R.id.iv_chat_from_other_photo_share);
+            timeTextView = itemView.findViewById(R.id.tv_chat_from_other_time);
         }
     }
 
@@ -352,6 +512,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         MessageDateViewHolder(View itemView) {
             super(itemView);
             mChatDateTextView = itemView.findViewById(R.id.tv_chat_date);
+        }
+    }
+
+    class MessageOtherTypingViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView fromImageView;
+        TextView textViewOne;
+        TextView textViewTwo;
+        TextView textViewThree;
+        LinearLayout typingLayout;
+
+        MessageOtherTypingViewHolder(View itemView) {
+            super(itemView);
+            typingLayout = itemView.findViewById(R.id.ll_typing);
+            fromImageView = itemView.findViewById(R.id.iv_chat_from_other_photo);
+            textViewOne = itemView.findViewById(R.id.tv_chat_from_other_typing_one);
+            textViewTwo = itemView.findViewById(R.id.tv_chat_from_other_typing_two);
+            textViewThree = itemView.findViewById(R.id.tv_chat_from_other_typing_three);
         }
     }
 }

@@ -5,8 +5,8 @@ import android.os.Parcelable;
 
 /**
  * Created by Laci on 03/07/2018.
+ * Class to create detailed object for message
  */
-
 public class MessageDetail implements Parcelable{
 
     private String from;
