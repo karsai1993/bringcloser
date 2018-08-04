@@ -36,9 +36,6 @@
     <string name="settings_birthday_header">Birthday</string>
     <string name="settings_gender_header">Gender</string>
     <string name="settings_verification_header">Email verification</string>
-    <string name="gender_male">Male</string>
-    <string name="gender_female">Female</string>
-    <string name="gender_none">I do not want to specify</string>
     <string name="settings_activity">Profile settings</string>
     <string name="about_activity">About BringCloser</string>
     <string name="received_details_activity_label">Your received memories</string>
@@ -97,42 +94,24 @@
     <string name="add_connection_chosen_question_part1">Who is</string>
     <string name="add_connection_chosen_question_part2">to you mostly?</string>
 
-    <string name="relationship_type_none">Data not provided</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_none">I do not want to specify</string>
     <string name="relationship_type_lover">Love</string>
     <string name="relationship_type_friend">Friend</string>
     <string name="relationship_type_sibling">Sibling</string>
-    <string name="relationship_type_sibling_male">Brother</string>
-    <string name="relationship_type_sibling_female">Sister</string>
     <string name="relationship_type_cousin">Cousin</string>
     <string name="relationship_type_parent">Parent</string>
-    <string name="relationship_type_parent_male">Father</string>
-    <string name="relationship_type_parent_female">Mother</string>
     <string name="relationship_type_child">Child</string>
-    <string name="relationship_type_child_male">Son</string>
-    <string name="relationship_type_child_female">Daughter</string>
     <string name="relationship_type_grandparent">Grandparent</string>
-    <string name="relationship_type_grandparent_male">Grandpa</string>
-    <string name="relationship_type_grandparent_female">Grandma</string>
     <string name="relationship_type_godchild">Godchild</string>
-    <string name="relationship_type_godchild_male">Godson</string>
-    <string name="relationship_type_godchild_female">Goddaughter</string>
     <string name="relationship_type_godparent">Godparent</string>
-    <string name="relationship_type_godparent_male">Godfather</string>
-    <string name="relationship_type_godparent_female">Godmother</string>
     <string name="relationship_type_grandchild">Grandchild</string>
-    <string name="relationship_type_grandchild_male">Grandson</string>
-    <string name="relationship_type_grandchild_female">Granddaughter</string>
     <string name="relationship_type_uncle">Uncle</string>
     <string name="relationship_type_aunt">Aunt</string>
     <string name="relationship_type_nephew">Nephew</string>
     <string name="relationship_type_niece">Niece</string>
     <string name="relationship_type_other">Other</string>
-    <string name="relationship_type_acquaintanceship">Acquaintanceship</string>
-    <string name="relationship_type_relative">Relative</string>
-    <string name="relationship_type_not_selected">Please, select a valid relationship type!</string>
-
-    <string name="wish_default_occasion">Select an occasion&#8230;</string>
-    <string name="wish_other_occasion">Other</string>
     <string name="wish_birthday_occasion">Birthday</string>
     <string name="wish_name_day_occasion">Name Day</string>
     <string name="wish_christmas_occasion">Christmas Eve</string>
@@ -143,6 +122,85 @@
     <string name="wish_women_day_occasion">Women\'s Day</string>
     <string name="wish_mother_day_occasion">Mother\'s Day</string>
     <string name="wish_father_day_occasion">Father\'s Day</string>
+
+    <string name="gender_male_id">g01</string>
+    <string name="gender_male_value">@string/gender_male</string>
+    <string name="gender_female_id">g02</string>
+    <string name="gender_female_value">@string/gender_female</string>
+    <string name="gender_none_id">g03</string>
+    <string name="gender_none_value">@string/gender_none</string>
+    <string name="relationship_type_lover_id">r01</string>
+    <string name="relationship_type_lover_value">@string/relationship_type_lover</string>
+    <string name="relationship_type_friend_id">r02</string>
+    <string name="relationship_type_friend_value">@string/relationship_type_friend</string>
+    <string name="relationship_type_sibling_id">r03</string>
+    <string name="relationship_type_sibling_value">@string/relationship_type_sibling</string>
+    <string name="relationship_type_cousin_id">r04</string>
+    <string name="relationship_type_cousin_value">@string/relationship_type_cousin</string>
+    <string name="relationship_type_parent_id">r05</string>
+    <string name="relationship_type_parent_value">@string/relationship_type_parent</string>
+    <string name="relationship_type_child_id">r06</string>
+    <string name="relationship_type_child_value">@string/relationship_type_child</string>
+    <string name="relationship_type_grandparent_id">r07</string>
+    <string name="relationship_type_grandparent_value">@string/relationship_type_grandparent</string>
+    <string name="relationship_type_godchild_id">r08</string>
+    <string name="relationship_type_godchild_value">@string/relationship_type_godchild</string>
+    <string name="relationship_type_godparent_id">r09</string>
+    <string name="relationship_type_godparent_value">@string/relationship_type_godparent</string>
+    <string name="relationship_type_grandchild_id">r10</string>
+    <string name="relationship_type_grandchild_value">@string/relationship_type_grandchild</string>
+    <string name="relationship_type_uncle_id">r11</string>
+    <string name="relationship_type_uncle_value">@string/relationship_type_uncle</string>
+    <string name="relationship_type_aunt_id">r12</string>
+    <string name="relationship_type_aunt_value">@string/relationship_type_aunt</string>
+    <string name="relationship_type_nephew_id">r13</string>
+    <string name="relationship_type_nephew_value">@string/relationship_type_nephew</string>
+    <string name="relationship_type_niece_id">r14</string>
+    <string name="relationship_type_niece_value">@string/relationship_type_niece</string>
+    <string name="relationship_type_other_id">r15</string>
+    <string name="relationship_type_other_value">@string/relationship_type_other</string>
+    <string name="wish_birthday_occasion_id">w01</string>
+    <string name="wish_birthday_occasion_value">@string/wish_birthday_occasion</string>
+    <string name="wish_name_day_occasion_id">w02</string>
+    <string name="wish_name_day_occasion_value">@string/wish_name_day_occasion</string>
+    <string name="wish_christmas_occasion_id">w03</string>
+    <string name="wish_christmas_occasion_value">@string/wish_christmas_occasion</string>
+    <string name="wish_new_year_occasion_id">w04</string>
+    <string name="wish_new_year_occasion_value">@string/wish_new_year_occasion</string>
+    <string name="wish_easter_occasion_id">w05</string>
+    <string name="wish_easter_occasion_value">@string/wish_easter_occasion</string>
+    <string name="wish_valentine_day_occasion_id">w06</string>
+    <string name="wish_valentine_day_occasion_value">@string/wish_valentine_day_occasion</string>
+    <string name="wish_anniversary_occasion_id">w07</string>
+    <string name="wish_anniversary_occasion_value">@string/wish_anniversary_occasion</string>
+    <string name="wish_women_day_occasion_id">w08</string>
+    <string name="wish_women_day_occasion_value">@string/wish_women_day_occasion</string>
+    <string name="wish_mother_day_occasion_id">w09</string>
+    <string name="wish_mother_day_occasion_value">@string/wish_mother_day_occasion</string>
+    <string name="wish_father_day_occasion_id">w10</string>
+    <string name="wish_father_day_occasion_value">@string/wish_father_day_occasion</string>
+
+    <string name="relationship_type_none">Data not provided</string>
+    <string name="relationship_type_sibling_male">Brother</string>
+    <string name="relationship_type_sibling_female">Sister</string>
+    <string name="relationship_type_parent_male">Father</string>
+    <string name="relationship_type_parent_female">Mother</string>
+    <string name="relationship_type_child_male">Son</string>
+    <string name="relationship_type_child_female">Daughter</string>
+    <string name="relationship_type_grandparent_male">Grandpa</string>
+    <string name="relationship_type_grandparent_female">Grandma</string>
+    <string name="relationship_type_godchild_male">Godson</string>
+    <string name="relationship_type_godchild_female">Goddaughter</string>
+    <string name="relationship_type_godparent_male">Godfather</string>
+    <string name="relationship_type_godparent_female">Godmother</string>
+    <string name="relationship_type_grandchild_male">Grandson</string>
+    <string name="relationship_type_grandchild_female">Granddaughter</string>
+    <string name="relationship_type_acquaintanceship">Acquaintanceship</string>
+    <string name="relationship_type_relative">Relative</string>
+    <string name="relationship_type_not_selected">Please, select a valid relationship type!</string>
+
+    <string name="wish_default_occasion">Select an occasion&#8230;</string>
+    <string name="wish_other_occasion">Other</string>
 
     <string name="wish_default_message_person_spec_day_1">Hi,\u0020</string>
     <string name="wish_default_message_person_spec_day_2">!\u0020It\'s your\u0020</string>
@@ -363,12 +421,12 @@
     <string name="received_details_no_selection_alert">
         Please, select at least one out of the three options above!</string>
     <string name="received_details_no_result_alert">
-        There are no results found based on the checked item!</string>
+        There are no memories found!</string>
     <string name="dot">\u2022</string>
 
     <string name="facebook_application_id" translatable="false">621043098259578</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>
-    <string name="empty_view_text">You have no received items, yet!\n
+    <string name="empty_view_text">You have no received memories, yet!\n
         Let others know the BringCloser app!</string>
 
     <string name="about_mission_label">Mission</string>

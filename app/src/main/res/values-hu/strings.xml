@@ -1,0 +1,542 @@
+<resources>
+    <string name="app_name">BringCloser</string>
+    <string name="navigation_drawer_open">Navigációs ablak megnyitása</string>
+    <string name="navigation_drawer_close">Navigációs ablak bezárása</string>
+
+    <string name="action_sign_out">Kijelentkezés</string>
+    <string name="action_delete_account">Fiók törlése</string>
+
+    <string name="connected_people_fragment_title">Kapcsolatok</string>
+    <string name="request_to_people_fragment_title">Elküldött felkérések</string>
+    <string name="request_from_people_fragment_title">Bejövő felkérések</string>
+
+    <string name="connection_detail_chat_fragment_title">Beszélgetés</string>
+    <string name="connection_detail_wish_fragment_title">Jókívánság</string>
+    <string name="connection_detail_event_fragment_title">Tervezett esemény</string>
+    <string name="connection_detail_thought_fragment_title">Személyes gondolat</string>
+
+    <string name="welcome_start">Szia,</string>
+
+    <string name="nav_received_items">Bejövő Emlékek</string>
+    <string name="nav_profile_settings">Profil Beállítások</string>
+    <string name="nav_about">Alkalmazásról</string>
+    <string name="nav_birthday_base">Születésnap:\u0020</string>
+    <string name="nav_gender_base">Nem:\u0020</string>
+
+    <string name="no_internet_message">Jelenleg nincs internetkapcsolat!
+        Kérlek, ellenőrizd, majd próbáld újra.</string>
+    <string name="no_internet_message_general">Jelenleg nincs internetkapcsolat! Kérlek,
+        vedd tudomásul, hogy a változtatások akkor lesznek szinkronizálva,
+        ha újra lesz intenetkapcsolatod!</string>
+    <string name="retry">ÚJRA</string>
+    <string name="zero_character_name_message">Nem ajánlott, hogy üresen hagyd!</string>
+    <string name="wrong_date_selected_message_before">A kiválasztott napnak a mai
+        előtt kell lennie!</string>
+    <string name="wrong_date_selected_message_after">A kiválasztott nap a mai
+        vagy az utáni kell, hogy legyen!</string>
+    <string name="uploading_image">Kép feltöltése&#8230;</string>
+    <string name="settings_display_name_header">Megjelenített név</string>
+    <string name="settings_birthday_header">Születésnap</string>
+    <string name="settings_gender_header">Nem</string>
+    <string name="settings_verification_header">Email cím megerősítése</string>
+    <string name="settings_activity">Profil beállítások</string>
+    <string name="about_activity">BringCloser alkalmazásról</string>
+    <string name="received_details_activity_label">Bejövő emlékeid</string>
+    <string name="received_details_widget_label">Bejövő emlékeid</string>
+    <string name="add_new_connection_activity">Keress egy új kapcsolatot</string>
+    <string name="add_chosen_connection_activity">Kiválasztott kapcsolat hozzáadása</string>
+    <string name="settings_birthday_default">Adat nincs megadva</string>
+    <string name="settings_birthday_set_default">Alapbeállítás</string>
+    <string name="dialog_settings_name">Írd be a kívánt nevet</string>
+    <string name="dialog_title">Írd be a kívánt üzenetet</string>
+    <string name="dialog_wish_withdraw_title">Arra készülsz, hogy visszavond a
+        következő jókívánságot!</string>
+    <string name="dialog_event_withdraw_title">Arra készülsz, hogy visszavond a
+        következő esemény értesítést!</string>
+    <string name="dialog_thought_withdraw_title">Arra készülsz, hogy töröld a következő gondolatot!</string>
+    <string name="dialog_thought_send_title">Arra készülsz, hogy elküld a következő gondolatot!</string>
+    <string name="dialog_settings_positive_btn">RENDBEN</string>
+    <string name="dialog_settings_negative_btn">MÉGSE</string>
+    <string name="dialog_settings_back_btn">VISSZA</string>
+    <string name="settings_change_btn">VÁLTOZTATÁS</string>
+    <string name="settings_verification_btn">MEGERŐSÍTÉS</string>
+    <string name="settings_verification_positive">Megerősítve</string>
+    <string name="settings_verification_negative">Nincs megerősítve</string>
+    <string name="settings_verification_ongoing">Bejövő levelek megnézése, megerősítés,
+        bejelentkezés újra</string>
+    <string name="nav_drawer_verification_required">Email megerősítés szükséges!</string>
+    <string name="starting_toolbar_title">Betöltés&#8230;</string>
+    <string name="no_suitable_app_message">A telefonnak nincs megfelelő alkalmazása,
+        hogy végrehajtsa a kérést!</string>
+    <string name="permission_needed">A következő engedélyek szükségesek a folytatáshoz&#8230;</string>
+    <string name="permission_needed_message">A külső tárhely olvasásához
+        és írásához engedélyek szükségesek! </string>
+    <string name="denied_permission_message">Engedélyezés nélkül a folytatás nem lehetséges!</string>
+    <string name="re_authenticate_request">Kérlek, jelentkezz be újra,
+        majd próbáld újra a fiók törlését.</string>
+    <string name="delete_account_dialog_title">Arra készülsz, hogy töröld a fiókodat!</string>
+    <string name="delete_account_dialog_alert_start">Törlés előtt</string>
+    <string name="delete_account_dialog_alert_part_1">\n
+        \u2022 Bizonyosodj meg, hogy nemrégiben jelentkeztél be</string>
+    <string name="delete_account_dialog_alert_part_2">
+        -> Egyébként, a kérésed nem lehet teljesen végrehajtva</string>
+    <string name="delete_account_dialog_alert_part_3">\n
+        \u2022 Ahhoz, hogy megbizonyosodj, jelentkezz be újra,\n
+        \u2022 Gyere vissza, ha még mindig törölni akarsz</string>
+    <string name="delete_account_dialog_data_info_start">\nHa kész, a következők lesznek törölve</string>
+    <string name="delete_account_dialog_data_info">\n
+        \u2022 Minden információd (fiók és kapcsolatok)\n
+        \u2022 Minden képed\n
+        \u2022 Bejelentkezési adataid</string>
+    <string name="settings_verification_dialog_title">Email megerősítési kérelem</string>
+    <string name="settings_verification_dialog_info">\n
+        \u2022 Kattints \"RENDBEN\"-re, hogy megkapd a kérelmet,\n
+        \u2022 Ellenőrizd az email fiókod és kattints a megerősítésre,\n
+        \u2022 Jelentkezz be újra,\n
+        \u2022 Érezd jól magad a hozzád közeli emberekkel :)</string>
+    <string name="filter_hint">Írj, hogy szűrd a lenti listát&#8230;</string>
+    <string name="add_connection_possible_size">Lehetséges kapcsolatok</string>
+    <string name="add_connection_found_possible_size">Talált lehetséges kapcsolatok</string>
+    <string name="add_connection_no_available">
+        Nincs új lehetséges kapcsolat! Mesélj másoknak is a BringCloser alkalmazásról!</string>
+    <string name="add_connection_chosen_question_part1">Ki</string>
+    <string name="add_connection_chosen_question_part2">a leginkább számodra?</string>
+
+    <string name="gender_male">Férfi</string>
+    <string name="gender_female">Nő</string>
+    <string name="gender_none">Nem akarom megadni</string>
+    <string name="relationship_type_lover">Szerelem</string>
+    <string name="relationship_type_friend">Barát</string>
+    <string name="relationship_type_sibling">Testvér</string>
+    <string name="relationship_type_cousin">Unokatestvér</string>
+    <string name="relationship_type_parent">Szülő</string>
+    <string name="relationship_type_child">Gyermek</string>
+    <string name="relationship_type_grandparent">Nagyszülő</string>
+    <string name="relationship_type_godchild">Keresztgyermek</string>
+    <string name="relationship_type_godparent">Keresztszülő</string>
+    <string name="relationship_type_grandchild">Unoka</string>
+    <string name="relationship_type_uncle">Nagybácsi</string>
+    <string name="relationship_type_aunt">Nagynéni</string>
+    <string name="relationship_type_nephew">Unokaöcs</string>
+    <string name="relationship_type_niece">Unokahúg</string>
+    <string name="relationship_type_other">Egyéb</string>
+    <string name="wish_birthday_occasion">Születésnap</string>
+    <string name="wish_name_day_occasion">Névnap</string>
+    <string name="wish_christmas_occasion">Szent Este</string>
+    <string name="wish_new_year_occasion">Új Év</string>
+    <string name="wish_easter_occasion">Húsvét</string>
+    <string name="wish_valentine_day_occasion">Valetin nap</string>
+    <string name="wish_anniversary_occasion">Évfoduló</string>
+    <string name="wish_women_day_occasion">Nők napja</string>
+    <string name="wish_mother_day_occasion">Anyák napja</string>
+    <string name="wish_father_day_occasion">Apák napja</string>
+
+    <string name="gender_male_id">g01</string>
+    <string name="gender_male_value">@string/gender_male</string>
+    <string name="gender_female_id">g02</string>
+    <string name="gender_female_value">@string/gender_female</string>
+    <string name="gender_none_id">g03</string>
+    <string name="gender_none_value">@string/gender_none</string>
+    <string name="relationship_type_lover_id">r01</string>
+    <string name="relationship_type_lover_value">@string/relationship_type_lover</string>
+    <string name="relationship_type_friend_id">r02</string>
+    <string name="relationship_type_friend_value">@string/relationship_type_friend</string>
+    <string name="relationship_type_sibling_id">r03</string>
+    <string name="relationship_type_sibling_value">@string/relationship_type_sibling</string>
+    <string name="relationship_type_cousin_id">r04</string>
+    <string name="relationship_type_cousin_value">@string/relationship_type_cousin</string>
+    <string name="relationship_type_parent_id">r05</string>
+    <string name="relationship_type_parent_value">@string/relationship_type_parent</string>
+    <string name="relationship_type_child_id">r06</string>
+    <string name="relationship_type_child_value">@string/relationship_type_child</string>
+    <string name="relationship_type_grandparent_id">r07</string>
+    <string name="relationship_type_grandparent_value">@string/relationship_type_grandparent</string>
+    <string name="relationship_type_godchild_id">r08</string>
+    <string name="relationship_type_godchild_value">@string/relationship_type_godchild</string>
+    <string name="relationship_type_godparent_id">r09</string>
+    <string name="relationship_type_godparent_value">@string/relationship_type_godparent</string>
+    <string name="relationship_type_grandchild_id">r10</string>
+    <string name="relationship_type_grandchild_value">@string/relationship_type_grandchild</string>
+    <string name="relationship_type_uncle_id">r11</string>
+    <string name="relationship_type_uncle_value">@string/relationship_type_uncle</string>
+    <string name="relationship_type_aunt_id">r12</string>
+    <string name="relationship_type_aunt_value">@string/relationship_type_aunt</string>
+    <string name="relationship_type_nephew_id">r13</string>
+    <string name="relationship_type_nephew_value">@string/relationship_type_nephew</string>
+    <string name="relationship_type_niece_id">r14</string>
+    <string name="relationship_type_niece_value">@string/relationship_type_niece</string>
+    <string name="relationship_type_other_id">r15</string>
+    <string name="relationship_type_other_value">@string/relationship_type_other</string>
+    <string name="wish_birthday_occasion_id">w01</string>
+    <string name="wish_birthday_occasion_value">@string/wish_birthday_occasion</string>
+    <string name="wish_name_day_occasion_id">w02</string>
+    <string name="wish_name_day_occasion_value">@string/wish_name_day_occasion</string>
+    <string name="wish_christmas_occasion_id">w03</string>
+    <string name="wish_christmas_occasion_value">@string/wish_christmas_occasion</string>
+    <string name="wish_new_year_occasion_id">w04</string>
+    <string name="wish_new_year_occasion_value">@string/wish_new_year_occasion</string>
+    <string name="wish_easter_occasion_id">w05</string>
+    <string name="wish_easter_occasion_value">@string/wish_easter_occasion</string>
+    <string name="wish_valentine_day_occasion_id">w06</string>
+    <string name="wish_valentine_day_occasion_value">@string/wish_valentine_day_occasion</string>
+    <string name="wish_anniversary_occasion_id">w07</string>
+    <string name="wish_anniversary_occasion_value">@string/wish_anniversary_occasion</string>
+    <string name="wish_women_day_occasion_id">w08</string>
+    <string name="wish_women_day_occasion_value">@string/wish_women_day_occasion</string>
+    <string name="wish_mother_day_occasion_id">w09</string>
+    <string name="wish_mother_day_occasion_value">@string/wish_mother_day_occasion</string>
+    <string name="wish_father_day_occasion_id">w10</string>
+    <string name="wish_father_day_occasion_value">@string/wish_father_day_occasion</string>
+
+    <string name="relationship_type_none">Adat nincs megadva</string>
+    <string name="relationship_type_sibling_male">Fiútestvér</string>
+    <string name="relationship_type_sibling_female">Lánytestvér</string>
+    <string name="relationship_type_parent_male">Apa</string>
+    <string name="relationship_type_parent_female">Anya</string>
+    <string name="relationship_type_child_male">Fiúgyermek</string>
+    <string name="relationship_type_child_female">Lánygyermek</string>
+    <string name="relationship_type_grandparent_male">Nagyapa</string>
+    <string name="relationship_type_grandparent_female">Nagyanya</string>
+    <string name="relationship_type_godchild_male">Keresztfiú</string>
+    <string name="relationship_type_godchild_female">Keresztlány</string>
+    <string name="relationship_type_godparent_male">Keresztapa</string>
+    <string name="relationship_type_godparent_female">Keresztanya</string>
+    <string name="relationship_type_grandchild_male">Fiúunoka</string>
+    <string name="relationship_type_grandchild_female">Lányunoka</string>
+    <string name="relationship_type_acquaintanceship">Ismerős</string>
+    <string name="relationship_type_relative">Rokon</string>
+    <string name="relationship_type_not_selected">Kérlek, válassz egy érvényes kapcsolat típust!</string>
+
+    <string name="wish_default_occasion">Válassz egy alkalmat&#8230;</string>
+    <string name="wish_other_occasion">Egyéb</string>
+
+    <string name="wish_default_message_person_spec_day_1">Szia,\u0020</string>
+    <string name="wish_default_message_person_spec_day_2">!\u0020A mai nap számodra\u0020</string>
+    <string name="wish_default_message_person_spec_day_3">!\u0020Kívánom, hogy csodálatos legyen!</string>
+
+    <string name="wish_default_message_year_spec_day_new_year">Boldog új évet,\u0020</string>
+    <string name="wish_default_message_year_spec_day_christmas">Boldog karácsonyt,\u0020</string>
+    <string name="wish_default_message_year_spec_day_easter">Kellemes húsvétot,\u0020</string>
+    <string name="wish_default_message_year_spec_day_end">!</string>
+
+    <string name="wish_default_message_valentine_day_1">Boldog Valentin napot,\u0020</string>
+    <string name="wish_default_message_valentine_day_2">! Nem tudom elmondani mennyire örülök,
+        hogy Te vagy a párom!</string>
+
+    <string name="wish_default_message_anniversary_day_1">Boldog évfodulót,\u0020</string>
+    <string name="wish_default_message_anniversary_day_2">! Nagyon várom az ünneplést!</string>
+
+    <string name="wish_default_message_women_day_1">Boldog nők napját,\u0020</string>
+    <string name="wish_default_message_women_day_2">! Legyen szép napod!</string>
+
+    <string name="wish_default_message_mother_day">Szia Anya! Örülök, hogy Te vagy az anyám!
+        Boldog anyák napját!</string>
+    <string name="wish_default_message_father_day">Szia Apa! Örülök, hogy Te vagy az apám!
+        Boldog apák napját!</string>
+
+    <string-array name="wish_basic_occasions">
+        <item>@string/wish_birthday_occasion</item>
+        <item>@string/wish_name_day_occasion</item>
+        <item>@string/wish_christmas_occasion</item>
+        <item>@string/wish_new_year_occasion</item>
+        <item>@string/wish_easter_occasion</item>
+    </string-array>
+
+    <string-array name="wish_love_occasions">
+        <item>@string/wish_valentine_day_occasion</item>
+        <item>@string/wish_anniversary_occasion</item>
+    </string-array>
+
+    <string-array name="wish_female_occasions">
+        <item>@string/wish_women_day_occasion</item>
+    </string-array>
+
+    <string-array name="wish_mother_occasions">
+        <item>@string/wish_mother_day_occasion</item>
+    </string-array>
+
+    <string-array name="wish_father_occasions">
+        <item>@string/wish_father_day_occasion</item>
+    </string-array>
+
+    <string name="sorted_by_default">Idő - Legkorábbitól kezdve</string>
+    <string name="sorted_by_time_descending">Idő - Legkésőbbitől kezdve</string>
+    <string name="wish_sorted_by_occasion">Alkalom</string>
+    <string-array name="wish_sort_options">
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
+        <item>@string/wish_sorted_by_occasion</item>
+    </string-array>
+    <string name="event_sorted_by_title">Cím</string>
+    <string name="event_sorted_by_place">Hely</string>
+    <string-array name="event_sort_options">
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
+        <item>@string/event_sorted_by_title</item>
+        <item>@string/event_sorted_by_place</item>
+    </string-array>
+    <string name="thought_sorted_by_message">Üzenet</string>
+    <string-array name="thought_sort_options">
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
+        <item>@string/thought_sorted_by_message</item>
+    </string-array>
+    <string name="received_detail_sorted_by_type">Típus</string>
+    <string name="received_detail_sorted_by_sender">Küldő</string>
+    <string-array name="received_detail_sort_options">
+        <item>@string/sorted_by_default</item>
+        <item>@string/sorted_by_time_descending</item>
+        <item>@string/received_detail_sorted_by_type</item>
+        <item>@string/received_detail_sorted_by_sender</item>
+    </string-array>
+    <string name="sorted_by_title">Mi alapján szeretnél rendezni?</string>
+    <string name="edit_sent_data">SZERKESZTÉS</string>
+    <string name="cancel_sent_data">VISSZAVONÁS</string>
+    <string name="thought_cancel_sent_data">TÖRLÉS</string>
+
+    <string name="play_services_alert">Play Services telepítés nélkül,
+        talán nem kapsz bizonyos értesítéseket!</string>
+
+    <string name="fragment_from_user_empty">Nincs függőben lévő felkérés a számodra közeli
+        emberektől! Mesélj nekik a BringCloser alkalmazásról!</string>
+    <string name="fragment_to_user_empty">Nincs függőben lévő felkérés a számodra közeli
+        emberek felé! Keresd meg és add őket a kapcsolataid közé!</string>
+    <string name="fragment_connected_user_empty">Nincs kapcsolat a számodra közeli emberek felé!
+        Keresd meg és add őket a kapcsolataid közé!</string>
+
+    <string name="not_verified_email_address_message">Email megerősítés szükséges
+        ennek a végrehajtásához!</string>
+
+    <string name="dialog_request_to_delete_title">Arra készülsz, hogy
+        visszavond a következő felkérést!</string>
+    <string name="dialog_request_from_delete_title">Arra készülsz, hogy
+        visszautasítsd a következő felkérést!</string>
+    <string name="dialog_connection_delete_title">Arra készülsz, hogy töröld a
+        következő kapcsolatot!</string>
+    <string name="dialog_request_approve_title">Arra készülsz, hogy
+        elfogadd a következő felkérést!</string>
+
+    <string name="congrats_on_accepted_request_start">Gratulálok! Az új kapcsolatod</string>
+    <string name="request_deleted_1">A törlés, ami őt érintette:\u0020</string>
+    <string name="request_deleted_2">, sikeresen végre lett hajtva!</string>
+
+    <string name="new_request_title">Új felkérés!</string>
+    <string name="new_request_body">\u0020akar kapcsolatba lépni veled.</string>
+    <string name="new_approval_title">Gratulálok az új kapcsolathoz!</string>
+    <string name="new_approval_body">\u0020és Te kapcsolatban vagytok.</string>
+    <string name="new_wish_title">Új jókívánság -\u0020</string>
+    <string name="new_event_title">Új esemény -\u0020</string>
+    <string name="new_thought_title">Új gondolat -\u0020</string>
+    <string name="new_message_title">Új üzenet -\u0020</string>
+    <string name="new_message_image_body">Kaptál egy képet a beszélgetésben.</string>
+
+    <string name="already_got_request">Már kaptál egy félkérést a tőle:</string>
+
+    <string name="connection_activity_toolbar_title">Te és\u0020</string>
+    <string name="connection_activity_toolbar_you">Te</string>
+    <string name="connection_activity_since">Kapcsolatba lépve ekkor\u0020</string>
+    <string name="action_connection_delete">Kapcsolat törlése</string>
+
+    <string name="chat_hint">Írd be az üzenetedet&#8230;</string>
+    <string name="chat_filter_hint">Keress az üzenetekben&#8230;</string>
+
+    <string name="thought_no_data">Még nem küldtél egy gondolatot sem!</string>
+    <string name="event_no_data">Még nem küldtél egy esemény értesítést sem!</string>
+    <string name="wish_no_data">Még nem küldtél egy jókívánságot sem!</string>
+    <string name="chat_no_data">Nincsennek üzenetek! Légy Te az, aki elküldi az elsőt!</string>
+    <string name="chat_no_data_search_message">Nincs elküldött üzenet, amiben keresni tudnál!</string>
+
+    <string name="data_not_available">Adat nem elérhető</string>
+    <string name="saved_to_clipboard_1">\"</string>
+    <string name="saved_to_clipboard_12">&#8230;</string>
+    <string name="saved_to_clipboard_2">\" a vágólapra lett másolva!</string>
+
+    <string name="share_title">Képed megosztása&#8230;</string>
+
+    <string name="image_link_copied">Kép linkje a vágólapja lett másolva!</string>
+
+    <string name="problem">Hiba történt.</string>
+
+    <string name="other_people_delete_common_1">Úgy tűnik, hogy\u0020</string>
+    <string name="other_people_delete_common_2">\u0020törölt Téged, mint kapcsolatot, vagy\u0020
+    </string>
+    <string name="other_people_delete_common_3">\u0020az alkalmazásból.</string>
+
+    <string name="gender_representative_none">saját magát</string>
+    <string name="gender_representative_female">saját magát</string>
+    <string name="gender_representative_male">saját magát</string>
+
+    <string name="sorted_by">Rendezve a következő szerint</string>
+
+    <string name="today">Ma</string>
+    <string name="yesterday">Tegnap</string>
+
+    <!--string name="wish_already_sent">This wish has already been sent!</string-->
+    <string name="wish_label">Új jókívánság küldése</string>
+    <string name="wish_other_edittext_hint">Részletezd az alkalmat&#8230;</string>
+    <string name="wish_edittext_hint">Írd be a jókívánságot&#8230;</string>
+    <string name="wish_question_1">Mikor kapja meg\u0020</string>
+    <string name="wish_question_2">\u0020ezt a jókívánságot?</string>
+    <string name="selected_date_default">Dátum nincs kiválasztva</string>
+    <string name="selected_time_default">Idő nincs kiválasztva</string>
+    <string name="date_selector">Dátum választása</string>
+    <string name="time_selector">Idő választása</string>
+    <string name="photo_assignment">Kép hozzáadása</string>
+    <string name="wish_photo_alert">Hozzá tudsz adni egy képet a jókívánságodhoz,
+        hogy ezzel még különlegesebbé tedd!</string>
+    <string name="wish_alert_no_occasion">Kérlek, válassz egy alkalmat a folytatáshoz!</string>
+    <string name="wish_alert_no_occasion_specified">Kérlek, írj be egy alkalmat a folytatáshoz!</string>
+    <string name="wish_alert_no_text">Kérlek, írd be a jókívánságod szövegét a folytatáshoz!</string>
+    <string name="alert_no_date">Kérlek, válassz ki a dátumot a folytatáshoz!</string>
+    <string name="alert_no_time">Kérlek, válassz ki az időt a folytatáshoz!</string>
+
+    <!--string name="event_already_sent">This event notification has already been sent!</string-->
+    <string name="event_label">Új esemény küldése</string>
+    <string name="event_title_hint">Írd be az esemény címét&#8230;</string>
+    <string name="event_place_hint">Írd be az esemény helyszínét&#8230;</string>
+    <string name="event_message_hint">Írd be az üzenetedet&#8230;</string>
+    <string name="event_question_1">Mikor kapja meg\u0020</string>
+    <string name="event_question_2">\u0020ezt az esemény értesítést?</string>
+    <string name="event_photo_alert">Hozzá tudsz adni egy képet az esemény értesítésedhez,
+        hogy ezzel még különlegesebbé tedd!</string>
+    <string name="event_alert_no_title">Kérlek, írd be az esemény címét a folytatáshoz!</string>
+    <string name="event_alert_no_place">Kérlek, írd be az esemény helyszínét a folytatáshoz!</string>
+    <string name="event_alert_no_message">Kérlek, írd be üzenetedet a folytatáshoz!</string>
+
+    <string name="thought_label">Új gondolat küldése</string>
+    <string name="thought_message_hint">Írd be a gondolatodat&#8230;</string>
+    <string name="thought_photo_alert">Hozzá tudsz adni egy képet a gondolathoz,
+        hogy ezzel még különlegesebbé tedd!</string>
+    <string name="thought_question_1">Szeretnéd, hogy\u0020</string>
+    <string name="thought_question_2">\u0020azonnal megkapja ezt?</string>
+    <string name="thought_status_no">Nem</string>
+    <string name="thought_status_yes">Igen</string>
+    <string name="thought_status_message_no">Ez a gondolat nincs elküldve!</string>
+    <!--string name="thought_status_message_yes">This thought has already been sent!</string-->
+    <string name="thought_alert_no_message">Kérlek, írd be az üzenetedet a folytatáshoz!</string>
+
+    <string name="up_nav_deletion_alert">Miután visszaléptél, a feltöltött kép törölve lett!</string>
+
+    <string name="received_detail_wish">Jókívánság</string>
+    <string name="received_detail_event">Esemény</string>
+    <string name="received_detail_thought">Gondolat</string>
+    <string name="share_title_received_item_1">Megosztás: bejövő\u0020</string>
+    <string name="share_title_received_item_2">&#8230;</string>
+    <string name="share_content_received_item_1">Kaptam:\u0020</string>
+    <string name="share_content_received_item_2">\u0020küldte:\u0020</string>
+    <string name="share_content_received_item_3">\u0020ekkor:\u0020</string>
+    <string name="received_details_no_selection_alert">
+        Kérlek, válassz legalább egyet a fenti három lehetőségből!</string>
+    <string name="received_details_no_result_alert">
+        Nincs megjelenítendő emlék!</string>
+    <string name="dot">\u2022</string>
+
+    <string name="facebook_application_id" translatable="false">621043098259578</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>
+    <string name="empty_view_text">Még nincs megjelenítendő emlék!
+        Mesélj másoknak is a BringCloser alkalmazásról!</string>
+
+    <string name="about_mission_label">Küldetés</string>
+    <string name="about_mission_1">BringCloser küldetése, hogy segítsen emlékezni minden
+        számodra közeli emberhez fűzűdő emlékedre.\n
+        Frissítsd fel a saját és a számodra közeli emberek mindennapjait a következőkkel:</string>
+    <string name="about_mission_2">
+        \u2022 jókívánság egy különleges alkalomra (pl. születésnap, névnap, nők napja,
+        anyák napja, apák napja, stb.)\n
+        \u2022 emlékeztető egy tervezett eseményre (pl. érettségi, álom munka interjú, stb.)\n
+        \u2022 privát gondolat egy fontos történésre (pl. első randevú, első évforduló,
+        első virágok megvéve valakinek, stb.)</string>
+    <string name="about_mission_3">
+        Ez az alkalmazás a mindennapi életedből eredő emlékeidre összpontosít,
+        és azokat könnyen értelmezhető módon adja vissza.</string>
+    <string name="about_used_libraries_label">Használt külső források</string>
+    <string name="about_used_libraries_firebase_common_name">com.google.firebase:firebase-common</string>
+    <string name="about_used_libraries_firebase_common_version">16.0.0</string>
+    <string name="about_used_libraries_firebase_core_name">com.google.firebase:firebase-core</string>
+    <string name="about_used_libraries_firebase_core_version">16.0.1</string>
+    <string name="about_used_libraries_firebase_auth_name">com.google.firebase:firebase-auth</string>
+    <string name="about_used_libraries_firebase_auth_version">16.0.2</string>
+    <string name="about_used_libraries_firebase_database_name">com.google.firebase:firebase-database</string>
+    <string name="about_used_libraries_firebase_databasae_version">16.0.1</string>
+    <string name="about_used_libraries_firebase_storage_name">com.google.firebase:firebase-storage</string>
+    <string name="about_used_libraries_firebase_storage_version">16.0.1</string>
+    <string name="about_used_libraries_firebase_messaging_name">com.google.firebase:firebase-messaging</string>
+    <string name="about_used_libraries_firebase_messaging_version">17.1.0</string>
+    <string name="about_used_libraries_firebase_ui_auth_name">com.firebaseui:firebase-ui-auth</string>
+    <string name="about_used_libraries_firebase_ui_auth_version">4.0.0</string>
+    <string name="about_used_libraries_glide_name">com.github.bumptech.glide:glide</string>
+    <string name="about_used_libraries_glide_version">4.7.1</string>
+    <string name="about_used_libraries_glide_compiler_name">com.github.bumptech.glide:compiler</string>
+    <string name="about_used_libraries_glide_compiler_version">4.7.1</string>
+    <string name="about_used_libraries_butterknife_name">com.jakewharton:butterknife</string>
+    <string name="about_used_libraries_butterknife_version">8.8.1</string>
+    <string name="about_used_libraries_butterknife_compiler_name">com.jakewharton:butterknife-compiler</string>
+    <string name="about_used_libraries_butterknife_compiler_version">8.8.1</string>
+    <string name="about_used_libraries_fastscroller_name">com.futuremind.recyclerfastscroll:fastscroll</string>
+    <string name="about_used_libraries_fastscroller_version">0.2.5</string>
+    <string name="about_used_libraries_facebook_login_name">com.facebook.android:facebook-login</string>
+    <string name="about_used_libraries_facebook_login_version">4.34.0</string>
+    <string name="about_used_libraries_firebase_jobdispatcher_name">com.firebase:firebase-jobdispatcher</string>
+    <string name="about_used_libraries_firebase_jobdispatcher_version">0.8.5</string>
+    <string name="about_used_libraries_timber_name">com.jakewharton.timber:timber</string>
+    <string name="about_used_libraries_timber_version">4.7.1</string>
+    <string name="about_license_label">Licenc</string>
+    <string name="about_license_content">Copyright 2018 László Karsai\n
+        \n
+        Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at\n
+        \n
+        http://www.apache.org/licenses/LICENSE-2.0\n
+        \n
+        Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.</string>
+    <string name="about_logo_content_description">Alkalmazásról oldal Logo</string>
+    <string name="add_chosen_photo_content_description">Kiválasztott Kép Hozzáadás</string>
+    <string name="camera_content_description">Kamera Kép Készítés</string>
+    <string name="gallery_content_description">Kép Hozzáadás a Galériából</string>
+    <string name="added_extra_photo_content_description">Kép Hozzáadás</string>
+    <string name="delete_added_extra_photo_content_description">Hozzáadott Kép Törlése</string>
+    <string name="connection_activity_current_photo">Mostani Felhasználó Kép</string>
+    <string name="connection_activity_other_photo">Másik felhasználó Kép</string>
+    <string name="search_content_description">Keresés</string>
+    <string name="send_content_description">Küldés</string>
+    <string name="settings_photo_content_description">Profil Beállítások Kép</string>
+    <string name="big_photo_content_description">Nagy Kép</string>
+    <string name="share_content_description">Megosztás</string>
+    <string name="all_users_image_content_description">Minden Felhasználó Kép</string>
+    <string name="connected_users_photo_content_description">Kapcsolatban Álló Felhasználók Kép</string>
+    <string name="event_extra_photo_content_description">Esemény Hozzáadott Kép</string>
+    <string name="message_from_current_share_content_description">Megosztás Üzenet Mostanitól</string>
+    <string name="message_from_current_photo_content_description">Kép Üzenet Mostanitól</string>
+    <string name="message_from_other_face_photo_content_description">Arc Kép Üzenet Másiktól</string>
+    <string name="message_from_other_photo_content_description">Kép Üzenet Másiktól</string>
+    <string name="message_from_other_share_content_description">Megosztás Üzenet Másiktól</string>
+    <string name="go_to_chat_content_description">Beszélgetéshez úgrás</string>
+    <string name="from_photo_content_description">Küldő Kép</string>
+    <string name="extra_photo_content_description">Hozzáadott Kép</string>
+    <string name="request_from_users_photo_content_description">Kapott Felkérés Felhasználók Kép</string>
+    <string name="delete_content_description">Kapcsolat Törlése</string>
+    <string name="approve_content_description">Kapcsolat Elfogadása</string>
+    <string name="request_to_users_photo_content_description">Küldött Felkérés Felhasználók Kép</string>
+    <string name="user_face_content_description">Felhasználó Arc Kép</string>
+    <string name="widget_logo_content_description">Widget Logó</string>
+    <string name="about_license_open_in_browser_content_description">Licenc Megnyitás Böngészőben</string>
+    <string name="about_icons_label">Ikonok</string>
+    <string name="about_icons_content">Az alkalmazásban használt ikonok a
+        következő forrásokból származnak:</string>
+    <string name="about_icons_content_icons8">https://icons8.com</string>
+    <string name="about_icons_content_google_icons">https://material.io/tools/icons/?style=baseline</string>
+    <string name="delete_account_conn_number_1">Törlése\u0020</string>
+    <string name="delete_account_conn_number_2">\u0020kapcsolatnak&#8230;</string>
+    <string name="fab_content_description_approve">Elfogadás Gomb</string>
+    <string name="fab_content_description_plus_one">Plusz Egy Gomb</string>
+    <string name="fab_content_description_gallery">Galléria Megnyitás Gomb</string>
+    <string name="fab_content_description_camera">Kamera Indítás Gomb</string>
+    <string name="fab_content_description_add_connection">Kapcsolat Hozzáadása Gomb</string>
+    <string name="fab_content_description_scroll_up">Felfele Görgetés Gomb</string>
+    <string name="fab_content_description_scroll_down">Lefele Görgetés Gomb</string>
+</resources>
