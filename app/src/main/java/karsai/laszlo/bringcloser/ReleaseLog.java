@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import timber.log.Timber;
 
 /**
@@ -35,7 +36,7 @@ public class ReleaseLog extends Timber.DebugTree {
                 .push();
         databaseReference.child("tag").setValue(tag);
         databaseReference.child("message").setValue(message);
-        databaseReference.child("utc_time").setValue(ApplicationHelper.getCurrentUTCDateAndTime());
+        databaseReference.child("utc_time").setValue(ApplicationUtils.getCurrentUTCDateAndTime());
         databaseReference.child("from").setValue(FirebaseAuth.getInstance().getUid());
     }
 }

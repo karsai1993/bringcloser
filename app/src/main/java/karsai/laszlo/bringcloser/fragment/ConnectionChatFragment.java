@@ -13,7 +13,6 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.MessageAdapter;
 import karsai.laszlo.bringcloser.background.SearchChatMessageAsyncTask;
@@ -131,12 +130,12 @@ public class ConnectionChatFragment extends Fragment {
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         mUsersDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mConnectionDetail = bundle.getParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY);
+            mConnectionDetail = bundle.getParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY);
         }
         mMessageList = new ArrayList<>();
         mMessageDetailList = new ArrayList<>();
@@ -153,11 +152,11 @@ public class ConnectionChatFragment extends Fragment {
             mOtherUid = mConnectionDetail.getFromUid();
         }
         mConnectionTypingDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CHAT_TYPING_NODE)
+                .child(ApplicationUtils.CHAT_TYPING_NODE)
                 .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
                 .child(mOtherUid);
         mConnectionsQuery = mConnectionsDatabaseReference
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mConnectionDetail.getFromUid());
         mConnectionMessagesValueEventListener = new ValueEventListener() {
             @Override
@@ -170,7 +169,7 @@ public class ConnectionChatFragment extends Fragment {
                     }
                     String toUidValue = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                             .getValue(String.class);
                     if (toUidValue == null) {
                         Timber.wtf("to uid null chat");
@@ -179,7 +178,7 @@ public class ConnectionChatFragment extends Fragment {
                     if (toUidValue.equals(mConnectionDetail.getToUid())) {
                         mMessagesDatabaseRef = mConnectionsDatabaseReference
                                 .child(key)
-                                .child(ApplicationHelper.MESSAGES_NODE);
+                                .child(ApplicationUtils.MESSAGES_NODE);
                         mMessagesDatabaseRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -229,7 +228,7 @@ public class ConnectionChatFragment extends Fragment {
                                                     }
                                                 }
                                                 mChatDetailList.addAll(
-                                                        ApplicationHelper.getDateInfoNextToMessageData(
+                                                        ApplicationUtils.getDateInfoNextToMessageData(
                                                                 contextForUserChange,
                                                                 mMessageDetailList
                                                         )
@@ -363,7 +362,7 @@ public class ConnectionChatFragment extends Fragment {
                 if (filter.isEmpty()) {
                     mChatDetailList.clear();
                     mChatDetailList.addAll(
-                            ApplicationHelper
+                            ApplicationUtils
                                     .getDateInfoNextToMessageData(getContext(), mMessageDetailList)
                     );
                     mMessageAdapter.notifyDataSetChanged();
@@ -428,7 +427,7 @@ public class ConnectionChatFragment extends Fragment {
                                                     fromPhotoUrl,
                                                     null,
                                                     null,
-                                                    ApplicationHelper.getCurrentUTCDateAndTime()
+                                                    ApplicationUtils.getCurrentUTCDateAndTime()
                                             )
                                     );
                                 } else {
@@ -444,7 +443,7 @@ public class ConnectionChatFragment extends Fragment {
                             }
                         }
                         mChatDetailList.addAll(
-                                ApplicationHelper.getDateInfoNextToMessageData(
+                                ApplicationUtils.getDateInfoNextToMessageData(
                                         getContext(),
                                         mMessageDetailList
                                 )

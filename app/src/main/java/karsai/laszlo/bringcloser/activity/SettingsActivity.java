@@ -22,10 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +52,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.model.Message;
@@ -93,6 +95,10 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     FloatingActionButton mSettingsPhotoFromCamera;
     @BindView(R.id.tv_no_internet)
     TextView mNoInternetAlertTextView;
+    @BindView(R.id.tv_analysis_status)
+    TextView mAnalysisStatus;
+    @BindView(R.id.switch_analysis)
+    Switch mAnalysisSwitch;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersRootDatabaseReference;
@@ -102,6 +108,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     private FirebaseStorage mFirebaseStorage;
     private User mCurrentUser;
     private List<String> mGenderOptionList;
+    private List<String> mGenderOptionsIdList;
     private View mSnackbarView;
     private FirebaseUser mFirebaseUser;
 
@@ -123,6 +130,14 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         return genderOptionsList;
     }
 
+    private List<String> getGenderOptionsIdList() {
+        List<String> genderOptionsIdList = new ArrayList<>();
+        genderOptionsIdList.add(getResources().getString(R.string.gender_none_id));
+        genderOptionsIdList.add(getResources().getString(R.string.gender_male_id));
+        genderOptionsIdList.add(getResources().getString(R.string.gender_female_id));
+        return genderOptionsIdList;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_settings);
@@ -133,16 +148,17 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         mDisplayedName = findViewById(R.id.tv_settings_displayed_name);
         mBirthday = findViewById(R.id.tv_settings_birthday);
         mGenderOptionList = getGenderOptionsList();
+        mGenderOptionsIdList = getGenderOptionsIdList();
         mGenderOptions = findViewById(R.id.spinner_settings_gender);
         mGenderOptions.setOnItemSelectedListener(this);
         mSettingsVerificationStatus = findViewById(R.id.tv_settings_verification);
         mSettingsVerificationChange = findViewById(R.id.tv_settings_verification_change);
         Intent receivedData = getIntent();
-        mCurrentUser = receivedData.getParcelableExtra(ApplicationHelper.USER_KEY);
+        mCurrentUser = receivedData.getParcelableExtra(ApplicationUtils.USER_KEY);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersRootDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mUserDatabaseReference = mUsersRootDatabaseReference.child(mFirebaseUser.getUid());
         mFirebaseStorage = FirebaseStorage.getInstance();
         mUserStorageReference = mFirebaseStorage.getReference().child(mFirebaseUser.getUid());
@@ -218,7 +234,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(KEY_USER, mCurrentUser);
                 datePickerFragment.setArguments(bundle);
-                datePickerFragment.show(getSupportFragmentManager(), ApplicationHelper.TAG_DATA_PICKER);
+                datePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_DATA_PICKER);
             }
         });
         mSettingsVerificationChange.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +268,46 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                         onClickListener,
                         R.style.DialogUpDownTheme
                 );
+            }
+        });
+        String storedAnalysisIdentifier = ApplicationUtils.getValueFromPrefs(
+                this,
+                ApplicationUtils.EMOJI_KEY
+        );
+        if (storedAnalysisIdentifier == null) {
+            ApplicationUtils.saveValueToPrefs(
+                    this,
+                    ApplicationUtils.EMOJI_KEY,
+                    ApplicationUtils.EMOJI_ENABLE_IDENTIFIER
+            );
+            mAnalysisStatus.setText(getResources().getString(R.string.status_yes));
+            mAnalysisSwitch.setChecked(true);
+        } else if (storedAnalysisIdentifier.equals(ApplicationUtils.EMOJI_ENABLE_IDENTIFIER)) {
+            mAnalysisStatus.setText(getResources().getString(R.string.status_yes));
+            mAnalysisSwitch.setChecked(true);
+        } else {
+            mAnalysisStatus.setText(getResources().getString(R.string.status_no));
+            mAnalysisSwitch.setChecked(false);
+        }
+        mAnalysisSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                String valueToStore;
+                String valueToDisplay;
+                if (isChecked) {
+                    valueToStore = ApplicationUtils.EMOJI_ENABLE_IDENTIFIER;
+                    valueToDisplay = getResources().getString(R.string.status_yes);
+                } else {
+                    valueToStore = ApplicationUtils.EMOJI_DISENABLE_IDENTIFIER;
+                    valueToDisplay = getResources().getString(R.string.status_no);
+                }
+                ApplicationUtils.saveValueToPrefs(
+                        SettingsActivity.this,
+                        ApplicationUtils.EMOJI_KEY,
+                        valueToStore
+                );
+                mAnalysisStatus.setText(valueToDisplay);
+                mAnalysisSwitch.setChecked(isChecked);
             }
         });
     }
@@ -302,16 +358,22 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                 mGenderOptionList
         );
         mGenderOptions.setAdapter(genderListAdapter);
-        if (gender == null || gender.equals(context.getResources().getString(R.string.gender_none))) {
+        if (gender == null || gender.equals(context.getResources().getString(R.string.gender_none_id))) {
             mGenderOptions.setSelection(0, true);
-        } else if (gender.equals(context.getResources().getString(R.string.gender_male))){
+        } else if (gender.equals(context.getResources().getString(R.string.gender_male_id))){
             mGenderOptions.setSelection(1, true);
         } else {
             mGenderOptions.setSelection(2, true);
         }
         ImageUtils.setPhoto(context, photoUrl, mUserPhoto, true);
         mDisplayedName.setText(username);
-        if (birthday != null) mBirthday.setText(birthday);
+        if (birthday != null) {
+            if (birthday.equals(getResources().getString(R.string.settings_birthday_default_id))) {
+                mBirthday.setText(getResources().getString(R.string.settings_birthday_default));
+            } else {
+                mBirthday.setText(birthday);
+            }
+        }
         if (mCurrentUser.getIsEmailVerified()) {
             mSettingsVerificationStatus.setText(
                     context.getResources().getString(R.string.settings_verification_positive)
@@ -331,16 +393,16 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         String birthday = user.getBirthday();
         String gender = user.getGender();
         Map<String, Object> updateValues = new HashMap<>();
-        updateValues.put("/" + ApplicationHelper.USER_BIRTHDAY_IDENTIFIER, birthday);
-        updateValues.put("/" + ApplicationHelper.USER_PHOTO_URL_IDENTIFIER, photoUrl);
-        updateValues.put("/" + ApplicationHelper.USER_NAME_IDENTIFIER, username);
-        updateValues.put("/" + ApplicationHelper.USER_GENDER_IDENTIFIER, gender);
+        updateValues.put("/" + ApplicationUtils.USER_BIRTHDAY_IDENTIFIER, birthday);
+        updateValues.put("/" + ApplicationUtils.USER_PHOTO_URL_IDENTIFIER, photoUrl);
+        updateValues.put("/" + ApplicationUtils.USER_NAME_IDENTIFIER, username);
+        updateValues.put("/" + ApplicationUtils.USER_GENDER_IDENTIFIER, gender);
         mUserDatabaseReference.updateChildren(updateValues);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        mCurrentUser.setGender((String) adapterView.getItemAtPosition(position));
+        mCurrentUser.setGender(mGenderOptionsIdList.get(position));
         updateDB(mCurrentUser);
     }
 
@@ -406,26 +468,26 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     private void restoreRelatedDatabaseData() {
         Map<String, Object> updateValues = new HashMap<>();
         updateValues.put(
-                "/" + ApplicationHelper.USER_BIRTHDAY_IDENTIFIER, mCurrentUser.getBirthday()
+                "/" + ApplicationUtils.USER_BIRTHDAY_IDENTIFIER, mCurrentUser.getBirthday()
         );
         updateValues.put(
-                "/" + ApplicationHelper.USER_PHOTO_URL_IDENTIFIER, mCurrentUser.getPhotoUrl()
+                "/" + ApplicationUtils.USER_PHOTO_URL_IDENTIFIER, mCurrentUser.getPhotoUrl()
         );
         updateValues.put(
-                "/" + ApplicationHelper.USER_NAME_IDENTIFIER, mCurrentUser.getUsername()
+                "/" + ApplicationUtils.USER_NAME_IDENTIFIER, mCurrentUser.getUsername()
         );
         updateValues.put(
-                "/" + ApplicationHelper.USER_GENDER_IDENTIFIER, mCurrentUser.getGender()
+                "/" + ApplicationUtils.USER_GENDER_IDENTIFIER, mCurrentUser.getGender()
         );
         updateValues.put(
-                "/" + ApplicationHelper.USER_UID_IDENTIFIER, mCurrentUser.getUid()
+                "/" + ApplicationUtils.USER_UID_IDENTIFIER, mCurrentUser.getUid()
         );
         updateValues.put(
-                "/" + ApplicationHelper.USER_EMAIL_VERIFICATION_IDENTIFIER,
+                "/" + ApplicationUtils.USER_EMAIL_VERIFICATION_IDENTIFIER,
                 mCurrentUser.getIsEmailVerified()
         );
         mUserDatabaseReference.updateChildren(updateValues);
-        mUserDatabaseReference.child(ApplicationHelper.USER_TOKENS_IDENTIFIER)
+        mUserDatabaseReference.child(ApplicationUtils.USER_TOKENS_IDENTIFIER)
                 .setValue(mCurrentUser.getTokensMap());
     }
 
@@ -441,7 +503,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
             final Context context,
             final String uid) {
         final DatabaseReference connectionsRef
-                = mFirebaseDatabase.getReference().child(ApplicationHelper.CONNECTIONS_NODE);
+                = mFirebaseDatabase.getReference().child(ApplicationUtils.CONNECTIONS_NODE);
         connectionsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -470,16 +532,16 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                         currCounter ++;
                         DatabaseReference messagesDatabaseRef = connectionsRef
                                 .child(currentKey)
-                                .child(ApplicationHelper.MESSAGES_NODE);
+                                .child(ApplicationUtils.MESSAGES_NODE);
                         final DatabaseReference wishesDatabaseRef = connectionsRef
                                 .child(currentKey)
-                                .child(ApplicationHelper.WISHES_NODE);
+                                .child(ApplicationUtils.WISHES_NODE);
                         final DatabaseReference eventsDatabaseRef = connectionsRef
                                 .child(currentKey)
-                                .child(ApplicationHelper.EVENTS_NODE);
+                                .child(ApplicationUtils.EVENTS_NODE);
                         final DatabaseReference thoughtsDatabaseRef = connectionsRef
                                 .child(currentKey)
-                                .child(ApplicationHelper.THOUGHTS_NODE);
+                                .child(ApplicationUtils.THOUGHTS_NODE);
                         deleteSingleMemoryElements(
                                 messagesDatabaseRef,
                                 wishesDatabaseRef,
@@ -513,7 +575,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageSnapshot.getValue(Message.class);
                     if (message == null) continue;
-                    ApplicationHelper.deleteImageFromStorage(context, message.getPhotoUrl());
+                    ApplicationUtils.deleteImageFromStorage(context, message.getPhotoUrl());
                 }
                 wishesDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -521,7 +583,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Wish wish = snapshot.getValue(Wish.class);
                             if (wish == null) continue;
-                            ApplicationHelper.deleteImageFromStorage(context, wish.getExtraPhotoUrl());
+                            ApplicationUtils.deleteImageFromStorage(context, wish.getExtraPhotoUrl());
                         }
                         eventsDatabaseRef.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -530,7 +592,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             Event event = snapshot.getValue(Event.class);
                                             if (event == null) continue;
-                                            ApplicationHelper.deleteImageFromStorage(context, event.getExtraPhotoUrl());
+                                            ApplicationUtils.deleteImageFromStorage(context, event.getExtraPhotoUrl());
                                         }
                                         thoughtsDatabaseRef.addListenerForSingleValueEvent(
                                                 new ValueEventListener() {
@@ -539,7 +601,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                             Thought thought = snapshot.getValue(Thought.class);
                                                             if (thought == null) continue;
-                                                            ApplicationHelper.deleteImageFromStorage(context, thought.getExtraPhotoUrl());
+                                                            ApplicationUtils.deleteImageFromStorage(context, thought.getExtraPhotoUrl());
                                                         }
                                                     }
 
@@ -573,12 +635,12 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
 
     private void deleteSingleConnection(final String uid) {
         final DatabaseReference connectionsRef = mFirebaseDatabase.getReference().child(
-                ApplicationHelper.CONNECTIONS_NODE);
+                ApplicationUtils.CONNECTIONS_NODE);
         final DatabaseReference visibilityRef
-                = mFirebaseDatabase.getReference().child(ApplicationHelper.CHAT_VISIBILITY_NODE);
+                = mFirebaseDatabase.getReference().child(ApplicationUtils.CHAT_VISIBILITY_NODE);
         final DatabaseReference typingRef
-                = mFirebaseDatabase.getReference().child(ApplicationHelper.CHAT_TYPING_NODE);
-        connectionsRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                = mFirebaseDatabase.getReference().child(ApplicationUtils.CHAT_TYPING_NODE);
+        connectionsRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -593,7 +655,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                             visibilityRef.child(key).setValue(null);
                             typingRef.child(key).setValue(null);
                         }
-                        connectionsRef.orderByChild(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                        connectionsRef.orderByChild(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                 .equalTo(uid)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -666,19 +728,24 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                 mCurrentUser = receivedData.getParcelable(KEY_USER);
                 final TextView birthdayTextView = mActivity.findViewById(R.id.tv_settings_birthday);
                 final DatabaseReference userRef = mFirebaseDatabase.getReference()
-                        .child(ApplicationHelper.USERS_NODE).child(mCurrentUser.getUid());
+                        .child(ApplicationUtils.USERS_NODE).child(mCurrentUser.getUid());
                 dialog.setButton(
                         DialogInterface.BUTTON_NEUTRAL,
                         getResources().getString(R.string.settings_birthday_set_default),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String birthday = getResources().getString(R.string.settings_birthday_default);
+                                String birthday = getResources()
+                                        .getString(R.string.settings_birthday_default_id);
                                 mCurrentUser.setBirthday(birthday);
                                 Map<String, Object> updateValues = new HashMap<>();
-                                updateValues.put("/" + ApplicationHelper.USER_BIRTHDAY_IDENTIFIER, birthday);
+                                updateValues.put(
+                                        "/" + ApplicationUtils.USER_BIRTHDAY_IDENTIFIER,
+                                        birthday);
                                 userRef.updateChildren(updateValues);
-                                birthdayTextView.setText(birthday);
+                                birthdayTextView.setText(
+                                        getResources()
+                                                .getString(R.string.settings_birthday_default));
                             }
                         });
             } else {
@@ -691,7 +758,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
             final TextView birthdayTextView = mActivity.findViewById(R.id.tv_settings_birthday);
             final DatabaseReference userRef = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.USERS_NODE).child(mCurrentUser.getUid());
+                    .child(ApplicationUtils.USERS_NODE).child(mCurrentUser.getUid());
             Calendar newCalendar = Calendar.getInstance();
             newCalendar.set(year, month, day);
             if (newCalendar.getTime().after(mActualCalendar.getTime())) {
@@ -711,7 +778,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                         .toString();
                 mCurrentUser.setBirthday(date);
                 Map<String, Object> updateValues = new HashMap<>();
-                updateValues.put("/" + ApplicationHelper.USER_BIRTHDAY_IDENTIFIER, date);
+                updateValues.put("/" + ApplicationUtils.USER_BIRTHDAY_IDENTIFIER, date);
                 userRef.updateChildren(updateValues);
                 birthdayTextView.setText(date);
             }

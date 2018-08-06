@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.List;
 import java.util.Locale;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.ConnectionActivity;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
@@ -67,7 +67,7 @@ public class ConnectedPeopleAdapter
             );
             holder.connectedUserNameTextView.setText(connectionDetail.getToName());
             holder.connectedUserType.setText(
-                    ApplicationHelper.getPersonalizedRelationshipType(
+                    ApplicationUtils.getPersonalizedRelationshipType(
                             mContext,
                             connectionDetail.getType(),
                             connectionDetail.getToGender(),
@@ -84,7 +84,7 @@ public class ConnectedPeopleAdapter
             );
             holder.connectedUserNameTextView.setText(connectionDetail.getFromName());
             holder.connectedUserType.setText(
-                    ApplicationHelper.getPersonalizedRelationshipType(
+                    ApplicationUtils.getPersonalizedRelationshipType(
                             mContext,
                             connectionDetail.getType(),
                             connectionDetail.getToGender(),
@@ -97,7 +97,7 @@ public class ConnectedPeopleAdapter
             @Override
             public void onClick(View view) {
                 Intent connectionIntent = new Intent(mContext, ConnectionActivity.class);
-                connectionIntent.putExtra(ApplicationHelper.CONNECTION_KEY, connectionDetail);
+                connectionIntent.putExtra(ApplicationUtils.CONNECTION_KEY, connectionDetail);
                 mContext.startActivity(connectionIntent);
             }
         });

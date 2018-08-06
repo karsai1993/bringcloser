@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.WishAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
@@ -118,13 +117,13 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         mUsersDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mConnectionDetail = bundle.getParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY);
+            mConnectionDetail = bundle.getParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY);
         }
 
         mWishList = new ArrayList<>();
@@ -142,8 +141,8 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
                 public void onClick(View view) {
                     String type = mConnectionDetail.getType();
                     Intent intent = new Intent(getContext(), AddNewWishActivity.class);
-                    intent.putExtra(ApplicationHelper.EXTRA_DATA, mConnectionDetail);
-                    intent.putExtra(ApplicationHelper.EXTRA_TYPE, type);
+                    intent.putExtra(ApplicationUtils.EXTRA_DATA, mConnectionDetail);
+                    intent.putExtra(ApplicationUtils.EXTRA_TYPE, type);
                     startActivity(intent);
                 }
             });
@@ -195,7 +194,7 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
             }
         });
         mConnectionsQuery = mConnectionsDatabaseReference
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mConnectionDetail.getFromUid());
         mConnectionWishesValueEventListener = new ValueEventListener() {
             @Override
@@ -208,7 +207,7 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
                     }
                     String toUidValue = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                             .getValue(String.class);
                     if (toUidValue == null) {
                         Timber.wtf("to uid null connection wish");
@@ -217,7 +216,7 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
                     if (toUidValue.equals(mConnectionDetail.getToUid())) {
                         mWishesDatabaseRef = mConnectionsDatabaseReference
                                 .child(key)
-                                .child(ApplicationHelper.WISHES_NODE);
+                                .child(ApplicationUtils.WISHES_NODE);
                         mWishesDatabaseRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -297,10 +296,10 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
             context = mSavedContext;
         }
         if (order.equals(context.getResources().getString(R.string.sorted_by_default))) {
-            Date dateOne = ApplicationHelper.getDateAndTime(
+            Date dateOne = ApplicationUtils.getDateAndTime(
                     wishOne.getWhenToArrive()
             );
-            Date dateTwo = ApplicationHelper.getDateAndTime(
+            Date dateTwo = ApplicationUtils.getDateAndTime(
                     wishTwo.getWhenToArrive()
             );
             if (dateOne == null || dateTwo == null) {
@@ -309,10 +308,10 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
             return dateOne.compareTo(dateTwo);
         } else if (order.equals(context.getResources()
                 .getString(R.string.sorted_by_time_descending))) {
-            Date dateOne = ApplicationHelper.getDateAndTime(
+            Date dateOne = ApplicationUtils.getDateAndTime(
                     wishOne.getWhenToArrive()
             );
-            Date dateTwo = ApplicationHelper.getDateAndTime(
+            Date dateTwo = ApplicationUtils.getDateAndTime(
                     wishTwo.getWhenToArrive()
             );
             if (dateOne == null || dateTwo == null) {
@@ -320,7 +319,11 @@ public class ConnectionWishFragment extends Fragment implements Comparator<Wish>
             }
             return dateTwo.compareTo(dateOne);
         } else {
-            return wishOne.getOccasion().compareToIgnoreCase(wishTwo.getOccasion());
+            String wishOneOccasion = ApplicationUtils
+                    .getTranslatedWishOccasion(context, wishOne.getOccasion());
+            String wishTwoOccasion = ApplicationUtils
+                    .getTranslatedWishOccasion(context, wishTwo.getOccasion());
+            return wishOneOccasion.compareToIgnoreCase(wishTwoOccasion);
         }
     }
 

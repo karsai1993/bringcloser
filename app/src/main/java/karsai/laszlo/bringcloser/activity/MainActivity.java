@@ -1,16 +1,10 @@
 package karsai.laszlo.bringcloser.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,9 +35,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
-import karsai.laszlo.bringcloser.AddTokenHandler;
+import karsai.laszlo.bringcloser.utils.AddTokenUtils;
 import karsai.laszlo.bringcloser.adapter.ConnectionFragmentPagerAdapter;
 import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
@@ -70,7 +65,9 @@ public class MainActivity extends CommonActivity
     private User mCurrentUser;
     private TextView mUserNameInNavDrawer;
     private TextView mUserBirthdayInNavDrawer;
+    private RelativeLayout mUserBirthdayLayoutInNavDrawer;
     private TextView mUserGenderInNavDrawer;
+    private RelativeLayout mUserGenderLayoutInNavDrawer;
     private TextView mUserEmailVerificationInNavDrawer;
     private ImageView mUserPhotoInNavDrawer;
     private FirebaseUser mFirebaseUser;
@@ -98,7 +95,6 @@ public class MainActivity extends CommonActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
-        //Timber.wtf("hello");
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         onSignedInInitialize();
     }
@@ -117,14 +113,14 @@ public class MainActivity extends CommonActivity
     private void onSignedInInitialize() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mCurrentUserUid = mFirebaseUser.getUid();
         mCurrentUser = new User(
                 mFirebaseUser.isEmailVerified(),
                 mFirebaseUser.getDisplayName(),
                 mFirebaseUser.getPhotoUrl() != null ? mFirebaseUser.getPhotoUrl().toString() : null,
-                getResources().getString(R.string.settings_birthday_default),
-                getResources().getString(R.string.gender_none),
+                getResources().getString(R.string.settings_birthday_default_id),
+                getResources().getString(R.string.gender_none_id),
                 null,
                 mCurrentUserUid
         );
@@ -153,7 +149,9 @@ public class MainActivity extends CommonActivity
         mUserNameInNavDrawer = navigationHeaderView.findViewById(R.id.tv_user_name);
         mUserPhotoInNavDrawer = navigationHeaderView.findViewById(R.id.iv_user_photo);
         mUserBirthdayInNavDrawer = navigationHeaderView.findViewById(R.id.tv_user_birthday);
+        mUserBirthdayLayoutInNavDrawer = navigationHeaderView.findViewById(R.id.rl_user_birthday);
         mUserGenderInNavDrawer = navigationHeaderView.findViewById(R.id.tv_user_gender);
+        mUserGenderLayoutInNavDrawer = navigationHeaderView.findViewById(R.id.rl_user_gender);
         mUserEmailVerificationInNavDrawer
                 = navigationHeaderView.findViewById(R.id.tv_user_email_verification);
 
@@ -173,13 +171,13 @@ public class MainActivity extends CommonActivity
             String action = intent.getAction();
             if (action != null) {
                 switch (action) {
-                    case ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_REQUEST:
+                    case ApplicationUtils.NOTIFICATION_INTENT_ACTION_PAGE_REQUEST:
                         mViewPager.setCurrentItem(2);
                         break;
-                    case ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION:
+                    case ApplicationUtils.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION:
                         mViewPager.setCurrentItem(0);
                         break;
-                    case ApplicationHelper.NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION:
+                    case ApplicationUtils.NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION:
                         mViewPager.setCurrentItem(1);
                         break;
                     default:
@@ -235,7 +233,7 @@ public class MainActivity extends CommonActivity
                             mCurrentUser.setIsEmailVerified(true);
                             Map<String, Object> updateVerificationValue = new HashMap<>();
                             updateVerificationValue.put(
-                                    "/" + ApplicationHelper.USER_EMAIL_VERIFICATION_IDENTIFIER,
+                                    "/" + ApplicationUtils.USER_EMAIL_VERIFICATION_IDENTIFIER,
                                     true
                             );
                             mCurrentUserDatabaseReference.updateChildren(updateVerificationValue);
@@ -247,7 +245,7 @@ public class MainActivity extends CommonActivity
                     @Override
                     public void onSuccess(InstanceIdResult instanceIdResult) {
                         String newToken = instanceIdResult.getToken();
-                        AddTokenHandler.addTokenIfNeeded(newToken, mCurrentUserUid);
+                        AddTokenUtils.addTokenIfNeeded(newToken, mCurrentUserUid);
                     }
                 });
             }
@@ -261,53 +259,34 @@ public class MainActivity extends CommonActivity
         mUserNameInNavDrawer.setText(mCurrentUser.getUsername());
         String birthday = mCurrentUser.getBirthday();
         if (birthday != null
-                && !birthday.equals(getResources().getString(R.string.settings_birthday_default))) {
-            mUserBirthdayInNavDrawer.setVisibility(View.VISIBLE);
+                && !birthday.equals(getResources().getString(R.string.settings_birthday_default_id))) {
+            mUserBirthdayLayoutInNavDrawer.setVisibility(View.VISIBLE);
             String [] birthdayParts = birthday.split("-");
             birthday = birthdayParts[0] + birthdayParts[1] + birthdayParts[2] + "000000";
-            birthday = ApplicationHelper.getLocalDateAndTimeToDisplay(this, birthday);
+            birthday = ApplicationUtils.getLocalDateAndTimeToDisplay(this, birthday);
             birthdayParts = birthday.split(" ");
             birthday = birthdayParts[0] + " " + birthdayParts[1] + " " + birthdayParts[2];
-            String birthdayLine = new StringBuilder()
-                    .append(getResources().getString(R.string.nav_birthday_base))
-                    .append(birthday)
-                    .toString();
-            mUserBirthdayInNavDrawer.setText(getBoldAndItalicText(birthdayLine));
+            mUserBirthdayInNavDrawer.setText(birthday);
         } else {
-            mUserBirthdayInNavDrawer.setVisibility(View.GONE);
+            mUserBirthdayLayoutInNavDrawer.setVisibility(View.GONE);
         }
         String gender = mCurrentUser.getGender();
-        if (gender != null && !gender.equals(getResources().getString(R.string.gender_none))) {
-            mUserGenderInNavDrawer.setVisibility(View.VISIBLE);
-            String genderLine = new StringBuilder()
-                    .append(getResources().getString(R.string.nav_gender_base))
-                    .append(gender)
-                    .toString();
-            mUserGenderInNavDrawer.setText(getBoldAndItalicText(genderLine));
+        if (gender != null && !gender.equals(getResources().getString(R.string.gender_none_id))) {
+            if (gender.equals(getResources().getString(R.string.gender_male_id))) {
+                gender = getResources().getString(R.string.gender_male);
+            } else if (gender.equals(getResources().getString(R.string.gender_female_id))) {
+                gender = getResources().getString(R.string.gender_female);
+            }
+            mUserGenderLayoutInNavDrawer.setVisibility(View.VISIBLE);
+            mUserGenderInNavDrawer.setText(gender);
         } else {
-            mUserGenderInNavDrawer.setVisibility(View.GONE);
+            mUserGenderLayoutInNavDrawer.setVisibility(View.GONE);
         }
         if (mCurrentUser.getIsEmailVerified()) {
             mUserEmailVerificationInNavDrawer.setVisibility(View.GONE);
         } else {
             mUserEmailVerificationInNavDrawer.setVisibility(View.VISIBLE);
         }
-    }
-
-    private CharSequence getBoldAndItalicText(String text) {
-        SpannableString resultValue = new SpannableString(text);
-        int indexOfSeparator = text.indexOf(":");
-        resultValue.setSpan(
-                new StyleSpan(Typeface.BOLD_ITALIC),
-                indexOfSeparator + 1,
-                text.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        resultValue.setSpan(
-                new ForegroundColorSpan(Color.WHITE),
-                indexOfSeparator + 1,
-                text.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return resultValue;
     }
 
     private void setToolbarTitle(String username) {
@@ -358,10 +337,20 @@ public class MainActivity extends CommonActivity
                     MainActivity.this,
                     SettingsActivity.class
             );
-            settingsIntent.putExtra(ApplicationHelper.USER_KEY, mCurrentUser);
+            settingsIntent.putExtra(ApplicationUtils.USER_KEY, mCurrentUser);
             startActivity(settingsIntent);
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(MainActivity.this, AboutActivity.class));
+        } else if (id == R.id.nav_terms_of_use) {
+            ApplicationUtils.openWebPage(
+                    this,
+                    getResources().getString(R.string.terms_of_use)
+            );
+        } else if (id == R.id.nav_privacy_policy) {
+            ApplicationUtils.openWebPage(
+                    this,
+                    getResources().getString(R.string.privacy_policy)
+            );
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         item.setChecked(false);

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.AddChosenConnectionActivity;
 import karsai.laszlo.bringcloser.model.User;
@@ -64,7 +64,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.AllUse
                         AddChosenConnectionActivity.class
                 );
                 addChosenConnectionIntent
-                        .putExtra(ApplicationHelper.INTENT_CHOSEN_USER_KEY, currentUser);
+                        .putExtra(ApplicationUtils.INTENT_CHOSEN_USER_KEY, currentUser);
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(
                                 (Activity) mContext,

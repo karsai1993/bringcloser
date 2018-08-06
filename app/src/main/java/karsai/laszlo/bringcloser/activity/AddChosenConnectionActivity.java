@@ -34,7 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.User;
@@ -69,6 +69,8 @@ public class AddChosenConnectionActivity extends CommonActivity {
     private Query mConnectionsDatabaseQuery;
     private ValueEventListener mConnectionsDatabaseValueEventListener;
     private DatabaseReference mCurrentUserDatabaseReference;
+    private List<String> mRelationshipOptionsList;
+    private List<String> mRelationshipOptionsIdList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class AddChosenConnectionActivity extends CommonActivity {
 
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedIntent = getIntent();
-        mChosenUser = receivedIntent.getParcelableExtra(ApplicationHelper.INTENT_CHOSEN_USER_KEY);
+        mChosenUser = receivedIntent.getParcelableExtra(ApplicationUtils.INTENT_CHOSEN_USER_KEY);
         mChosenUserUid = mChosenUser.getUid();
 
         RequestOptions requestOptions = new RequestOptions();
@@ -134,20 +136,22 @@ public class AddChosenConnectionActivity extends CommonActivity {
                                 R.string.add_connection_chosen_question_part2)
                         ).toString()
         );
+        mRelationshipOptionsList = getRelationshipOptionsList();
+        mRelationshipOptionsIdList = getRelationshipOptionsIdList();
         ArrayAdapter<String> relationshipListAdapter = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_spinner_item,
-                getRelationshipOptionsList()
+                mRelationshipOptionsList
         );
         mChosenRelationshipSpinner.setAdapter(relationshipListAdapter);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mCurrentUserDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
 
-        mConnectionsDatabaseQuery = mConnectionsDatabaseReference.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseQuery = mConnectionsDatabaseReference.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mChosenUserUid);
 
         mConnectionsDatabaseValueEventListener = new ValueEventListener() {
@@ -161,7 +165,7 @@ public class AddChosenConnectionActivity extends CommonActivity {
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null connection not found");
@@ -190,7 +194,7 @@ public class AddChosenConnectionActivity extends CommonActivity {
         mApproveAddNewConnectionFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String selectedRelationshipType
+                String selectedRelationshipType
                         = (String) mChosenRelationshipSpinner.getSelectedItem();
                 if (selectedRelationshipType
                         .equals(getResources().getString(R.string.relationship_type_none))) {
@@ -200,6 +204,9 @@ public class AddChosenConnectionActivity extends CommonActivity {
                             Snackbar.LENGTH_LONG
                     ).show();
                 } else {
+                    final String selectedTypeCode = mRelationshipOptionsIdList.get(
+                            mChosenRelationshipSpinner.getSelectedItemPosition()
+                    );
                     mCurrentUserDatabaseReference.child(mCurrentUserUid)
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -212,9 +219,9 @@ public class AddChosenConnectionActivity extends CommonActivity {
                                     Connection connection = new Connection(
                                             mCurrentUser.getUid(),
                                             mChosenUser.getUid(),
-                                            ApplicationHelper.CONNECTION_BIT_NEG,
-                                            selectedRelationshipType,
-                                            ApplicationHelper.getCurrentUTCDateAndTime()
+                                            ApplicationUtils.CONNECTION_BIT_NEG,
+                                            selectedTypeCode,
+                                            ApplicationUtils.getCurrentUTCDateAndTime()
                                     );
                                     String key = mCurrentUser.getUid() + "_" + mChosenUser.getUid();
                                     mConnectionsDatabaseReference.child(key).setValue(connection);
@@ -223,7 +230,7 @@ public class AddChosenConnectionActivity extends CommonActivity {
                                             MainActivity.class
                                     );
                                     mainIntent.setAction(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION
                                     );
                                     startActivity(mainIntent);
@@ -279,6 +286,43 @@ public class AddChosenConnectionActivity extends CommonActivity {
         relationshipOptionsList.add(
                 getResources().getString(R.string.relationship_type_other));
         return relationshipOptionsList;
+    }
+
+    private List<String> getRelationshipOptionsIdList() {
+        List<String> relationshipOptionsIdList = new ArrayList<>();
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_none));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_lover_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_friend_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_sibling_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_cousin_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_parent_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_child_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_godparent_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_godchild_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_grandparent_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_grandchild_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_uncle_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_aunt_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_nephew_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_niece_id));
+        relationshipOptionsIdList.add(
+                getResources().getString(R.string.relationship_type_other_id));
+        return relationshipOptionsIdList;
     }
 
     @Override

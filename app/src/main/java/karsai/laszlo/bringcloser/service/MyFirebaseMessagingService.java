@@ -1,23 +1,18 @@
 package karsai.laszlo.bringcloser.service;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
-import java.util.Set;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
@@ -36,11 +31,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String EVENT_IDENTIFIER = "event";
     private static final String THOUGHT_IDENTIFIER = "thought";
     private static final String MESSAGE_IDENTIFIER = "message";
+    private static final String PRIVACY_CHANGED_IDENTIFIER = "privacy";
+    private static final String TERMS_CHANGED_IDENTIFIER = "terms";
     private static final int REQUEST_NOTIFICATION_ID = 1;
     private static final int APPROVAL_NOTIFICATION_ID = 2;
     private static final int WISH_NOTIFICATION_ID = 3;
     private static final int EVENT_NOTIFICATION_ID = 4;
     private static final int THOUGHT_NOTIFICATION_ID = 5;
+    private static final int PRIVACY_CHANGED_NOTIFICATION_ID = 6;
+    private static final int TERMS_CHANGED_NOTIFICATION_ID = 7;
 
     private int mMessageNotificationId;
 
@@ -72,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String type = data.get(TYPE_KEY);
         String name = data.get(NAME_KEY);
         String photoUrl = data.get(PHOTO_URL_KEY);
-        photoUrl = !photoUrl.equals(NO_DATA_NULL) ? photoUrl : null;
+        photoUrl = photoUrl != null && !photoUrl.equals(NO_DATA_NULL) ? photoUrl : null;
         String content = data.get(CONTENT_KEY);
         String extraPhotoUrl = data.get(EXTRA_PHOTO_URL_KEY);
         String fromUid = data.get(FROM_UID_KEY);
@@ -102,7 +101,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                     .getString(R.string.new_request_body)
                     ).toString();
             notificationId = REQUEST_NOTIFICATION_ID;
-            action = ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_REQUEST;
+            action = ApplicationUtils.NOTIFICATION_INTENT_ACTION_PAGE_REQUEST;
         } else if (type.equals(APPROVAL_IDENTIFIER)) {
             title = getApplicationContext().getResources().getString(R.string.new_approval_title);
             body = new StringBuilder()
@@ -113,7 +112,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                     .getString(R.string.new_approval_body)
                     ).toString();
             notificationId = APPROVAL_NOTIFICATION_ID;
-            action = ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION;
+            action = ApplicationUtils.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION;
         } else if (type.equals(WISH_IDENTIFIER)) {
             title = new StringBuilder()
                     .append(
@@ -124,7 +123,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .toString();
             body = content;
             notificationId = WISH_NOTIFICATION_ID;
-            action = ApplicationHelper.NOTIFICATION_INTENT_ACTION_WISH;
+            action = ApplicationUtils.NOTIFICATION_INTENT_ACTION_WISH;
         } else if (type.equals(EVENT_IDENTIFIER)) {
             title = new StringBuilder()
                     .append(
@@ -135,7 +134,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .toString();
             body = content;
             notificationId = EVENT_NOTIFICATION_ID;
-            action = ApplicationHelper.NOTIFICATION_INTENT_ACTION_EVENT;
+            action = ApplicationUtils.NOTIFICATION_INTENT_ACTION_EVENT;
         } else if (type.equals(THOUGHT_IDENTIFIER)) {
             title = new StringBuilder()
                     .append(
@@ -146,7 +145,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .toString();
             body = content;
             notificationId = THOUGHT_NOTIFICATION_ID;
-            action = ApplicationHelper.NOTIFICATION_INTENT_ACTION_THOUGHT;
+            action = ApplicationUtils.NOTIFICATION_INTENT_ACTION_THOUGHT;
         } else if (type.equals(MESSAGE_IDENTIFIER)) {
             title = new StringBuilder()
                     .append(
@@ -161,25 +160,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 body = getApplicationContext().getResources().getString(R.string.new_message_image_body);
             }
             String uniqueNotificationIdKey = fromUid + "-" + toUid;
-            String storedUniqueId = ApplicationHelper.getValueFromPrefs(
+            String storedUniqueId = ApplicationUtils.getValueFromPrefs(
                     getApplicationContext(),
                     uniqueNotificationIdKey
             );
             if (storedUniqueId == null) {
-                String storedGeneralId = ApplicationHelper.getValueFromPrefs(
+                String storedGeneralId = ApplicationUtils.getValueFromPrefs(
                         getApplicationContext(),
                         NOTIFICATION_ID_GENERAL_KEY);
                 if (storedGeneralId == null) {
-                    mMessageNotificationId = 6;
+                    mMessageNotificationId = 8;
                 } else {
                     mMessageNotificationId = Integer.parseInt(storedGeneralId) + 1;
                 }
-                ApplicationHelper.saveValueToPrefs(
+                ApplicationUtils.saveValueToPrefs(
                         getApplicationContext(),
                         NOTIFICATION_ID_GENERAL_KEY,
                         String.valueOf(mMessageNotificationId)
                 );
-                ApplicationHelper.saveValueToPrefs(
+                ApplicationUtils.saveValueToPrefs(
                         getApplicationContext(),
                         uniqueNotificationIdKey,
                         String.valueOf(mMessageNotificationId)
@@ -189,7 +188,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
             notificationId = mMessageNotificationId;
-            action = ApplicationHelper.NOTIFICATION_INTENT_ACTION_MESSAGE;
+            action = ApplicationUtils.NOTIFICATION_INTENT_ACTION_MESSAGE;
             connectionDetail = new ConnectionDetail(
                     fromUid,
                     name,
@@ -205,6 +204,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     1,
                     timestamp
             );
+        } else if (type.equals(PRIVACY_CHANGED_IDENTIFIER)) {
+            title = getApplicationContext()
+                    .getResources()
+                    .getString(R.string.privacy_changed_title);
+            body = getApplicationContext()
+                    .getResources()
+                    .getString(R.string.doc_changed_message);
+            notificationId = PRIVACY_CHANGED_NOTIFICATION_ID;
+            action = ApplicationUtils.NOTIFICATION_INTENT_PRIVACY;
+        } else if (type.equals(TERMS_CHANGED_IDENTIFIER)) {
+            title = getApplicationContext()
+                    .getResources()
+                    .getString(R.string.terms_changed_title);
+            body = getApplicationContext()
+                    .getResources()
+                    .getString(R.string.doc_changed_message);
+            notificationId = TERMS_CHANGED_NOTIFICATION_ID;
+            action = ApplicationUtils.NOTIFICATION_INTENT_TERMS;
         }
 
         NotificationUtils.addNotification(
@@ -227,7 +244,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void updateTokenInDatabase(final String token) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -240,7 +257,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     String uid = user.getUid();
                     databaseReference
                             .child(uid)
-                            .child(ApplicationHelper.USER_TOKENS_IDENTIFIER)
+                            .child(ApplicationUtils.USER_TOKENS_IDENTIFIER)
                             .child(token)
                             .setValue(true);
                 }

@@ -20,8 +20,8 @@
     <string name="nav_received_items">Bejövő Emlékek</string>
     <string name="nav_profile_settings">Profil Beállítások</string>
     <string name="nav_about">Alkalmazásról</string>
-    <string name="nav_birthday_base">Születésnap:\u0020</string>
-    <string name="nav_gender_base">Nem:\u0020</string>
+    <string name="nav_birthday_base">Születésnap</string>
+    <string name="nav_gender_base">Nem</string>
 
     <string name="no_internet_message">Jelenleg nincs internetkapcsolat!
         Kérlek, ellenőrizd, majd próbáld újra.</string>
@@ -45,7 +45,6 @@
     <string name="received_details_widget_label">Bejövő emlékeid</string>
     <string name="add_new_connection_activity">Keress egy új kapcsolatot</string>
     <string name="add_chosen_connection_activity">Kiválasztott kapcsolat hozzáadása</string>
-    <string name="settings_birthday_default">Adat nincs megadva</string>
     <string name="settings_birthday_set_default">Alapbeállítás</string>
     <string name="dialog_settings_name">Írd be a kívánt nevet</string>
     <string name="dialog_title">Írd be a kívánt üzenetet</string>
@@ -70,7 +69,7 @@
         hogy végrehajtsa a kérést!</string>
     <string name="permission_needed">A következő engedélyek szükségesek a folytatáshoz&#8230;</string>
     <string name="permission_needed_message">A külső tárhely olvasásához
-        és írásához engedélyek szükségesek! </string>
+        és írásához engedélyek szükségesek!</string>
     <string name="denied_permission_message">Engedélyezés nélkül a folytatás nem lehetséges!</string>
     <string name="re_authenticate_request">Kérlek, jelentkezz be újra,
         majd próbáld újra a fiók törlését.</string>
@@ -98,10 +97,11 @@
     <string name="add_connection_possible_size">Lehetséges kapcsolatok</string>
     <string name="add_connection_found_possible_size">Talált lehetséges kapcsolatok</string>
     <string name="add_connection_no_available">
-        Nincs új lehetséges kapcsolat! Mesélj másoknak is a BringCloser alkalmazásról!</string>
+        Nincs új lehetséges kapcsolat!\nMesélj másoknak is a BringCloser alkalmazásról!</string>
     <string name="add_connection_chosen_question_part1">Ki</string>
     <string name="add_connection_chosen_question_part2">a leginkább számodra?</string>
 
+    <string name="settings_birthday_default">Adat nincs megadva</string>
     <string name="gender_male">Férfi</string>
     <string name="gender_female">Nő</string>
     <string name="gender_none">Nem akarom megadni</string>
@@ -131,62 +131,64 @@
     <string name="wish_mother_day_occasion">Anyák napja</string>
     <string name="wish_father_day_occasion">Apák napja</string>
 
+    <string name="settings_birthday_default_id">s01</string>
+    <!--string name="settings_birthday_default_value">@string/settings_birthday_default</string-->
     <string name="gender_male_id">g01</string>
-    <string name="gender_male_value">@string/gender_male</string>
+    <!--string name="gender_male_value">@string/gender_male</string-->
     <string name="gender_female_id">g02</string>
-    <string name="gender_female_value">@string/gender_female</string>
+    <!--string name="gender_female_value">@string/gender_female</string-->
     <string name="gender_none_id">g03</string>
-    <string name="gender_none_value">@string/gender_none</string>
+    <!--string name="gender_none_value">@string/gender_none</string-->
     <string name="relationship_type_lover_id">r01</string>
-    <string name="relationship_type_lover_value">@string/relationship_type_lover</string>
+    <!--string name="relationship_type_lover_value">@string/relationship_type_lover</string-->
     <string name="relationship_type_friend_id">r02</string>
-    <string name="relationship_type_friend_value">@string/relationship_type_friend</string>
+    <!--string name="relationship_type_friend_value">@string/relationship_type_friend</string-->
     <string name="relationship_type_sibling_id">r03</string>
-    <string name="relationship_type_sibling_value">@string/relationship_type_sibling</string>
+    <!--string name="relationship_type_sibling_value">@string/relationship_type_sibling</string-->
     <string name="relationship_type_cousin_id">r04</string>
-    <string name="relationship_type_cousin_value">@string/relationship_type_cousin</string>
+    <!--string name="relationship_type_cousin_value">@string/relationship_type_cousin</string-->
     <string name="relationship_type_parent_id">r05</string>
-    <string name="relationship_type_parent_value">@string/relationship_type_parent</string>
+    <!--string name="relationship_type_parent_value">@string/relationship_type_parent</string-->
     <string name="relationship_type_child_id">r06</string>
-    <string name="relationship_type_child_value">@string/relationship_type_child</string>
+    <!--string name="relationship_type_child_value">@string/relationship_type_child</string-->
     <string name="relationship_type_grandparent_id">r07</string>
-    <string name="relationship_type_grandparent_value">@string/relationship_type_grandparent</string>
+    <!--string name="relationship_type_grandparent_value">@string/relationship_type_grandparent</string-->
     <string name="relationship_type_godchild_id">r08</string>
-    <string name="relationship_type_godchild_value">@string/relationship_type_godchild</string>
+    <!--string name="relationship_type_godchild_value">@string/relationship_type_godchild</string-->
     <string name="relationship_type_godparent_id">r09</string>
-    <string name="relationship_type_godparent_value">@string/relationship_type_godparent</string>
+    <!--string name="relationship_type_godparent_value">@string/relationship_type_godparent</string-->
     <string name="relationship_type_grandchild_id">r10</string>
-    <string name="relationship_type_grandchild_value">@string/relationship_type_grandchild</string>
+    <!--string name="relationship_type_grandchild_value">@string/relationship_type_grandchild</string-->
     <string name="relationship_type_uncle_id">r11</string>
-    <string name="relationship_type_uncle_value">@string/relationship_type_uncle</string>
+    <!--string name="relationship_type_uncle_value">@string/relationship_type_uncle</string-->
     <string name="relationship_type_aunt_id">r12</string>
-    <string name="relationship_type_aunt_value">@string/relationship_type_aunt</string>
+    <!--string name="relationship_type_aunt_value">@string/relationship_type_aunt</string-->
     <string name="relationship_type_nephew_id">r13</string>
-    <string name="relationship_type_nephew_value">@string/relationship_type_nephew</string>
+    <!--string name="relationship_type_nephew_value">@string/relationship_type_nephew</string-->
     <string name="relationship_type_niece_id">r14</string>
-    <string name="relationship_type_niece_value">@string/relationship_type_niece</string>
+    <!--string name="relationship_type_niece_value">@string/relationship_type_niece</string-->
     <string name="relationship_type_other_id">r15</string>
-    <string name="relationship_type_other_value">@string/relationship_type_other</string>
+    <!--string name="relationship_type_other_value">@string/relationship_type_other</string-->
     <string name="wish_birthday_occasion_id">w01</string>
-    <string name="wish_birthday_occasion_value">@string/wish_birthday_occasion</string>
+    <!--string name="wish_birthday_occasion_value">@string/wish_birthday_occasion</string-->
     <string name="wish_name_day_occasion_id">w02</string>
-    <string name="wish_name_day_occasion_value">@string/wish_name_day_occasion</string>
+    <!--string name="wish_name_day_occasion_value">@string/wish_name_day_occasion</string-->
     <string name="wish_christmas_occasion_id">w03</string>
-    <string name="wish_christmas_occasion_value">@string/wish_christmas_occasion</string>
+    <!--string name="wish_christmas_occasion_value">@string/wish_christmas_occasion</string-->
     <string name="wish_new_year_occasion_id">w04</string>
-    <string name="wish_new_year_occasion_value">@string/wish_new_year_occasion</string>
+    <!--string name="wish_new_year_occasion_value">@string/wish_new_year_occasion</string-->
     <string name="wish_easter_occasion_id">w05</string>
-    <string name="wish_easter_occasion_value">@string/wish_easter_occasion</string>
+    <!--string name="wish_easter_occasion_value">@string/wish_easter_occasion</string-->
     <string name="wish_valentine_day_occasion_id">w06</string>
-    <string name="wish_valentine_day_occasion_value">@string/wish_valentine_day_occasion</string>
+    <!--string name="wish_valentine_day_occasion_value">@string/wish_valentine_day_occasion</string-->
     <string name="wish_anniversary_occasion_id">w07</string>
-    <string name="wish_anniversary_occasion_value">@string/wish_anniversary_occasion</string>
+    <!--string name="wish_anniversary_occasion_value">@string/wish_anniversary_occasion</string-->
     <string name="wish_women_day_occasion_id">w08</string>
-    <string name="wish_women_day_occasion_value">@string/wish_women_day_occasion</string>
+    <!--string name="wish_women_day_occasion_value">@string/wish_women_day_occasion</string-->
     <string name="wish_mother_day_occasion_id">w09</string>
-    <string name="wish_mother_day_occasion_value">@string/wish_mother_day_occasion</string>
+    <!--string name="wish_mother_day_occasion_value">@string/wish_mother_day_occasion</string-->
     <string name="wish_father_day_occasion_id">w10</string>
-    <string name="wish_father_day_occasion_value">@string/wish_father_day_occasion</string>
+    <!--string name="wish_father_day_occasion_value">@string/wish_father_day_occasion</string-->
 
     <string name="relationship_type_none">Adat nincs megadva</string>
     <string name="relationship_type_sibling_male">Fiútestvér</string>
@@ -229,9 +231,9 @@
     <string name="wish_default_message_women_day_1">Boldog nők napját,\u0020</string>
     <string name="wish_default_message_women_day_2">! Legyen szép napod!</string>
 
-    <string name="wish_default_message_mother_day">Szia Anya! Örülök, hogy Te vagy az anyám!
+    <string name="wish_default_message_mother_day">Szia Anya! Örülök, hogy Te vagy az Édesanyám!
         Boldog anyák napját!</string>
-    <string name="wish_default_message_father_day">Szia Apa! Örülök, hogy Te vagy az apám!
+    <string name="wish_default_message_father_day">Szia Apa! Örülök, hogy Te vagy az Édesapám!
         Boldog apák napját!</string>
 
     <string-array name="wish_basic_occasions">
@@ -301,11 +303,11 @@
         emberektől! Mesélj nekik a BringCloser alkalmazásról!</string>
     <string name="fragment_to_user_empty">Nincs függőben lévő felkérés a számodra közeli
         emberek felé! Keresd meg és add őket a kapcsolataid közé!</string>
-    <string name="fragment_connected_user_empty">Nincs kapcsolat a számodra közeli emberek felé!
+    <string name="fragment_connected_user_empty">Nincs kapcsolat a számodra közeli emberekkel!
         Keresd meg és add őket a kapcsolataid közé!</string>
 
     <string name="not_verified_email_address_message">Email megerősítés szükséges
-        ennek a végrehajtásához!</string>
+        a végrehajtáshoz!</string>
 
     <string name="dialog_request_to_delete_title">Arra készülsz, hogy
         visszavond a következő felkérést!</string>
@@ -343,7 +345,7 @@
     <string name="thought_no_data">Még nem küldtél egy gondolatot sem!</string>
     <string name="event_no_data">Még nem küldtél egy esemény értesítést sem!</string>
     <string name="wish_no_data">Még nem küldtél egy jókívánságot sem!</string>
-    <string name="chat_no_data">Nincsennek üzenetek! Légy Te az, aki elküldi az elsőt!</string>
+    <string name="chat_no_data">Nincsennek üzenetek!\nLégy Te az, aki elküldi az elsőt!</string>
     <string name="chat_no_data_search_message">Nincs elküldött üzenet, amiben keresni tudnál!</string>
 
     <string name="data_not_available">Adat nem elérhető</string>
@@ -387,8 +389,8 @@
     <string name="wish_alert_no_occasion">Kérlek, válassz egy alkalmat a folytatáshoz!</string>
     <string name="wish_alert_no_occasion_specified">Kérlek, írj be egy alkalmat a folytatáshoz!</string>
     <string name="wish_alert_no_text">Kérlek, írd be a jókívánságod szövegét a folytatáshoz!</string>
-    <string name="alert_no_date">Kérlek, válassz ki a dátumot a folytatáshoz!</string>
-    <string name="alert_no_time">Kérlek, válassz ki az időt a folytatáshoz!</string>
+    <string name="alert_no_date">Kérlek, válaszd ki a dátumot a folytatáshoz!</string>
+    <string name="alert_no_time">Kérlek, válaszd ki az időt a folytatáshoz!</string>
 
     <!--string name="event_already_sent">This event notification has already been sent!</string-->
     <string name="event_label">Új esemény küldése</string>
@@ -396,21 +398,21 @@
     <string name="event_place_hint">Írd be az esemény helyszínét&#8230;</string>
     <string name="event_message_hint">Írd be az üzenetedet&#8230;</string>
     <string name="event_question_1">Mikor kapja meg\u0020</string>
-    <string name="event_question_2">\u0020ezt az esemény értesítést?</string>
+    <string name="event_question_2">\u0020 az esemény értesítést?</string>
     <string name="event_photo_alert">Hozzá tudsz adni egy képet az esemény értesítésedhez,
         hogy ezzel még különlegesebbé tedd!</string>
     <string name="event_alert_no_title">Kérlek, írd be az esemény címét a folytatáshoz!</string>
     <string name="event_alert_no_place">Kérlek, írd be az esemény helyszínét a folytatáshoz!</string>
-    <string name="event_alert_no_message">Kérlek, írd be üzenetedet a folytatáshoz!</string>
+    <string name="event_alert_no_message">Kérlek, írd be az üzenetedet a folytatáshoz!</string>
 
     <string name="thought_label">Új gondolat küldése</string>
     <string name="thought_message_hint">Írd be a gondolatodat&#8230;</string>
     <string name="thought_photo_alert">Hozzá tudsz adni egy képet a gondolathoz,
         hogy ezzel még különlegesebbé tedd!</string>
     <string name="thought_question_1">Szeretnéd, hogy\u0020</string>
-    <string name="thought_question_2">\u0020azonnal megkapja ezt?</string>
-    <string name="thought_status_no">Nem</string>
-    <string name="thought_status_yes">Igen</string>
+    <string name="thought_question_2">\u0020azonnal megkapja?</string>
+    <string name="status_no">Nem</string>
+    <string name="status_yes">Igen</string>
     <string name="thought_status_message_no">Ez a gondolat nincs elküldve!</string>
     <!--string name="thought_status_message_yes">This thought has already been sent!</string-->
     <string name="thought_alert_no_message">Kérlek, írd be az üzenetedet a folytatáshoz!</string>
@@ -443,9 +445,11 @@
     <string name="about_mission_2">
         \u2022 jókívánság egy különleges alkalomra (pl. születésnap, névnap, nők napja,
         anyák napja, apák napja, stb.)\n
+        \n
         \u2022 emlékeztető egy tervezett eseményre (pl. érettségi, álom munka interjú, stb.)\n
+        \n
         \u2022 privát gondolat egy fontos történésre (pl. első randevú, első évforduló,
-        első virágok megvéve valakinek, stb.)</string>
+        első virágok megvétele valaki számára, stb.)</string>
     <string name="about_mission_3">
         Ez az alkalmazás a mindennapi életedből eredő emlékeidre összpontosít,
         és azokat könnyen értelmezhető módon adja vissza.</string>
@@ -539,4 +543,102 @@
     <string name="fab_content_description_add_connection">Kapcsolat Hozzáadása Gomb</string>
     <string name="fab_content_description_scroll_up">Felfele Görgetés Gomb</string>
     <string name="fab_content_description_scroll_down">Lefele Görgetés Gomb</string>
+
+    <string name="privacy_changed_title">Változás az Adatvédelmi Irányelvekben!</string>
+    <string name="terms_changed_title">Változás a Használati Feltételekben!</string>
+    <string name="doc_changed_message">Kérlek, nézzd meg amint tudod!</string>
+    <string name="privacy_policy">https://sites.google.com/view/bringcloser-privacy-policy-hu</string>
+    <string name="terms_of_use">https://sites.google.com/view/bringcloser-terms-of-use-hu</string>
+    <string name="nav_terms_of_use">Használati Feltételek</string>
+    <string name="nav_privacy_policy">Adatvédelmi Irányelvek</string>
+    <string name="nav_documents">Dokumentumok</string>
+
+    <string name="emoji_heart">Szív</string>
+    <string name="emoji_happy_with_halo">Boldog fénykoszorúval</string>
+    <string name="emoji_happy_with_horns">Boldog szarvakkal</string>
+    <string name="emoji_relieved">Megkönnyebbült</string>
+    <string name="emoji_happy">Boldog</string>
+    <string name="emoji_dizzy">Szédülő</string>
+    <string name="emoji_happy_with_open_mouth_and_open_eyes">Boldog nyitott szájjal
+        és nyitott szemmel</string>
+    <string name="emoji_happy_with_open_mouth">Boldog nyitott szájjal</string>
+    <string name="emoji_happy_with_open_mouth_with_sweat">Boldog nyitott szájjal valamint izzadtsággal</string>
+    <string name="emoji_happy_with_tongue">Boldog nyelvvel</string>
+    <string name="emoji_happy_with_tightly_closed_eyes">Boldog szorosan zárt szemmel</string>
+    <string name="emoji_happy_with_heart_shaped_eyes">Boldog szív alakú szemmel</string>
+    <string name="emoji_happy_with_sunglasses">Boldog napszemüveggel</string>
+    <string name="emoji_neutral">Semleges</string>
+    <string name="emoji_expressionless">Kifejezéstelen</string>
+    <string name="emoji_wink">Kacsintó</string>
+    <string name="emoji_pensive">Töprengő</string>
+    <string name="emoji_confused">Zavaros</string>
+    <string name="emoji_confounded">Zavarba hozott</string>
+    <string name="emoji_throwing_kiss">Csókot küldő</string>
+    <string name="emoji_kiss">Csók</string>
+    <string name="emoji_tongue">Nyelv</string>
+    <string name="emoji_tongue_with_wink">Nyelv kacsintással</string>
+    <string name="emoji_tongue_with_tightly_closed_eyes">Nyelv szorosan zárt szemmel</string>
+    <string name="emoji_surprised">Meglepett</string>
+    <string name="emoji_hushed">Elcsendesedett</string>
+    <string name="emoji_screaming">Visító</string>
+    <string name="emoji_sleepign">Alvó</string>
+    <string name="emoji_sad_with_sweat">Szomorú izzadtsággal</string>
+    <string name="emoji_worried">Aggódó</string>
+    <string name="emoji_sad">Szomorú</string>
+    <string name="emoji_angry">Mérges</string>
+    <string name="emoji_crying">Síró</string>
+    <string name="emoji_anguished">Kínzott</string>
+    <string name="emoji_fearful">Fél</string>
+    <string name="emoji_tired">Fáradt</string>
+    <string name="emoji_smirk">Önelégült</string>
+
+    <string-array name="emoji_descriptions">
+        <item>@string/emoji_heart</item>
+        <item>@string/emoji_happy_with_halo</item>
+        <item>@string/emoji_happy_with_horns</item>
+        <item>@string/emoji_relieved</item>
+        <item>@string/emoji_happy</item>
+        <item>@string/emoji_dizzy</item>
+        <item>@string/emoji_happy_with_open_mouth_and_open_eyes</item>
+        <item>@string/emoji_happy_with_open_mouth</item>
+        <item>@string/emoji_happy_with_open_mouth_with_sweat</item>
+        <item>@string/emoji_happy_with_tongue</item>
+        <item>@string/emoji_happy_with_tightly_closed_eyes</item>
+        <item>@string/emoji_happy_with_heart_shaped_eyes</item>
+        <item>@string/emoji_happy_with_sunglasses</item>
+        <item>@string/emoji_neutral</item>
+        <item>@string/emoji_expressionless</item>
+        <item>@string/emoji_wink</item>
+        <item>@string/emoji_pensive</item>
+        <item>@string/emoji_confused</item>
+        <item>@string/emoji_confounded</item>
+        <item>@string/emoji_throwing_kiss</item>
+        <item>@string/emoji_kiss</item>
+        <item>@string/emoji_tongue</item>
+        <item>@string/emoji_tongue_with_wink</item>
+        <item>@string/emoji_tongue_with_tightly_closed_eyes</item>
+        <item>@string/emoji_surprised</item>
+        <item>@string/emoji_hushed</item>
+        <item>@string/emoji_screaming</item>
+        <item>@string/emoji_sleepign</item>
+        <item>@string/emoji_sad_with_sweat</item>
+        <item>@string/emoji_worried</item>
+        <item>@string/emoji_sad</item>
+        <item>@string/emoji_angry</item>
+        <item>@string/emoji_crying</item>
+        <item>@string/emoji_anguished</item>
+        <item>@string/emoji_fearful</item>
+        <item>@string/emoji_tired</item>
+        <item>@string/emoji_smirk</item>
+    </string-array>
+
+    <string name="analysis_question">Szeretnéd engedélyezni az analízist, amely helyettesíti
+        a beszélgetésnél vagy az emlékeknél beírt szöveged bizonyos részeit hangulatjelekkel?</string>
+
+    <string name="emoticions">Hangulatjelek</string>
+    <string name="about_emoticions_description">Ha a beírt szöveg elemzése aktiválva van, akkor a
+        következő hangulatjelek jelenhetnek meg a beszélgetésnél vagy az emlékeknél.</string>
+    <string name="about_emoticons_item_icon">Ikon</string>
+    <string name="about_emoticons_item_key">Kulcs</string>
+    <string name="about_emoticons_item_description">Leírás</string>
 </resources>

@@ -19,11 +19,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
@@ -70,7 +69,7 @@ public class RequestFromUsersAdapter
         );
         holder.requestFromUserNameTextView.setText(connectionDetail.getFromName());
         holder.requestFromUserTypeTextView.setText(
-                ApplicationHelper.getPersonalizedRelationshipType(
+                ApplicationUtils.getPersonalizedRelationshipType(
                         mContext,
                         connectionDetail.getType(),
                         connectionDetail.getToGender(),
@@ -84,7 +83,7 @@ public class RequestFromUsersAdapter
                 DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ApplicationHelper.deletePairConnection(
+                        ApplicationUtils.deletePairConnection(
                                 connectionDetail.getFromUid(),
                                 connectionDetail.getToUid(),
                                 mContext,
@@ -146,9 +145,9 @@ public class RequestFromUsersAdapter
     private void applyDeletion(final ConnectionDetail connectionDetail) {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         mConnectionsDatabaseReference
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(connectionDetail.getFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -161,7 +160,7 @@ public class RequestFromUsersAdapter
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null request from adapter");
@@ -170,12 +169,12 @@ public class RequestFromUsersAdapter
                             if (toUidValue.equals(connectionDetail.getToUid())) {
                                 mConnectionsDatabaseReference
                                         .child(key)
-                                        .child(ApplicationHelper.CONNECTION_CONNECTED_IDENTIFIER)
-                                        .setValue(ApplicationHelper.CONNECTION_BIT_POS);
+                                        .child(ApplicationUtils.CONNECTION_CONNECTED_IDENTIFIER)
+                                        .setValue(ApplicationUtils.CONNECTION_BIT_POS);
                                 mConnectionsDatabaseReference
                                         .child(key)
-                                        .child(ApplicationHelper.CONNECTION_TIMESTAMP_IDENTIFIER)
-                                        .setValue(ApplicationHelper
+                                        .child(ApplicationUtils.CONNECTION_TIMESTAMP_IDENTIFIER)
+                                        .setValue(ApplicationUtils
                                                 .getCurrentUTCDateAndTime()
                                         );
                             }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/AppTheme"
+        android:layout_width="@dimen/emoticons_item_width"
+        android:layout_height="wrap_content"
+        android:text="@string/about_emoticons_item_icon"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        style="@style/AppTheme"
+        android:layout_width="@dimen/emoticons_item_width"
+        android:layout_height="wrap_content"
+        android:text="@string/about_emoticons_item_key"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        style="@style/AppTheme"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/about_emoticons_item_description"
+        android:textStyle="bold"/>
+
+</LinearLayout>

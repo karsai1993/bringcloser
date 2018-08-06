@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ThoughtAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
@@ -118,11 +117,11 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mConnectionDetail = bundle.getParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY);
+            mConnectionDetail = bundle.getParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY);
         }
 
         mThoughtList = new ArrayList<>();
@@ -139,7 +138,7 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getContext(), AddNewThoughtActivity.class);
-                    intent.putExtra(ApplicationHelper.EXTRA_DATA, mConnectionDetail);
+                    intent.putExtra(ApplicationUtils.EXTRA_DATA, mConnectionDetail);
                     startActivity(intent);
                 }
             });
@@ -191,7 +190,7 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
             }
         });
         mConnectionsQuery = mConnectionsDatabaseReference
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mConnectionDetail.getFromUid());
         mConnectionThoughtsValueEventListener = new ValueEventListener() {
             @Override
@@ -204,7 +203,7 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
                     }
                     String toUidValue = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                             .getValue(String.class);
                     if (toUidValue == null) {
                         Timber.wtf("to uid null");
@@ -213,7 +212,7 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
                     if (toUidValue.equals(mConnectionDetail.getToUid())) {
                         mThoughtsDatabaseRef = mConnectionsDatabaseReference
                                 .child(key)
-                                .child(ApplicationHelper.THOUGHTS_NODE);
+                                .child(ApplicationUtils.THOUGHTS_NODE);
                         mThoughtsDatabaseRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -293,10 +292,10 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
             context = mSavedAppContext;
         }
         if (order.equals(context.getResources().getString(R.string.sorted_by_default))) {
-            Date dateOne = ApplicationHelper.getDateAndTime(
+            Date dateOne = ApplicationUtils.getDateAndTime(
                     thoughtOne.getTimestamp()
             );
-            Date dateTwo = ApplicationHelper.getDateAndTime(
+            Date dateTwo = ApplicationUtils.getDateAndTime(
                     thoughtTwo.getTimestamp()
             );
             if (dateOne == null || dateTwo == null) {
@@ -305,10 +304,10 @@ public class ConnectionThoughtFragment extends Fragment implements Comparator<Th
             return dateOne.compareTo(dateTwo);
         } else if (order.equals(context.getResources()
                 .getString(R.string.sorted_by_time_descending))) {
-            Date dateOne = ApplicationHelper.getDateAndTime(
+            Date dateOne = ApplicationUtils.getDateAndTime(
                     thoughtOne.getTimestamp()
             );
-            Date dateTwo = ApplicationHelper.getDateAndTime(
+            Date dateTwo = ApplicationUtils.getDateAndTime(
                     thoughtTwo.getTimestamp()
             );
             if (dateOne == null || dateTwo == null) {

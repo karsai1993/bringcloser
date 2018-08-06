@@ -46,7 +46,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ConnectionDetailFragmentPagerAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
@@ -127,6 +127,7 @@ public class ConnectionActivity extends CommonActivity {
     private View mSnackbarView;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mMessageImagesRef;
+    private TextWatcher mTextWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,11 +187,11 @@ public class ConnectionActivity extends CommonActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
         mMessageImagesRef = mFirebaseStorage.getReference()
                 .child(mFirebaseUser.getUid())
-                .child(ApplicationHelper.STORAGE_MESSAGE_IMAGES_FOLDER);
+                .child(ApplicationUtils.STORAGE_MESSAGE_IMAGES_FOLDER);
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedData = getIntent();
         if (receivedData != null) {
-            mConnectionDetail = receivedData.getParcelableExtra(ApplicationHelper.CONNECTION_KEY);
+            mConnectionDetail = receivedData.getParcelableExtra(ApplicationUtils.CONNECTION_KEY);
             mPageAdapter = new ConnectionDetailFragmentPagerAdapter(
                     getSupportFragmentManager(),
                     this,
@@ -285,7 +286,7 @@ public class ConnectionActivity extends CommonActivity {
                 }
             }
         });
-        mMessageEditText.addTextChangedListener(new TextWatcher() {
+        mTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -304,13 +305,18 @@ public class ConnectionActivity extends CommonActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String message = editable.toString();
-                if (message.isEmpty()) mSendImageView.setVisibility(View.GONE);
-                else mSendImageView.setVisibility(View.VISIBLE);
+                if (message.isEmpty()) {
+                    mSendImageView.setVisibility(View.GONE);
+                }
+                else {
+                    mSendImageView.setVisibility(View.VISIBLE);
+                }
             }
-        });
+        };
+        mMessageEditText.addTextChangedListener(mTextWatcher);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         mConnectionChildValueEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -370,12 +376,16 @@ public class ConnectionActivity extends CommonActivity {
         mSendImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewMessageObject(mMessageEditText.getText().toString(), null);
+                String message = ApplicationUtils.convertTextToEmojiIfNeeded(
+                        getApplicationContext(),
+                        mMessageEditText.getText().toString()
+                );
+                createNewMessageObject(message, null);
             }
         });
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mConnectionUsersValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -458,7 +468,7 @@ public class ConnectionActivity extends CommonActivity {
 
     private void unregisterChatVisibility() {
         mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CHAT_VISIBILITY_NODE)
+                .child(ApplicationUtils.CHAT_VISIBILITY_NODE)
                 .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
                 .child(mCurrentUserUid)
                 .setValue(false);
@@ -466,7 +476,7 @@ public class ConnectionActivity extends CommonActivity {
 
     private void registerChatVisibility() {
         mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CHAT_VISIBILITY_NODE)
+                .child(ApplicationUtils.CHAT_VISIBILITY_NODE)
                 .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
                 .child(mCurrentUserUid)
                 .setValue(true);
@@ -474,7 +484,7 @@ public class ConnectionActivity extends CommonActivity {
 
     private void unregisterChatTyping() {
         mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CHAT_TYPING_NODE)
+                .child(ApplicationUtils.CHAT_TYPING_NODE)
                 .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
                 .child(mCurrentUserUid)
                 .setValue(false);
@@ -482,7 +492,7 @@ public class ConnectionActivity extends CommonActivity {
 
     private void registerChatTyping() {
         mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CHAT_TYPING_NODE)
+                .child(ApplicationUtils.CHAT_TYPING_NODE)
                 .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
                 .child(mCurrentUserUid)
                 .setValue(true);
@@ -490,7 +500,7 @@ public class ConnectionActivity extends CommonActivity {
 
     private void createNewMessageObject(final String text, final String photoUrl) {
         mConnectionsDatabaseReference
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mConnectionDetail.getFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -503,7 +513,7 @@ public class ConnectionActivity extends CommonActivity {
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid not found");
@@ -512,7 +522,7 @@ public class ConnectionActivity extends CommonActivity {
                             if (toUidValue.equals(mConnectionDetail.getToUid())) {
                                 mConnectionsDatabaseReference
                                         .child(key)
-                                        .child(ApplicationHelper.MESSAGES_NODE)
+                                        .child(ApplicationUtils.MESSAGES_NODE)
                                         .push()
                                         .setValue(
                                                 new Message(
@@ -525,7 +535,7 @@ public class ConnectionActivity extends CommonActivity {
                                                                 mConnectionDetail.getToUid(),
                                                         text,
                                                         photoUrl,
-                                                        ApplicationHelper
+                                                        ApplicationUtils
                                                                 .getCurrentUTCDateAndTime()
                                                 )
                                         );
@@ -546,7 +556,7 @@ public class ConnectionActivity extends CommonActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mMessageImagesRef = mMessageImagesRef.child(
-                ApplicationHelper.getCurrentUTCDateAndTime()
+                ApplicationUtils.getCurrentUTCDateAndTime()
         );
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -580,14 +590,14 @@ public class ConnectionActivity extends CommonActivity {
             otherName = connectionDetail.getToName().split(" ")[0];
             currentPhotoUrl = connectionDetail.getFromPhotoUrl();
             otherPhotoUrl = connectionDetail.getToPhotoUrl();
-            mOtherType = ApplicationHelper.getPersonalizedRelationshipType(
+            mOtherType = ApplicationUtils.getPersonalizedRelationshipType(
                     this,
                     connectionDetail.getType(),
                     connectionDetail.getToGender(),
                     connectionDetail.getFromGender(),
                     false
             ).toUpperCase(Locale.getDefault());
-            mCurrentType = ApplicationHelper.getPersonalizedRelationshipType(
+            mCurrentType = ApplicationUtils.getPersonalizedRelationshipType(
                     this,
                     connectionDetail.getType(),
                     connectionDetail.getToGender(),
@@ -598,14 +608,14 @@ public class ConnectionActivity extends CommonActivity {
             otherName = connectionDetail.getFromName().split(" ")[0];
             currentPhotoUrl = connectionDetail.getToPhotoUrl();
             otherPhotoUrl = connectionDetail.getFromPhotoUrl();
-            mCurrentType = ApplicationHelper.getPersonalizedRelationshipType(
+            mCurrentType = ApplicationUtils.getPersonalizedRelationshipType(
                     this,
                     connectionDetail.getType(),
                     connectionDetail.getToGender(),
                     connectionDetail.getFromGender(),
                     false
             ).toUpperCase(Locale.getDefault());
-            mOtherType = ApplicationHelper.getPersonalizedRelationshipType(
+            mOtherType = ApplicationUtils.getPersonalizedRelationshipType(
                     this,
                     connectionDetail.getType(),
                     connectionDetail.getToGender(),
@@ -626,7 +636,7 @@ public class ConnectionActivity extends CommonActivity {
         ImageUtils.setPhoto(this, otherPhotoUrl, mToolbarOtherPhotoImageView, true);
         mToolbarCurrentRelationshipTextView.setText(mCurrentType);
         ImageUtils.setPhoto(this, currentPhotoUrl, mToolbarCurrentPhotoImageView, true);
-        String dateAndTimeLocal = ApplicationHelper.getLocalDateAndTimeToDisplay(
+        String dateAndTimeLocal = ApplicationUtils.getLocalDateAndTimeToDisplay(
                 this,
                 connectionDetail.getTimestamp()
         );
@@ -648,7 +658,7 @@ public class ConnectionActivity extends CommonActivity {
         super.onPause();
         if (mViewPager.getCurrentItem() == 0) {
             mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.CONNECTIONS_NODE)
+                    .child(ApplicationUtils.CONNECTIONS_NODE)
                     .child(mConnectionDetail.getFromUid() + "_" + mConnectionDetail.getToUid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -679,9 +689,9 @@ public class ConnectionActivity extends CommonActivity {
             final String name) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference connectionsRef
-                = firebaseDatabase.getReference().child(ApplicationHelper.CONNECTIONS_NODE);
+                = firebaseDatabase.getReference().child(ApplicationUtils.CONNECTIONS_NODE);
         Query connectionsQuery = connectionsRef
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(fromUid);
         connectionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -691,22 +701,22 @@ public class ConnectionActivity extends CommonActivity {
                     if (key == null) continue;
                     String toUidValue = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                             .getValue(String.class);
                     if (toUidValue == null) continue;
                     if (toUidValue.equals(toUid)) {
                         DatabaseReference messagesDatabaseRef = connectionsRef
                                 .child(key)
-                                .child(ApplicationHelper.MESSAGES_NODE);
+                                .child(ApplicationUtils.MESSAGES_NODE);
                         final DatabaseReference wishesDatabaseRef = connectionsRef
                                 .child(key)
-                                .child(ApplicationHelper.WISHES_NODE);
+                                .child(ApplicationUtils.WISHES_NODE);
                         final DatabaseReference eventsDatabaseRef = connectionsRef
                                 .child(key)
-                                .child(ApplicationHelper.EVENTS_NODE);
+                                .child(ApplicationUtils.EVENTS_NODE);
                         final DatabaseReference thoughtsDatabaseRef = connectionsRef
                                 .child(key)
-                                .child(ApplicationHelper.THOUGHTS_NODE);
+                                .child(ApplicationUtils.THOUGHTS_NODE);
                         deleteMemoryElementsAndConnection(
                                 messagesDatabaseRef,
                                 wishesDatabaseRef,
@@ -743,7 +753,7 @@ public class ConnectionActivity extends CommonActivity {
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageSnapshot.getValue(Message.class);
                     if (message == null) continue;
-                    ApplicationHelper.deleteImageFromStorage(context, message.getPhotoUrl());
+                    ApplicationUtils.deleteImageFromStorage(context, message.getPhotoUrl());
                 }
                 wishesDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -751,7 +761,7 @@ public class ConnectionActivity extends CommonActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Wish wish = snapshot.getValue(Wish.class);
                             if (wish == null) continue;
-                            ApplicationHelper.deleteImageFromStorage(context, wish.getExtraPhotoUrl());
+                            ApplicationUtils.deleteImageFromStorage(context, wish.getExtraPhotoUrl());
                         }
                         eventsDatabaseRef.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -760,7 +770,7 @@ public class ConnectionActivity extends CommonActivity {
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             Event event = snapshot.getValue(Event.class);
                                             if (event == null) continue;
-                                            ApplicationHelper.deleteImageFromStorage(context, event.getExtraPhotoUrl());
+                                            ApplicationUtils.deleteImageFromStorage(context, event.getExtraPhotoUrl());
                                         }
                                         thoughtsDatabaseRef.addListenerForSingleValueEvent(
                                                 new ValueEventListener() {
@@ -769,12 +779,12 @@ public class ConnectionActivity extends CommonActivity {
                                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                             Thought thought = snapshot.getValue(Thought.class);
                                                             if (thought == null) continue;
-                                                            ApplicationHelper.deleteImageFromStorage(context, thought.getExtraPhotoUrl());
+                                                            ApplicationUtils.deleteImageFromStorage(context, thought.getExtraPhotoUrl());
                                                         }
                                                         if (fromUid != null
                                                                 && toUid != null
                                                                 && name != null) {
-                                                            ApplicationHelper.deletePairConnection(
+                                                            ApplicationUtils.deletePairConnection(
                                                                     fromUid,
                                                                     toUid,
                                                                     context,

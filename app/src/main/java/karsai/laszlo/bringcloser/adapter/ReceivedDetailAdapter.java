@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 import java.util.Locale;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
@@ -104,9 +104,11 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case WISH_BASIC_VIEW_TYPE:
                 WishBasicViewHolder wishBasicViewHolder = (WishBasicViewHolder) holder;
                 wishBasicViewHolder.infoHeaderLayout.setAlpha(0.75F);
-                wishBasicViewHolder.occasionTextView.setText(wishDetail.getOccasion());
+                wishBasicViewHolder.occasionTextView.setText(
+                        ApplicationUtils.getTranslatedWishOccasion(mContext, wishDetail.getOccasion())
+                );
                 wishBasicViewHolder.occasionTextView.setAlpha(1F);
-                final String wishBasicDate = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String wishBasicDate = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         wishDetail.getWhenToArrive()
                 );
@@ -151,9 +153,11 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 );
                 wishExtraPhotoViewHolder.infoHeaderLayout.setAlpha(0.75F);
                 wishExtraPhotoViewHolder.typeHeaderLayout.setAlpha(0.75F);
-                wishExtraPhotoViewHolder.occasionTextView.setText(wishDetail.getOccasion());
+                wishExtraPhotoViewHolder.occasionTextView.setText(
+                        ApplicationUtils.getTranslatedWishOccasion(mContext, wishDetail.getOccasion())
+                );
                 wishExtraPhotoViewHolder.occasionTextView.setAlpha(1F);
-                final String wishExtraDate = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String wishExtraDate = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         wishDetail.getWhenToArrive()
                 );
@@ -195,7 +199,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 eventBasicViewHolder.titleTextView.setAlpha(1F);
                 eventBasicViewHolder.placeTextView.setText(eventDetail.getPlace());
                 eventBasicViewHolder.placeTextView.setAlpha(1F);
-                final String eventBasicDate = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String eventBasicDate = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         eventDetail.getWhenToArrive()
                 );
@@ -244,7 +248,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 eventExtraPhotoViewHolder.titleTextView.setAlpha(1F);
                 eventExtraPhotoViewHolder.placeTextView.setText(eventDetail.getPlace());
                 eventExtraPhotoViewHolder.placeTextView.setAlpha(1F);
-                final String eventExtraDate = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String eventExtraDate = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         eventDetail.getWhenToArrive()
                 );
@@ -282,7 +286,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case THOUGHT_BASIC_VIEW_TYPE:
                 ThoughtBasicViewHolder thoughtBasicViewHolder = (ThoughtBasicViewHolder) holder;
                 thoughtBasicViewHolder.infoHeaderLayout.setAlpha(0.75F);
-                final String thoughtBasicDate = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String thoughtBasicDate = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         thoughtDetail.getTimestamp()
                 );
@@ -328,7 +332,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 );
                 thoughtExtraPhotoViewHolder.infoHeaderLayout.setAlpha(0.75F);
                 thoughtExtraPhotoViewHolder.typeHeaderLayout.setAlpha(0.75F);
-                final String thoughtExtraDate = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String thoughtExtraDate = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         thoughtDetail.getTimestamp()
                 );
@@ -370,7 +374,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         final String currentUid = FirebaseAuth.getInstance().getUid();
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference connectionsDatabaseRef = firebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         connectionsDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -391,7 +395,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
                 if (currentConnection != null) {
                     DatabaseReference usersDatabaseRef = firebaseDatabase.getReference()
-                            .child(ApplicationHelper.USERS_NODE);
+                            .child(ApplicationUtils.USERS_NODE);
                     final Connection finalCurrentConnection = currentConnection;
                     usersDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -430,7 +434,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     connectionDetail.setTimestamp(timestamp);
                                     Intent intent = new Intent(mContext, ConnectionActivity.class);
                                     intent.putExtra(
-                                            ApplicationHelper.CONNECTION_KEY, connectionDetail);
+                                            ApplicationUtils.CONNECTION_KEY, connectionDetail);
                                     mContext.startActivity(intent);
                                     break;
                                 }
@@ -483,7 +487,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .append(fromName)
                     .append(mContext.getResources().getString(R.string.share_content_received_item_3))
                     .append(date)
-                    .append(":\n")
+                    .append(".\n")
                     .append(message)
                     .toString();
         } else {
@@ -494,7 +498,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .append(fromName)
                     .append(mContext.getResources().getString(R.string.share_content_received_item_3))
                     .append(date)
-                    .append(":\n")
+                    .append(".\n")
                     .append(message)
                     .append("\n")
                     .append(extraPhotoUrl)
@@ -522,14 +526,14 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ReceivedDetail receivedDetail = mReceivedDetailList.get(position);
         String type = receivedDetail.getType();
         switch (type) {
-            case ApplicationHelper.TYPE_WISH_IDENTIFIER:
+            case ApplicationUtils.TYPE_WISH_IDENTIFIER:
                 WishDetail wishDetail = receivedDetail.getWishDetail();
                 if (wishDetail.getExtraPhotoUrl() == null) {
                     return WISH_BASIC_VIEW_TYPE;
                 } else {
                     return WISH_EXTRA_PHOTO_VIEW_TYPE;
                 }
-            case ApplicationHelper.TYPE_EVENT_IDENTIFIER:
+            case ApplicationUtils.TYPE_EVENT_IDENTIFIER:
                 EventDetail eventDetail = receivedDetail.getEventDetail();
                 if (eventDetail.getExtraPhotoUrl() == null) {
                     return EVENT_BASIC_VIEW_TYPE;

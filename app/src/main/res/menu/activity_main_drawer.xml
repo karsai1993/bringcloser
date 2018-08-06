@@ -18,4 +18,15 @@
             android:title="@string/nav_about" />
     </group>
 
+    <item android:title="@string/nav_documents">
+        <menu>
+            <item
+                android:id="@+id/nav_terms_of_use"
+                android:title="@string/nav_terms_of_use" />
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:title="@string/nav_privacy_policy" />
+        </menu>
+    </item>
+
 </menu>

@@ -1,6 +1,5 @@
-package karsai.laszlo.bringcloser;
+package karsai.laszlo.bringcloser.utils;
 
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -8,24 +7,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import org.w3c.dom.Entity;
-
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import timber.log.Timber;
 
 /**
  * Class to add token to the database
  */
-public class AddTokenHandler {
+public class AddTokenUtils {
 
     public static void addTokenIfNeeded(final String token, String uid) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE)
+                .child(ApplicationUtils.USERS_NODE)
                 .child(uid)
-                .child(ApplicationHelper.USER_TOKENS_IDENTIFIER);
+                .child(ApplicationUtils.USER_TOKENS_IDENTIFIER);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

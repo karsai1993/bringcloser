@@ -1,18 +1,17 @@
 package karsai.laszlo.bringcloser.activity;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,7 +31,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.AllUsersAdapter;
 import karsai.laszlo.bringcloser.background.AllUsersFilterAsyncTask;
@@ -49,6 +48,8 @@ public class AddNewConnectionActivity extends CommonActivity {
 
     @BindView(R.id.et_filter_users)
     TextInputEditText mFilterUsersEditText;
+    @BindView(R.id.til_add_new_connection)
+    TextInputLayout mFilterTextInputLayout;
     @BindView(R.id.rv_all_users)
     RecyclerView mAllUsersRecyclerView;
     @BindView(R.id.tv_info_connection)
@@ -85,7 +86,7 @@ public class AddNewConnectionActivity extends CommonActivity {
             mUserList = savedInstanceState.getParcelableArrayList(SAVE_USER_LIST_KEY);
             mFilterUsersEditText.setText(savedInstanceState.getString(SAVE_FILTER_KEY));
             mIsFilterEditTextFocused = savedInstanceState.getBoolean(SAVE_FILTER_FOCUSED_KEY);
-            mPos = savedInstanceState.getInt(ApplicationHelper.SAVE_RECYCLERVIEW_POS_KEY, -1);
+            mPos = savedInstanceState.getInt(ApplicationUtils.SAVE_RECYCLERVIEW_POS_KEY, -1);
         }
 
         mInitFilter = mFilterUsersEditText.getText().toString();
@@ -105,9 +106,9 @@ public class AddNewConnectionActivity extends CommonActivity {
         mFilterProgressBar.setVisibility(View.VISIBLE);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
 
         mUsersValueEventListener = new ValueEventListener() {
             @Override
@@ -239,7 +240,7 @@ public class AddNewConnectionActivity extends CommonActivity {
         int userListSize = mUserList.size();
         mInfoAboutConnectionsTextView.setVisibility(View.VISIBLE);
         if (userListSize != 0) {
-            mFilterUsersEditText.setVisibility(View.VISIBLE);
+            mFilterTextInputLayout.setVisibility(View.VISIBLE);
             mAllUsersRecyclerView.setVisibility(View.VISIBLE);
             mFilterProgressBar.setVisibility(View.GONE);
             mInitFilter = mFilterUsersEditText.getText().toString();
@@ -258,7 +259,7 @@ public class AddNewConnectionActivity extends CommonActivity {
                 applySearch(mInitFilter);
             }
         } else {
-            mFilterUsersEditText.setVisibility(View.GONE);
+            mFilterTextInputLayout.setVisibility(View.GONE);
             mAllUsersRecyclerView.setVisibility(View.GONE);
             mFilterProgressBar.setVisibility(View.GONE);
             mInfoAboutConnectionsTextView.setText(
@@ -330,7 +331,7 @@ public class AddNewConnectionActivity extends CommonActivity {
         outState.putString(SAVE_FILTER_KEY, mFilterUsersEditText.getText().toString());
         outState.putBoolean(SAVE_FILTER_FOCUSED_KEY, mFilterUsersEditText.isFocused());
         outState.putInt(
-                ApplicationHelper.SAVE_RECYCLERVIEW_POS_KEY,
+                ApplicationUtils.SAVE_RECYCLERVIEW_POS_KEY,
                 ((GridLayoutManager)mAllUsersRecyclerView.getLayoutManager())
                         .findFirstVisibleItemPosition());
         super.onSaveInstanceState(outState);

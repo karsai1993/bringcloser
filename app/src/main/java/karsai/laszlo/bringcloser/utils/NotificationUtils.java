@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.support.media.ExifInterface;
 import android.os.Build;
 import android.provider.Settings;
@@ -21,7 +22,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.activity.ConnectionActivity;
@@ -108,26 +108,42 @@ public class NotificationUtils {
             ConnectionDetail connectionDetail) {
         Intent targetIntent;
         Intent openMainActivityForUpNavigationIntent = null;
-        if (action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION)
-                || action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_PAGE_REQUEST)) {
+        if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_ACTION_PAGE_CONNECTION)
+                || action.equals(ApplicationUtils.NOTIFICATION_INTENT_ACTION_PAGE_REQUEST)) {
             targetIntent = new Intent(context, MainActivity.class);
-        } else if (action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_WISH)
-                || action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_EVENT)
-                || action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_THOUGHT)) {
+        } else if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_ACTION_WISH)
+                || action.equals(ApplicationUtils.NOTIFICATION_INTENT_ACTION_EVENT)
+                || action.equals(ApplicationUtils.NOTIFICATION_INTENT_ACTION_THOUGHT)) {
             openMainActivityForUpNavigationIntent = new Intent(context, MainActivity.class);
             openMainActivityForUpNavigationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             targetIntent = new Intent(context, ReceivedDetailsActivity.class);
-        } else if (action.equals(ApplicationHelper.NOTIFICATION_INTENT_ACTION_MESSAGE)) {
+        } else if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_ACTION_MESSAGE)) {
             openMainActivityForUpNavigationIntent = new Intent(context, MainActivity.class);
             openMainActivityForUpNavigationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             targetIntent = new Intent(context, ConnectionActivity.class);
-            targetIntent.putExtra(ApplicationHelper.CONNECTION_KEY, connectionDetail);
+            targetIntent.putExtra(ApplicationUtils.CONNECTION_KEY, connectionDetail);
+        } else if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_PRIVACY)) {
+            String url = context.getResources().getString(R.string.privacy_policy);
+            Uri webPage = Uri.parse(url);
+            targetIntent = new Intent(Intent.ACTION_VIEW, webPage);
+        } else if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_TERMS)) {
+            String url = context.getResources().getString(R.string.terms_of_use);
+            Uri webPage = Uri.parse(url);
+            targetIntent = new Intent(Intent.ACTION_VIEW, webPage);
         } else {
             return;
         }
-        targetIntent.setAction(action);
         PendingIntent contentIntent;
-        if (openMainActivityForUpNavigationIntent == null) {
+        if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_PRIVACY)
+                || action.equals(ApplicationUtils.NOTIFICATION_INTENT_TERMS)) {
+            contentIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    targetIntent,
+                    0
+            );
+        } else if (openMainActivityForUpNavigationIntent == null) {
+            targetIntent.setAction(action);
             contentIntent = PendingIntent.getActivity(
                     context,
                     0,
@@ -135,6 +151,7 @@ public class NotificationUtils {
                     PendingIntent.FLAG_CANCEL_CURRENT
             );
         } else {
+            targetIntent.setAction(action);
             contentIntent = PendingIntent.getActivities(
                     context,
                     0,
@@ -152,6 +169,12 @@ public class NotificationUtils {
         builder.setContentTitle(title)
                 .setContentText(message)
                 .setLargeIcon(
+                        action.equals(ApplicationUtils.NOTIFICATION_INTENT_PRIVACY)
+                                || action.equals(ApplicationUtils.NOTIFICATION_INTENT_TERMS) ?
+                                BitmapFactory.decodeResource(
+                                        context.getResources(),
+                                        R.mipmap.ic_launcher
+                                ) :
                         imageUrl != null ?
                                 getBitmapFromUrl(imageUrl) :
                                 BitmapFactory.decodeResource(

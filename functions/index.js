@@ -382,41 +382,84 @@ exports.sendNewMessageNotification = functions.database.ref('/connections/{key}/
 		return admin.messaging().sendToDevice(tokens, payload);
 	});
  });
-exports.sendEmail = functions.database.ref('/problems')
+exports.sendPrivacyChangedNotification = functions.database.ref('/privacy_changed')
     .onWrite((change, context) => {
 	
 	if (!change.after.exists()) {
         return null;
     }
 	
-	const object = change.after.val();
-	const fromUid = object.from;
-	const message = object.message;
-	const time = object.utc_time;
-	const tag = object.tag;
-	
-	const gmailEmail = functions.config().gmail.email;
-	const gmailPassword = functions.config().gmail.password;
-	console.log('email:', gmailEmail, 'pw:', gmailPassword);
-	const mailTransport = nodemailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: gmailEmail,
-			pass: gmailPassword,
-		},
-	});
-	
-	const email = `karsai1993@gmail.com`;
-	const mailOptions = {
-		//from: `<noreply.alert@bringcloser.com>`,
-		from: email,
-		to: email,
-	};
-
-	
-	mailOptions.subject = `BringCloser problem in ${tag}!`;
-	mailOptions.text = `Problem from ${fromUid} with message: ${message} at UTC ${time}`;
-	return mailTransport.sendMail(mailOptions).then(() => {
-		return console.log('New welcome email sent to:', email);
-	});
+	var usersRef = admin.database().ref('/users');
+	return usersRef.once('value')
+	 .then((data) => {
+		var collectedData = data.val();
+		let keys = Object.keys(collectedData);
+		let values = getValues(keys, collectedData);
+		for(var i in values) {
+			var uid = keys[i];
+			var currValue = values[i];
+			var tokensMap = currValue.tokensMap;
+			let tokenKeys = Object.keys(tokensMap);
+			let tokenValues = getValues(tokenKeys, tokensMap);
+			var tokens = []
+			for (var k in tokenKeys) {
+				var currKey = tokenKeys[k];
+				//var currValue = tokenValues[k];
+				//var currToken = currKey + ":" + currValue;
+				tokens.push(currKey);
+			}
+			const type = "privacy";
+			const payload = {
+				data: {
+					type: `${type}`
+				}
+			};
+			console.log('Sending privacy policy changed notification to', uid);
+			admin.messaging().sendToDevice(tokens, payload);
+		}
+		return data;
+	 });
  });
+exports.sendTermsChangedNotification = functions.database.ref('/terms_changed')
+    .onWrite((change, context) => {
+	
+	if (!change.after.exists()) {
+        return null;
+    }
+	
+	var usersRef = admin.database().ref('/users');
+	return usersRef.once('value')
+	 .then((data) => {
+		var collectedData = data.val();
+		let keys = Object.keys(collectedData);
+		let values = getValues(keys, collectedData);
+		for(var i in values) {
+			var uid = keys[i];
+			var currValue = values[i];
+			var tokensMap = currValue.tokensMap;
+			let tokenKeys = Object.keys(tokensMap);
+			let tokenValues = getValues(tokenKeys, tokensMap);
+			var tokens = []
+			for (var k in tokenKeys) {
+				var currKey = tokenKeys[k];
+				//var currValue = tokenValues[k];
+				//var currToken = currKey + ":" + currValue;
+				tokens.push(currKey);
+			}
+			const type = "terms";
+			const payload = {
+				data: {
+					type: `${type}`
+				}
+			};
+			console.log('Sending terms of use changed notification to', uid);
+			admin.messaging().sendToDevice(tokens, payload);
+		}
+		return data;
+	 });
+ });
+function getValues(keys, object) {
+  return keys.map(key => {
+    return object[key];
+  });
+}

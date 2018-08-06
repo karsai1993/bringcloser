@@ -5,12 +5,14 @@ import org.junit.Test;
 
 import java.util.Date;
 
-public class ApplicationHelperDateConversionUnitTest {
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
+
+public class ApplicationUtilsDateConversionUnitTest {
 
     @Test
     public void testGetUTCDateAndTime() {
         String input = "20180726184900";
-        String result = ApplicationHelper.getUTCDateAndTime(null, input);
+        String result = ApplicationUtils.getUTCDateAndTime(null, input);
         String demandedResult = "20180726164900";
         Assert.assertEquals(result, demandedResult);
     }
@@ -18,14 +20,14 @@ public class ApplicationHelperDateConversionUnitTest {
     @Test
     public void testGetLocalDateAndTimeToDisplay() {
         String input = "20180726164900";
-        String result = ApplicationHelper.getLocalDateAndTimeToDisplay(null, input);
+        String result = ApplicationUtils.getLocalDateAndTimeToDisplay(null, input);
         String demandedResult = "2018 Jul 26 18:49";
         Assert.assertEquals(result, demandedResult);
     }
 
     @Test
     public void testGetDateAndTime() {
-        Date date = ApplicationHelper.getDateAndTime("20180726164900");
+        Date date = ApplicationUtils.getDateAndTime("20180726164900");
         Assert.assertNotNull(date);
     }
 }

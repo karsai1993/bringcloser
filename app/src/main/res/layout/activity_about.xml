@@ -103,6 +103,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/distance"
+                android:text="@string/emoticions"
+                android:textSize="@dimen/header_text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/AppTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_emoticions_description"
+                android:layout_marginBottom="@dimen/small_distance"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_emoticons"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/emoticons_rv_height"/>
+
+            <TextView
+                style="@style/AppTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/distance"
                 android:text="@string/about_used_libraries_label"
                 android:textSize="@dimen/header_text_size"
                 android:textStyle="bold" />

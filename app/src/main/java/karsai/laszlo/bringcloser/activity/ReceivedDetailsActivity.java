@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
@@ -33,7 +32,7 @@ import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ReceivedDetailAdapter;
 import karsai.laszlo.bringcloser.model.Event;
@@ -116,7 +115,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                 switch (action) {
                     case Intent.ACTION_VIEW:
                         mPositionToSeek = receivedData
-                                .getIntExtra(ApplicationHelper.FROM_WIDGET_POS_KEY, -1);
+                                .getIntExtra(ApplicationUtils.FROM_WIDGET_POS_KEY, -1);
                         if (mPositionToSeek != -1) {
                             mStatus = "111";
                             mWishCheckBox.setChecked(true);
@@ -127,7 +126,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                             );
                         }
                         break;
-                    case ApplicationHelper.NOTIFICATION_INTENT_ACTION_WISH:
+                    case ApplicationUtils.NOTIFICATION_INTENT_ACTION_WISH:
                         mStatus = "100";
                         mWishCheckBox.setChecked(true);
                         mEventCheckBox.setChecked(false);
@@ -136,7 +135,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                 getResources().getString(R.string.sorted_by_time_descending)
                         );
                         break;
-                    case ApplicationHelper.NOTIFICATION_INTENT_ACTION_EVENT:
+                    case ApplicationUtils.NOTIFICATION_INTENT_ACTION_EVENT:
                         mStatus = "010";
                         mWishCheckBox.setChecked(false);
                         mEventCheckBox.setChecked(true);
@@ -145,7 +144,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                 getResources().getString(R.string.sorted_by_time_descending)
                         );
                         break;
-                    case ApplicationHelper.NOTIFICATION_INTENT_ACTION_THOUGHT:
+                    case ApplicationUtils.NOTIFICATION_INTENT_ACTION_THOUGHT:
                         mStatus = "001";
                         mWishCheckBox.setChecked(false);
                         mEventCheckBox.setChecked(false);
@@ -220,9 +219,9 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         mUsersDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -237,11 +236,11 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                     }
                     String fromUid = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                             .getValue(String.class);
                     String toUid = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                             .getValue(String.class);
                     if (fromUid == null || toUid == null) return;
                     if (fromUid.equals(mCurrentUserUid) || toUid.equals(mCurrentUserUid)) {
@@ -249,13 +248,13 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                 = new GenericTypeIndicator<HashMap<String, Object>>() {};
                         DataSnapshot wishesSnapshot = dataSnapshot
                                 .child(key)
-                                .child(ApplicationHelper.WISHES_NODE);
+                                .child(ApplicationUtils.WISHES_NODE);
                         DataSnapshot eventsSnapshot = dataSnapshot
                                 .child(key)
-                                .child(ApplicationHelper.EVENTS_NODE);
+                                .child(ApplicationUtils.EVENTS_NODE);
                         DataSnapshot thoughtsSnapshot = dataSnapshot
                                 .child(key)
-                                .child(ApplicationHelper.THOUGHTS_NODE);
+                                .child(ApplicationUtils.THOUGHTS_NODE);
                         List<HashMap<String, Object>> wishMapList = new ArrayList<>();
                         List<HashMap<String, Object>> eventMapList = new ArrayList<>();
                         List<HashMap<String, Object>> thoughtMapList = new ArrayList<>();
@@ -279,32 +278,32 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                         while (wishListIterator.hasNext()) {
                             HashMap<String, Object> currWish = wishListIterator.next();
                             Object hasArrived = currWish.get(
-                                    ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
+                                    ApplicationUtils.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                             Wish wish = new Wish(
                                     (String) currWish.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
                                     (String) currWish.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
                                     (String) currWish.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
                                     (String) currWish.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
                                     (String) currWish.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_WHEN_TO_ARRIVE_IDENTIFIER),
                                     (String) currWish.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_OCCASION_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_OCCASION_IDENTIFIER),
                                     (String) currWish.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_TEXT_IDENTIFIER),
                                     hasArrived != null && (boolean) hasArrived,
                                     (String) currWish.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
+                                            ApplicationUtils.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );
                             if (!wish.getFromUid().equals(mCurrentUserUid)
-                                    && ApplicationHelper.isSent(wish)) {
+                                    && ApplicationUtils.isSent(wish)) {
                                 mWishList.add(wish);
                             }
                         }
@@ -313,34 +312,34 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                         while (eventListIterator.hasNext()) {
                             HashMap<String, Object> currEvent = eventListIterator.next();
                             Object hasArrived = currEvent.get(
-                                    ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
+                                    ApplicationUtils.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                             Event event = new Event(
                                     (String) currEvent.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_WHEN_TO_ARRIVE_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_TITLE_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_TITLE_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_PLACE_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_PLACE_IDENTIFIER),
                                     (String) currEvent.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_TEXT_IDENTIFIER),
                                     hasArrived != null && (boolean) hasArrived,
                                     (String) currEvent.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
+                                            ApplicationUtils.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );
                             if (!event.getFromUid().equals(mCurrentUserUid)
-                                    && ApplicationHelper.isSent(event)) {
+                                    && ApplicationUtils.isSent(event)) {
                                 mEventList.add(event);
                             }
                         }
@@ -349,26 +348,26 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                         while (thoughtListIterator.hasNext()) {
                             HashMap<String, Object> currThought = thoughtListIterator.next();
                             Object hasArrived = currThought.get(
-                                    ApplicationHelper.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
+                                    ApplicationUtils.RECEIVED_DETAIL_HAS_ARRIVED_IDENTIFIER);
                             Thought thought = new Thought(
                                     (String) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_FROM_UID_IDENTIFIER),
                                     (String) currThought.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_CONNECTION_FROM_UID_IDENTIFIER),
                                     (String) currThought.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_CONNECTION_TO_UID_IDENTIFIER),
                                     (String) currThought.get(
-                                            ApplicationHelper
+                                            ApplicationUtils
                                                     .RECEIVED_DETAIL_EXTRA_PHOTO_URL_IDENTIFIER),
                                     (String) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_TIMESTAMP_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_TIMESTAMP_IDENTIFIER),
                                     (String) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_TEXT_IDENTIFIER),
+                                            ApplicationUtils.RECEIVED_DETAIL_TEXT_IDENTIFIER),
                                     hasArrived != null && (boolean) hasArrived,
                                     (String) currThought.get(
-                                            ApplicationHelper.RECEIVED_DETAIL_KEY_IDENTIFIER)
+                                            ApplicationUtils.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );
                             if (!thought.getFromUid().equals(mCurrentUserUid)
                                     && thought.hasArrived()) {
@@ -437,7 +436,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                                         wish.getWhenToArrive(),
                                                         wish.getOccasion(),
                                                         wish.getText()
-                                                ), ApplicationHelper.TYPE_WISH_IDENTIFIER
+                                                ), ApplicationUtils.TYPE_WISH_IDENTIFIER
                                         )
                                 );
                             }
@@ -455,7 +454,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                                         event.getTitle(),
                                                         event.getPlace(),
                                                         event.getText()
-                                                ), ApplicationHelper.TYPE_EVENT_IDENTIFIER
+                                                ), ApplicationUtils.TYPE_EVENT_IDENTIFIER
                                         )
                                 );
                             }
@@ -471,7 +470,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                                         thought.getExtraPhotoUrl(),
                                                         thought.getTimestamp(),
                                                         thought.getText()
-                                                ), ApplicationHelper.TYPE_THOUGHT_IDENTIFIER
+                                                ), ApplicationUtils.TYPE_THOUGHT_IDENTIFIER
                                         )
                                 );
                             }
@@ -604,8 +603,8 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
             } else {
                 dateTwoAsText = thoughtDetailTwo.getTimestamp();
             }
-            Date dateOne = ApplicationHelper.getDateAndTime(dateOneAsText);
-            Date dateTwo = ApplicationHelper.getDateAndTime(dateTwoAsText);
+            Date dateOne = ApplicationUtils.getDateAndTime(dateOneAsText);
+            Date dateTwo = ApplicationUtils.getDateAndTime(dateTwoAsText);
             if (dateOne == null || dateTwo == null) {
                 return dateOneAsText.compareTo(dateTwoAsText);
             }
@@ -627,8 +626,8 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
             } else {
                 dateTwoAsText = thoughtDetailTwo.getTimestamp();
             }
-            Date dateOne = ApplicationHelper.getDateAndTime(dateOneAsText);
-            Date dateTwo = ApplicationHelper.getDateAndTime(dateTwoAsText);
+            Date dateOne = ApplicationUtils.getDateAndTime(dateOneAsText);
+            Date dateTwo = ApplicationUtils.getDateAndTime(dateTwoAsText);
             if (dateOne == null || dateTwo == null) {
                 return dateTwoAsText.compareTo(dateOneAsText);
             }

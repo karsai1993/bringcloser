@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Thought;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
@@ -54,7 +54,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.mThoughtList = thoughtList;
         this.mFirebaseDatabase = FirebaseDatabase.getInstance();
         this.mConnectionsDatabaseRef = this.mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
     }
 
     @NonNull
@@ -112,7 +112,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 final BasicOnViewHolder basicOnViewHolder = (BasicOnViewHolder) holder;
                 basicOnViewHolder.headerLinearLayout.setAlpha(0.75F);
                 basicOnViewHolder.messageTextView.setText(thought.getText());
-                final String dateAndTimeBasicOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String dateAndTimeBasicOn = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         thought.getTimestamp()
                 );
@@ -146,7 +146,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 basicOffViewHolder.headerLinearLayout.setAlpha(0.75F);
                 basicOffViewHolder.messageTextView.setText(thought.getText());
                 basicOffViewHolder.timestampTextView.setText(
-                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        ApplicationUtils.getLocalDateAndTimeToDisplay(
                                 mContext,
                                 thought.getTimestamp()
                         )
@@ -164,7 +164,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 );
                 withExtraPhotoOnViewHolder.headerLinearLayout.setAlpha(0.75F);
                 withExtraPhotoOnViewHolder.messageTextView.setText(thought.getText());
-                final String dateAndTimePhotoOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String dateAndTimePhotoOn = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         thought.getTimestamp()
                 );
@@ -205,7 +205,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 withExtraPhotoOffViewHolder.headerLinearLayout.setAlpha(0.75F);
                 withExtraPhotoOffViewHolder.messageTextView.setText(thought.getText());
                 withExtraPhotoOffViewHolder.timestampTextView.setText(
-                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        ApplicationUtils.getLocalDateAndTimeToDisplay(
                                 mContext,
                                 thought.getTimestamp()
                         )
@@ -264,11 +264,11 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void deleteFromStorage(Thought thought) {
-        ApplicationHelper.deleteImageFromStorage(mContext, thought.getExtraPhotoUrl());
+        ApplicationUtils.deleteImageFromStorage(mContext, thought.getExtraPhotoUrl());
     }
 
     private void deleteFromDB(final Thought thought) {
-        mConnectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(thought.getConnectionFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -281,7 +281,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null thought delete from db");
@@ -290,7 +290,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             if (toUidValue.equals(thought.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
-                                        .child(ApplicationHelper.THOUGHTS_NODE).child(thought.getKey());
+                                        .child(ApplicationUtils.THOUGHTS_NODE).child(thought.getKey());
                                 databaseReference.setValue(null);
                             }
                         }
@@ -334,7 +334,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void updateDB(final Thought thought, final String newValue) {
-        mConnectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(thought.getConnectionFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -347,7 +347,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null thought update db");
@@ -356,16 +356,16 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             if (toUidValue.equals(thought.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
-                                        .child(ApplicationHelper.THOUGHTS_NODE).child(thought.getKey());
+                                        .child(ApplicationUtils.THOUGHTS_NODE).child(thought.getKey());
                                 Map<String, Object> updateValueMap = new HashMap<>();
                                 if (newValue != null) {
                                     updateValueMap.put(
-                                            "/" + ApplicationHelper.OBJECT_TEXT_IDENTIFIER,
+                                            "/" + ApplicationUtils.OBJECT_TEXT_IDENTIFIER,
                                             newValue
                                     );
                                 } else {
                                     updateValueMap.put(
-                                            "/" + ApplicationHelper.OBJECT_HAS_ARRIVED_IDENTIFIER,
+                                            "/" + ApplicationUtils.OBJECT_HAS_ARRIVED_IDENTIFIER,
                                             true
                                     );
                                 }

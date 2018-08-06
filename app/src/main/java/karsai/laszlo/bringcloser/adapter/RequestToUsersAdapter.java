@@ -16,7 +16,7 @@ import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import java.util.List;
 import java.util.Locale;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
@@ -61,7 +61,7 @@ public class RequestToUsersAdapter
         );
         holder.requestToUserNameTextView.setText(connectionDetail.getToName());
         holder.requestToUserTypeTextView.setText(
-                ApplicationHelper.getPersonalizedRelationshipType(
+                ApplicationUtils.getPersonalizedRelationshipType(
                         mContext,
                         connectionDetail.getType(),
                         connectionDetail.getToGender(),
@@ -75,7 +75,7 @@ public class RequestToUsersAdapter
                 DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ApplicationHelper.deletePairConnection(
+                        ApplicationUtils.deletePairConnection(
                                 connectionDetail.getFromUid(),
                                 connectionDetail.getToUid(),
                                 mContext,

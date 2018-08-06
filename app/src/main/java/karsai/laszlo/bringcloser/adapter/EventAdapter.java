@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
@@ -54,7 +54,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mEventList = eventList;
         this.mFirebaseDatabase = FirebaseDatabase.getInstance();
         this.mConnectionsDatabaseRef = this.mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
     }
 
     @NonNull
@@ -88,7 +88,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemViewType(int position) {
         Event event = mEventList.get(position);
         String photoUrl = event.getExtraPhotoUrl();
-        boolean isSent = ApplicationHelper.isSent(event);
+        boolean isSent = ApplicationUtils.isSent(event);
         if (photoUrl != null && !photoUrl.isEmpty()) {
             if (isSent) {
                 return EXTRA_PHOTO_OFF;
@@ -115,7 +115,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 basicOnViewHolder.titleTextView.setAlpha(1F);
                 basicOnViewHolder.placeTextView.setText(event.getPlace());
                 basicOnViewHolder.placeTextView.setAlpha(1F);
-                final String dateAndTimeBasicOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String dateAndTimeBasicOn = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         event.getWhenToArrive()
                 );
@@ -143,7 +143,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 basicOffViewHolder.placeTextView.setText(event.getPlace());
                 basicOffViewHolder.placeTextView.setAlpha(1F);
                 basicOffViewHolder.whenTextView.setText(
-                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        ApplicationUtils.getLocalDateAndTimeToDisplay(
                                 mContext,
                                 event.getWhenToArrive()
                         )
@@ -165,7 +165,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 withExtraPhotoOnViewHolder.titleTextView.setAlpha(1F);
                 withExtraPhotoOnViewHolder.placeTextView.setText(event.getPlace());
                 withExtraPhotoOnViewHolder.placeTextView.setAlpha(1F);
-                final String dateAndTimePhotoOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String dateAndTimePhotoOn = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         event.getWhenToArrive()
                 );
@@ -200,7 +200,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 withExtraPhotoOffViewHolder.placeTextView.setText(event.getPlace());
                 withExtraPhotoOffViewHolder.placeTextView.setAlpha(1F);
                 withExtraPhotoOffViewHolder.whenTextView.setText(
-                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        ApplicationUtils.getLocalDateAndTimeToDisplay(
                                 mContext,
                                 event.getWhenToArrive()
                         )
@@ -229,7 +229,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 FirebaseJobDispatcher dispatcher
                         = new FirebaseJobDispatcher(new GooglePlayDriver(mContext));
                 dispatcher.cancel(
-                        ApplicationHelper.getServiceUniqueTag(
+                        ApplicationUtils.getServiceUniqueTag(
                                 event.getConnectionFromUid(),
                                 event.getConnectionToUid(),
                                 event.getKey()
@@ -247,7 +247,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void deleteFromDB(final Event event) {
-        mConnectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(event.getConnectionFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -260,7 +260,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null event adapter delete from db");
@@ -269,7 +269,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             if (toUidValue.equals(event.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
-                                        .child(ApplicationHelper.EVENTS_NODE).child(event.getKey());
+                                        .child(ApplicationUtils.EVENTS_NODE).child(event.getKey());
                                 databaseReference.setValue(null);
                             }
                         }
@@ -283,7 +283,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void deleteFromStorage(final Event event) {
-        ApplicationHelper.deleteImageFromStorage(mContext, event.getExtraPhotoUrl());
+        ApplicationUtils.deleteImageFromStorage(mContext, event.getExtraPhotoUrl());
     }
 
     private void editMessage(final Event event) {
@@ -317,7 +317,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void updateDB(final Event event, final String newValue) {
-        mConnectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(event.getConnectionFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -330,7 +330,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null event adapter update db");
@@ -339,10 +339,10 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             if (toUidValue.equals(event.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
-                                        .child(ApplicationHelper.EVENTS_NODE).child(event.getKey());
+                                        .child(ApplicationUtils.EVENTS_NODE).child(event.getKey());
                                 Map<String, Object> updateValueMap = new HashMap<>();
                                 updateValueMap.put(
-                                        "/" + ApplicationHelper.OBJECT_TEXT_IDENTIFIER,
+                                        "/" + ApplicationUtils.OBJECT_TEXT_IDENTIFIER,
                                         newValue
                                 );
                                 databaseReference.updateChildren(updateValueMap);

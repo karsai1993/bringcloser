@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import timber.log.Timber;
 
 /**
@@ -50,17 +50,17 @@ public class UpdateStateService extends JobService {
         protected Integer doInBackground(Void... voids) {
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference connectionsDataBaseRef = firebaseDatabase.getReference()
-                    .child(ApplicationHelper.CONNECTIONS_NODE);
+                    .child(ApplicationUtils.CONNECTIONS_NODE);
             if (mJob != null) {
                 Bundle extras = mJob.getExtras();
                 if (extras != null) {
-                    String type = extras.getString(ApplicationHelper.SERVICE_TYPE_IDENTIFIER);
+                    String type = extras.getString(ApplicationUtils.SERVICE_TYPE_IDENTIFIER);
                     String fromUid
-                            = extras.getString(ApplicationHelper.SERVICE_CONTENT_FROM_IDENTIFIER);
+                            = extras.getString(ApplicationUtils.SERVICE_CONTENT_FROM_IDENTIFIER);
                     String toUid
-                            = extras.getString(ApplicationHelper.SERVICE_CONTENT_TO_IDENTIFIER);
+                            = extras.getString(ApplicationUtils.SERVICE_CONTENT_TO_IDENTIFIER);
                     String key
-                            = extras.getString(ApplicationHelper.SERVICE_CONTENT_KEY_IDENTIFIER);
+                            = extras.getString(ApplicationUtils.SERVICE_CONTENT_KEY_IDENTIFIER);
                     if (type != null) {
                         updateDatabase(type, fromUid, toUid, key, connectionsDataBaseRef);
                         return RESULT_OK;
@@ -86,7 +86,7 @@ public class UpdateStateService extends JobService {
                 final String toUid,
                 final String objectKey,
                 final DatabaseReference connectionsDatabaseRef) {
-            connectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+            connectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                     .equalTo(fromUid)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -99,7 +99,7 @@ public class UpdateStateService extends JobService {
                                 }
                                 String toUidValue = dataSnapshot
                                         .child(key)
-                                        .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                        .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                         .getValue(String.class);
                                 if (toUidValue == null) {
                                     Timber.wtf("to uid null connections update service");
@@ -107,20 +107,20 @@ public class UpdateStateService extends JobService {
                                 }
                                 if (toUidValue.equals(toUid)) {
                                     final DatabaseReference databaseReference;
-                                    if (type.equals(ApplicationHelper.SERVICE_TYPE_WISH)) {
+                                    if (type.equals(ApplicationUtils.SERVICE_TYPE_WISH)) {
                                         databaseReference = connectionsDatabaseRef
                                                 .child(key)
-                                                .child(ApplicationHelper.WISHES_NODE).child(objectKey);
-                                    } else if (type.equals(ApplicationHelper.SERVICE_TYPE_EVENT)) {
+                                                .child(ApplicationUtils.WISHES_NODE).child(objectKey);
+                                    } else if (type.equals(ApplicationUtils.SERVICE_TYPE_EVENT)) {
                                         databaseReference = connectionsDatabaseRef
                                                 .child(key)
-                                                .child(ApplicationHelper.EVENTS_NODE).child(objectKey);
+                                                .child(ApplicationUtils.EVENTS_NODE).child(objectKey);
                                     } else {
                                         return;
                                     }
                                     final Map<String, Object> updateValueMap = new HashMap<>();
                                     updateValueMap.put(
-                                            "/" + ApplicationHelper.OBJECT_HAS_ARRIVED_IDENTIFIER,
+                                            "/" + ApplicationUtils.OBJECT_HAS_ARRIVED_IDENTIFIER,
                                             true
                                     );
                                     databaseReference.addListenerForSingleValueEvent(

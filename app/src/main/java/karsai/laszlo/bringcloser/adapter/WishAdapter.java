@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Wish;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
@@ -54,7 +54,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mWishList = wishList;
         this.mFirebaseDatabase = FirebaseDatabase.getInstance();
         this.mConnectionsDatabaseRef = this.mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
     }
 
     @NonNull
@@ -88,7 +88,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         Wish wish = mWishList.get(position);
         String photoUrl = wish.getExtraPhotoUrl();
-        boolean isSent = ApplicationHelper.isSent(wish);
+        boolean isSent = ApplicationUtils.isSent(wish);
         if (photoUrl != null && !photoUrl.isEmpty()) {
             if (isSent) {
                 return EXTRA_PHOTO_OFF;
@@ -111,9 +111,11 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case BASIC_ON:
                 BasicOnViewHolder basicOnViewHolder = (BasicOnViewHolder) holder;
                 basicOnViewHolder.headerLinearLayout.setAlpha(0.75F);
-                basicOnViewHolder.occasionTextView.setText(wish.getOccasion());
+                basicOnViewHolder.occasionTextView.setText(
+                        ApplicationUtils.getTranslatedWishOccasion(mContext, wish.getOccasion())
+                );
                 basicOnViewHolder.occasionTextView.setAlpha(1F);
-                final String dateAndTimeBasicOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String dateAndTimeBasicOn = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         wish.getWhenToArrive()
                 );
@@ -136,10 +138,12 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case BASIC_OFF:
                 BasicOffViewHolder basicOffViewHolder = (BasicOffViewHolder) holder;
                 basicOffViewHolder.headerLinearLayout.setAlpha(0.75F);
-                basicOffViewHolder.occasionTextView.setText(wish.getOccasion());
+                basicOffViewHolder.occasionTextView.setText(
+                        ApplicationUtils.getTranslatedWishOccasion(mContext, wish.getOccasion())
+                );
                 basicOffViewHolder.occasionTextView.setAlpha(1F);
                 basicOffViewHolder.whenTextView.setText(
-                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        ApplicationUtils.getLocalDateAndTimeToDisplay(
                                 mContext,
                                 wish.getWhenToArrive()
                         )
@@ -157,9 +161,11 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         false
                 );
                 withExtraPhotoOnViewHolder.headerLinearLayout.setAlpha(0.75F);
-                withExtraPhotoOnViewHolder.occasionTextView.setText(wish.getOccasion());
+                withExtraPhotoOnViewHolder.occasionTextView.setText(
+                        ApplicationUtils.getTranslatedWishOccasion(mContext, wish.getOccasion())
+                );
                 withExtraPhotoOnViewHolder.occasionTextView.setAlpha(1F);
-                final String dateAndTimePhotoOn = ApplicationHelper.getLocalDateAndTimeToDisplay(
+                final String dateAndTimePhotoOn = ApplicationUtils.getLocalDateAndTimeToDisplay(
                         mContext,
                         wish.getWhenToArrive()
                 );
@@ -189,10 +195,12 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         false
                 );
                 withExtraPhotoOffViewHolder.headerLinearLayout.setAlpha(0.75F);
-                withExtraPhotoOffViewHolder.occasionTextView.setText(wish.getOccasion());
+                withExtraPhotoOffViewHolder.occasionTextView.setText(
+                        ApplicationUtils.getTranslatedWishOccasion(mContext, wish.getOccasion())
+                );
                 withExtraPhotoOffViewHolder.occasionTextView.setAlpha(1F);
                 withExtraPhotoOffViewHolder.whenTextView.setText(
-                        ApplicationHelper.getLocalDateAndTimeToDisplay(
+                        ApplicationUtils.getLocalDateAndTimeToDisplay(
                                 mContext,
                                 wish.getWhenToArrive()
                         )
@@ -320,7 +328,9 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView textViewOne = view.findViewById(R.id.tv_info_one);
         TextView textViewTwo = view.findViewById(R.id.tv_info_two);
         TextView textViewThree = view.findViewById(R.id.tv_info_three);
-        textViewOne.setText(wish.getOccasion());
+        textViewOne.setText(
+                ApplicationUtils.getTranslatedWishOccasion(mContext, wish.getOccasion())
+        );
         textViewTwo.setText(dateAndTime);
         textViewThree.setText(wish.getText());
         DialogInterface.OnClickListener dialogOnPositiveBtnClickListener
@@ -332,7 +342,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 FirebaseJobDispatcher dispatcher
                         = new FirebaseJobDispatcher(new GooglePlayDriver(mContext));
                 dispatcher.cancel(
-                        ApplicationHelper.getServiceUniqueTag(
+                        ApplicationUtils.getServiceUniqueTag(
                                 wish.getConnectionFromUid(),
                                 wish.getConnectionToUid(),
                                 wish.getKey()
@@ -350,7 +360,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void deleteFromDB(final Wish wish) {
-        mConnectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(wish.getConnectionFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -363,7 +373,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null wish delete from db");
@@ -372,7 +382,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             if (toUidValue.equals(wish.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
-                                        .child(ApplicationHelper.WISHES_NODE).child(wish.getKey());
+                                        .child(ApplicationUtils.WISHES_NODE).child(wish.getKey());
                                 databaseReference.setValue(null);
                             }
                         }
@@ -386,11 +396,11 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void deleteFromStorage(final Wish wish) {
-        ApplicationHelper.deleteImageFromStorage(mContext, wish.getExtraPhotoUrl());
+        ApplicationUtils.deleteImageFromStorage(mContext, wish.getExtraPhotoUrl());
     }
 
     private void updateDB(final Wish wish, final String newValue) {
-        mConnectionsDatabaseRef.orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+        mConnectionsDatabaseRef.orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(wish.getConnectionFromUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -403,7 +413,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             }
                             String toUidValue = dataSnapshot
                                     .child(key)
-                                    .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                    .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                     .getValue(String.class);
                             if (toUidValue == null) {
                                 Timber.wtf("to uid null wish update db");
@@ -412,10 +422,10 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             if (toUidValue.equals(wish.getConnectionToUid())) {
                                 DatabaseReference databaseReference = mConnectionsDatabaseRef
                                         .child(key)
-                                        .child(ApplicationHelper.WISHES_NODE).child(wish.getKey());
+                                        .child(ApplicationUtils.WISHES_NODE).child(wish.getKey());
                                 Map<String, Object> updateValueMap = new HashMap<>();
                                 updateValueMap.put(
-                                        "/" + ApplicationHelper.OBJECT_TEXT_IDENTIFIER,
+                                        "/" + ApplicationUtils.OBJECT_TEXT_IDENTIFIER,
                                         newValue
                                 );
                                 databaseReference.updateChildren(updateValueMap);

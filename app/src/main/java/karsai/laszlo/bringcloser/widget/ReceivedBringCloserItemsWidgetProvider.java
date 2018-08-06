@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.activity.ReceivedDetailsActivity;
@@ -28,7 +28,7 @@ public class ReceivedBringCloserItemsWidgetProvider extends AppWidgetProvider {
             Timber.wtf("widget no action for update");
             return;
         }
-        if (action.equals(ApplicationHelper.UPDATE_WIDGET_KEY)) {
+        if (action.equals(ApplicationUtils.UPDATE_WIDGET_KEY)) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                     new ComponentName(context, getClass()));

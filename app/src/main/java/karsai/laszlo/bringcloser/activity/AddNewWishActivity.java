@@ -1,6 +1,7 @@
 package karsai.laszlo.bringcloser.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -52,7 +52,7 @@ import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.fragment.DatePickerFragment;
 import karsai.laszlo.bringcloser.fragment.TimePickerFragment;
@@ -146,18 +146,18 @@ public class AddNewWishActivity extends CommonActivity {
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedData = getIntent();
         if (receivedData != null) {
-            mConnectionDetail = receivedData.getParcelableExtra(ApplicationHelper.EXTRA_DATA);
+            mConnectionDetail = receivedData.getParcelableExtra(ApplicationUtils.EXTRA_DATA);
             if (mConnectionDetail.getFromUid().equals(mCurrentUserUid)) {
                 mOtherUid = mConnectionDetail.getToUid();
             } else {
                 mOtherUid = mConnectionDetail.getFromUid();
                 mGenderShouldBeReversed = true;
             }
-            mType = receivedData.getStringExtra(ApplicationHelper.EXTRA_TYPE);
+            mType = receivedData.getStringExtra(ApplicationUtils.EXTRA_TYPE);
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mUserDatabaseRef = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.USERS_NODE)
+                    .child(ApplicationUtils.USERS_NODE)
                     .child(mOtherUid);
             mUserValueEventListener = new ValueEventListener() {
                 @Override
@@ -180,9 +180,9 @@ public class AddNewWishActivity extends CommonActivity {
                 public void onClick(View view) {
                     DialogFragment datePickerFragment = new DatePickerFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(ApplicationHelper.EXTRA_ID, R.id.tv_wish_selected_date);
+                    bundle.putInt(ApplicationUtils.EXTRA_ID, R.id.tv_wish_selected_date);
                     datePickerFragment.setArguments(bundle);
-                    datePickerFragment.show(getSupportFragmentManager(), ApplicationHelper.TAG_DATA_PICKER);
+                    datePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_DATA_PICKER);
                 }
             });
             mWishTimeSelectorTextView.setOnClickListener(new View.OnClickListener() {
@@ -190,19 +190,19 @@ public class AddNewWishActivity extends CommonActivity {
                 public void onClick(View view) {
                     DialogFragment timePickerFragment = new TimePickerFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(ApplicationHelper.EXTRA_ID, R.id.tv_wish_selected_time);
+                    bundle.putInt(ApplicationUtils.EXTRA_ID, R.id.tv_wish_selected_time);
                     timePickerFragment.setArguments(bundle);
-                    timePickerFragment.show(getSupportFragmentManager(), ApplicationHelper.TAG_TIME_PICKER);
+                    timePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_TIME_PICKER);
                 }
             });
             mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             mFirebaseStorage = FirebaseStorage.getInstance();
             mWishImagesRootRef = mFirebaseStorage.getReference()
                     .child(mFirebaseUser.getUid())
-                    .child(ApplicationHelper.STORAGE_WISH_IMAGES_FOLDER);
+                    .child(ApplicationUtils.STORAGE_WISH_IMAGES_FOLDER);
             mWishImagesRef = mWishImagesRootRef;
             mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.CONNECTIONS_NODE);
+                    .child(ApplicationUtils.CONNECTIONS_NODE);
             mWishGalleryPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -224,7 +224,7 @@ public class AddNewWishActivity extends CommonActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             String photoUrl = uri.toString();
-                            ApplicationHelper.deleteImageFromStorage(
+                            ApplicationUtils.deleteImageFromStorage(
                                     AddNewWishActivity.this,
                                     photoUrl
                             );
@@ -328,7 +328,7 @@ public class AddNewWishActivity extends CommonActivity {
                 @Override
                 public void onSuccess(Uri uri) {
                     String photoUrl = uri.toString();
-                    ApplicationHelper.deleteImageFromStorage(
+                    ApplicationUtils.deleteImageFromStorage(
                             getApplicationContext(),
                             photoUrl
                     );
@@ -365,10 +365,10 @@ public class AddNewWishActivity extends CommonActivity {
                 + timeParts[0]
                 + timeParts[1]
                 + "00";
-        final String whenToArrive = ApplicationHelper.getUTCDateAndTime(this, dateAndTimeComposition);
+        final String whenToArrive = ApplicationUtils.getUTCDateAndTime(this, dateAndTimeComposition);
         if (!whenToArrive.equals(getResources().getString(R.string.data_not_available))) {
             mConnectionsQuery = mConnectionsDatabaseReference
-                    .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                    .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                     .equalTo(mConnectionDetail.getFromUid());
             mConnectionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -381,7 +381,7 @@ public class AddNewWishActivity extends CommonActivity {
                         }
                         String toUidValue = dataSnapshot
                                 .child(key)
-                                .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                 .getValue(String.class);
                         if (toUidValue == null) {
                             Timber.wtf("to uid not found connection to");
@@ -390,13 +390,41 @@ public class AddNewWishActivity extends CommonActivity {
                         if (toUidValue.equals(mConnectionDetail.getToUid())) {
                             mWishesDatabaseRef = mConnectionsDatabaseReference
                                     .child(key)
-                                    .child(ApplicationHelper.WISHES_NODE);
+                                    .child(ApplicationUtils.WISHES_NODE);
                             DatabaseReference databaseReference
                                     = mWishesDatabaseRef.push();
                             String selectedOccasion = (String) mSpinner.getSelectedItem();
-                            if (selectedOccasion.equals(getString(R.string.wish_other_occasion))) {
-                                selectedOccasion = mWishOtherEditText.getText().toString();
+                            Resources res = getResources();
+                            if (selectedOccasion.equals(res.getString(R.string.wish_birthday_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_birthday_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_name_day_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_name_day_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_christmas_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_christmas_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_new_year_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_new_year_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_easter_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_easter_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_valentine_day_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_valentine_day_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_anniversary_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_anniversary_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_women_day_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_women_day_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_mother_day_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_mother_day_occasion_id);
+                            } else if (selectedOccasion.equals(res.getString(R.string.wish_father_day_occasion))) {
+                                selectedOccasion = res.getString(R.string.wish_father_day_occasion_id);
+                            } else if (selectedOccasion.equals(getString(R.string.wish_other_occasion))) {
+                                selectedOccasion = ApplicationUtils.convertTextToEmojiIfNeeded(
+                                        getApplicationContext(),
+                                        mWishOtherEditText.getText().toString()
+                                );
                             }
+                            String message = ApplicationUtils.convertTextToEmojiIfNeeded(
+                                    getApplicationContext(),
+                                    mWishEditText.getText().toString()
+                            );
                             final Wish wish = new Wish(
                                     mCurrentUserUid,
                                     mConnectionDetail.getFromUid(),
@@ -404,7 +432,7 @@ public class AddNewWishActivity extends CommonActivity {
                                     photoUrl,
                                     whenToArrive,
                                     selectedOccasion,
-                                    mWishEditText.getText().toString(),
+                                    message,
                                     false,
                                     databaseReference.getKey()
                             );
@@ -435,24 +463,24 @@ public class AddNewWishActivity extends CommonActivity {
                 = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
         Bundle extraBundle = new Bundle();
         extraBundle.putString(
-                ApplicationHelper.SERVICE_TYPE_IDENTIFIER,
-                ApplicationHelper.SERVICE_TYPE_WISH
+                ApplicationUtils.SERVICE_TYPE_IDENTIFIER,
+                ApplicationUtils.SERVICE_TYPE_WISH
         );
         extraBundle.putString(
-                ApplicationHelper.SERVICE_CONTENT_FROM_IDENTIFIER,
+                ApplicationUtils.SERVICE_CONTENT_FROM_IDENTIFIER,
                 wish.getConnectionFromUid()
         );
         extraBundle.putString(
-                ApplicationHelper.SERVICE_CONTENT_TO_IDENTIFIER,
+                ApplicationUtils.SERVICE_CONTENT_TO_IDENTIFIER,
                 wish.getConnectionToUid()
         );
         extraBundle.putString(
-                ApplicationHelper.SERVICE_CONTENT_KEY_IDENTIFIER,
+                ApplicationUtils.SERVICE_CONTENT_KEY_IDENTIFIER,
                 wish.getKey()
         );
         Job myJob = dispatcher.newJobBuilder()
                 .setService(UpdateStateService.class)
-                .setTag(ApplicationHelper.getServiceUniqueTag(
+                .setTag(ApplicationUtils.getServiceUniqueTag(
                             wish.getConnectionFromUid(),
                             wish.getConnectionToUid(),
                             wish.getKey())
@@ -467,9 +495,9 @@ public class AddNewWishActivity extends CommonActivity {
 
     private JobTrigger getTriggerTime(Wish wish) {
         String targetDateAndTimeAsText = wish.getWhenToArrive();
-        String currentDateAndTimeAsText = ApplicationHelper.getCurrentUTCDateAndTime();
-        Date targetDateAndTime = ApplicationHelper.getDateAndTime(targetDateAndTimeAsText);
-        Date currentDateAndTime = ApplicationHelper.getDateAndTime(currentDateAndTimeAsText);
+        String currentDateAndTimeAsText = ApplicationUtils.getCurrentUTCDateAndTime();
+        Date targetDateAndTime = ApplicationUtils.getDateAndTime(targetDateAndTimeAsText);
+        Date currentDateAndTime = ApplicationUtils.getDateAndTime(currentDateAndTimeAsText);
         if (targetDateAndTime == null || currentDateAndTime == null) {
             Timber.wtf("get trigger time problem occurred");
             return Trigger.NOW;
@@ -495,7 +523,7 @@ public class AddNewWishActivity extends CommonActivity {
         super.onActivityResult(requestCode, resultCode, data);
         final StorageReference tempRef = mWishImagesRef;
         mWishImagesRef = mWishImagesRootRef.child(
-                ApplicationHelper.getCurrentUTCDateAndTime()
+                ApplicationUtils.getCurrentUTCDateAndTime()
         );
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -510,7 +538,7 @@ public class AddNewWishActivity extends CommonActivity {
                                 @Override
                                 public void onSuccess(Uri prevUri) {
                                     String prevPhotoUrl = prevUri.toString();
-                                    ApplicationHelper.deleteImageFromStorage(
+                                    ApplicationUtils.deleteImageFromStorage(
                                             AddNewWishActivity.this,
                                             prevPhotoUrl
                                     );
@@ -650,8 +678,8 @@ public class AddNewWishActivity extends CommonActivity {
     }
 
     private void addKnownDataToViewBasedOnSelection(String selectedItem, String birthday) {
-        String currDateAsText = ApplicationHelper.getCurrentUTCDateAndTime();
-        Date currDate = ApplicationHelper.getDateAndTime(currDateAsText);
+        String currDateAsText = ApplicationUtils.getCurrentUTCDateAndTime();
+        Date currDate = ApplicationUtils.getDateAndTime(currDateAsText);
         if (currDate == null) {
             Timber.wtf("get date and time problem occurred");
         }
@@ -659,14 +687,14 @@ public class AddNewWishActivity extends CommonActivity {
         calendar.add(Calendar.YEAR, 1);
         Date plusOneYearDate = calendar.getTime();
         SimpleDateFormat sdf
-                = new SimpleDateFormat(ApplicationHelper.FULL_DATE_PATTERN, Locale.getDefault());
+                = new SimpleDateFormat(ApplicationUtils.FULL_DATE_PATTERN, Locale.getDefault());
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String plusOneYearDateAsText = sdf.format(plusOneYearDate);
         String currYear = currDateAsText.substring(0, 4);
         String nextYear = plusOneYearDateAsText.substring(0, 4);
         String dateToSet = getResources().getString(R.string.selected_date_default);
         if (selectedItem.equals(getString(R.string.wish_birthday_occasion))) {
-            if (birthday != null && !birthday.equals(getString(R.string.settings_birthday_default))) {
+            if (birthday != null && !birthday.equals(getString(R.string.settings_birthday_default_id))) {
                 String [] birthdayParts = birthday.split("-");
                 dateToSet = getDateToSet(
                         currDate, currYear, nextYear, birthdayParts[1], birthdayParts[2]);
@@ -699,7 +727,7 @@ public class AddNewWishActivity extends CommonActivity {
             String day) {
         String dateAndTimeToSetAsText = currYear + month + day;
         String dateAndTimeToSetAsTextTemp = dateAndTimeToSetAsText + "000000";
-        Date dateAndTimeToSet = ApplicationHelper.getDateAndTime(dateAndTimeToSetAsTextTemp);
+        Date dateAndTimeToSet = ApplicationUtils.getDateAndTime(dateAndTimeToSetAsTextTemp);
         if (dateAndTimeToSet == null) {
             Timber.wtf("get date and time problem occurred");
             return null;
@@ -792,15 +820,15 @@ public class AddNewWishActivity extends CommonActivity {
         occasionsList.add(getString(R.string.wish_default_occasion));
         String[] basicOccasions = getResources().getStringArray(R.array.wish_basic_occasions);
         occasionsList.addAll(Arrays.asList(basicOccasions));
-        if (mType.equals(getString(R.string.relationship_type_lover))) {
+        if (mType.equals(getString(R.string.relationship_type_lover_id))) {
             String[] loveOccasions = getResources().getStringArray(R.array.wish_love_occasions);
             occasionsList.addAll(Arrays.asList(loveOccasions));
         }
-        if (gender.equals(getString(R.string.gender_female))) {
+        if (gender.equals(getString(R.string.gender_female_id))) {
             String[] femaleOccasions = getResources().getStringArray(R.array.wish_female_occasions);
             occasionsList.addAll(Arrays.asList(femaleOccasions));
         }
-        String displayedType = ApplicationHelper.getPersonalizedRelationshipType(
+        String displayedType = ApplicationUtils.getPersonalizedRelationshipType(
                 this,
                 mType,
                 !mGenderShouldBeReversed ? gender : null,

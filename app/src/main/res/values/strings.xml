@@ -20,8 +20,8 @@
     <string name="nav_received_items">Received Memories</string>
     <string name="nav_profile_settings">Profile Settings</string>
     <string name="nav_about">About App</string>
-    <string name="nav_birthday_base">Birthday:\u0020</string>
-    <string name="nav_gender_base">Gender:\u0020</string>
+    <string name="nav_birthday_base">Birthday</string>
+    <string name="nav_gender_base">Gender</string>
 
     <string name="no_internet_message">You are currently offline!
         Please, check your network connection, and try again.</string>
@@ -39,10 +39,9 @@
     <string name="settings_activity">Profile settings</string>
     <string name="about_activity">About BringCloser</string>
     <string name="received_details_activity_label">Your received memories</string>
-    <string name="received_details_widget_label">Your received memories</string>
+    <string name="received_details_widget_label">Received memories</string>
     <string name="add_new_connection_activity">Search for a new connection</string>
     <string name="add_chosen_connection_activity">Add the chosen connection</string>
-    <string name="settings_birthday_default">Data not provided</string>
     <string name="settings_birthday_set_default">Set default</string>
     <string name="dialog_settings_name">Type the desired name</string>
     <string name="dialog_title">Type the desired message</string>
@@ -94,6 +93,7 @@
     <string name="add_connection_chosen_question_part1">Who is</string>
     <string name="add_connection_chosen_question_part2">to you mostly?</string>
 
+    <string name="settings_birthday_default">Data not provided</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="gender_none">I do not want to specify</string>
@@ -123,62 +123,64 @@
     <string name="wish_mother_day_occasion">Mother\'s Day</string>
     <string name="wish_father_day_occasion">Father\'s Day</string>
 
+    <string name="settings_birthday_default_id">s01</string>
+    <!--string name="settings_birthday_default_value">@string/settings_birthday_default</string-->
     <string name="gender_male_id">g01</string>
-    <string name="gender_male_value">@string/gender_male</string>
+    <!--string name="gender_male_value">@string/gender_male</string-->
     <string name="gender_female_id">g02</string>
-    <string name="gender_female_value">@string/gender_female</string>
+    <!--string name="gender_female_value">@string/gender_female</string-->
     <string name="gender_none_id">g03</string>
-    <string name="gender_none_value">@string/gender_none</string>
+    <!--string name="gender_none_value">@string/gender_none</string-->
     <string name="relationship_type_lover_id">r01</string>
-    <string name="relationship_type_lover_value">@string/relationship_type_lover</string>
+    <!--string name="relationship_type_lover_value">@string/relationship_type_lover</string-->
     <string name="relationship_type_friend_id">r02</string>
-    <string name="relationship_type_friend_value">@string/relationship_type_friend</string>
+    <!--string name="relationship_type_friend_value">@string/relationship_type_friend</string-->
     <string name="relationship_type_sibling_id">r03</string>
-    <string name="relationship_type_sibling_value">@string/relationship_type_sibling</string>
+    <!--string name="relationship_type_sibling_value">@string/relationship_type_sibling</string-->
     <string name="relationship_type_cousin_id">r04</string>
-    <string name="relationship_type_cousin_value">@string/relationship_type_cousin</string>
+    <!--string name="relationship_type_cousin_value">@string/relationship_type_cousin</string-->
     <string name="relationship_type_parent_id">r05</string>
-    <string name="relationship_type_parent_value">@string/relationship_type_parent</string>
+    <!--string name="relationship_type_parent_value">@string/relationship_type_parent</string-->
     <string name="relationship_type_child_id">r06</string>
-    <string name="relationship_type_child_value">@string/relationship_type_child</string>
+    <!--string name="relationship_type_child_value">@string/relationship_type_child</string-->
     <string name="relationship_type_grandparent_id">r07</string>
-    <string name="relationship_type_grandparent_value">@string/relationship_type_grandparent</string>
+    <!--string name="relationship_type_grandparent_value">@string/relationship_type_grandparent</string-->
     <string name="relationship_type_godchild_id">r08</string>
-    <string name="relationship_type_godchild_value">@string/relationship_type_godchild</string>
+    <!--string name="relationship_type_godchild_value">@string/relationship_type_godchild</string-->
     <string name="relationship_type_godparent_id">r09</string>
-    <string name="relationship_type_godparent_value">@string/relationship_type_godparent</string>
+    <!--string name="relationship_type_godparent_value">@string/relationship_type_godparent</string-->
     <string name="relationship_type_grandchild_id">r10</string>
-    <string name="relationship_type_grandchild_value">@string/relationship_type_grandchild</string>
+    <!--string name="relationship_type_grandchild_value">@string/relationship_type_grandchild</string-->
     <string name="relationship_type_uncle_id">r11</string>
-    <string name="relationship_type_uncle_value">@string/relationship_type_uncle</string>
+    <!--string name="relationship_type_uncle_value">@string/relationship_type_uncle</string-->
     <string name="relationship_type_aunt_id">r12</string>
-    <string name="relationship_type_aunt_value">@string/relationship_type_aunt</string>
+    <!--string name="relationship_type_aunt_value">@string/relationship_type_aunt</string-->
     <string name="relationship_type_nephew_id">r13</string>
-    <string name="relationship_type_nephew_value">@string/relationship_type_nephew</string>
+    <!--string name="relationship_type_nephew_value">@string/relationship_type_nephew</string-->
     <string name="relationship_type_niece_id">r14</string>
-    <string name="relationship_type_niece_value">@string/relationship_type_niece</string>
+    <!--string name="relationship_type_niece_value">@string/relationship_type_niece</string-->
     <string name="relationship_type_other_id">r15</string>
-    <string name="relationship_type_other_value">@string/relationship_type_other</string>
+    <!--string name="relationship_type_other_value">@string/relationship_type_other</string-->
     <string name="wish_birthday_occasion_id">w01</string>
-    <string name="wish_birthday_occasion_value">@string/wish_birthday_occasion</string>
+    <!--string name="wish_birthday_occasion_value">@string/wish_birthday_occasion</string-->
     <string name="wish_name_day_occasion_id">w02</string>
-    <string name="wish_name_day_occasion_value">@string/wish_name_day_occasion</string>
+    <!--string name="wish_name_day_occasion_value">@string/wish_name_day_occasion</string-->
     <string name="wish_christmas_occasion_id">w03</string>
-    <string name="wish_christmas_occasion_value">@string/wish_christmas_occasion</string>
+    <!--string name="wish_christmas_occasion_value">@string/wish_christmas_occasion</string-->
     <string name="wish_new_year_occasion_id">w04</string>
-    <string name="wish_new_year_occasion_value">@string/wish_new_year_occasion</string>
+    <!--string name="wish_new_year_occasion_value">@string/wish_new_year_occasion</string-->
     <string name="wish_easter_occasion_id">w05</string>
-    <string name="wish_easter_occasion_value">@string/wish_easter_occasion</string>
+    <!--string name="wish_easter_occasion_value">@string/wish_easter_occasion</string-->
     <string name="wish_valentine_day_occasion_id">w06</string>
-    <string name="wish_valentine_day_occasion_value">@string/wish_valentine_day_occasion</string>
+    <!--string name="wish_valentine_day_occasion_value">@string/wish_valentine_day_occasion</string-->
     <string name="wish_anniversary_occasion_id">w07</string>
-    <string name="wish_anniversary_occasion_value">@string/wish_anniversary_occasion</string>
+    <!--string name="wish_anniversary_occasion_value">@string/wish_anniversary_occasion</string-->
     <string name="wish_women_day_occasion_id">w08</string>
-    <string name="wish_women_day_occasion_value">@string/wish_women_day_occasion</string>
+    <!--string name="wish_women_day_occasion_value">@string/wish_women_day_occasion</string-->
     <string name="wish_mother_day_occasion_id">w09</string>
-    <string name="wish_mother_day_occasion_value">@string/wish_mother_day_occasion</string>
+    <!--string name="wish_mother_day_occasion_value">@string/wish_mother_day_occasion</string-->
     <string name="wish_father_day_occasion_id">w10</string>
-    <string name="wish_father_day_occasion_value">@string/wish_father_day_occasion</string>
+    <!--string name="wish_father_day_occasion_value">@string/wish_father_day_occasion</string-->
 
     <string name="relationship_type_none">Data not provided</string>
     <string name="relationship_type_sibling_male">Brother</string>
@@ -402,8 +404,8 @@
     to make it more special!</string>
     <string name="thought_question_1">Would you like\u0020</string>
     <string name="thought_question_2">\u0020to receive it immediately?</string>
-    <string name="thought_status_no">No</string>
-    <string name="thought_status_yes">Yes</string>
+    <string name="status_no">No</string>
+    <string name="status_yes">Yes</string>
     <string name="thought_status_message_no">This thought is not sent!</string>
     <!--string name="thought_status_message_yes">This thought has already been sent!</string-->
     <string name="thought_alert_no_message">Please, type your message regarding the thought to continue!</string>
@@ -532,4 +534,101 @@
     <string name="fab_content_description_add_connection">Add Connection Button</string>
     <string name="fab_content_description_scroll_up">Scroll Up Button</string>
     <string name="fab_content_description_scroll_down">Scroll Down Button</string>
+
+    <string name="privacy_changed_title">Change in Privacy Policy!</string>
+    <string name="terms_changed_title">Change in Terms of Use!</string>
+    <string name="doc_changed_message">Please, check it as soon as you can!</string>
+    <string name="privacy_policy">https://sites.google.com/view/bringcloser-privacy-policy-en</string>
+    <string name="terms_of_use">https://sites.google.com/view/bringcloser-terms-of-use-en</string>
+    <string name="nav_terms_of_use">Terms of Use</string>
+    <string name="nav_privacy_policy">Privacy Policy</string>
+    <string name="nav_documents">Documents</string>
+
+    <string name="emoji_heart">Heart</string>
+    <string name="emoji_happy_with_halo">Happy with halo</string>
+    <string name="emoji_happy_with_horns">Happy with horns</string>
+    <string name="emoji_relieved">Relieved</string>
+    <string name="emoji_happy">Happy</string>
+    <string name="emoji_dizzy">Dizzy</string>
+    <string name="emoji_happy_with_open_mouth_and_open_eyes">Happy with open mouth and open eyes</string>
+    <string name="emoji_happy_with_open_mouth">Happy with open mouth</string>
+    <string name="emoji_happy_with_open_mouth_with_sweat">Happy with open mouth with sweat</string>
+    <string name="emoji_happy_with_tongue">Happy with tongue</string>
+    <string name="emoji_happy_with_tightly_closed_eyes">Happy with tightly-closed eyes</string>
+    <string name="emoji_happy_with_heart_shaped_eyes">Happy with heart-shaped eyes</string>
+    <string name="emoji_happy_with_sunglasses">Happy with sunglasses</string>
+    <string name="emoji_neutral">Neutral</string>
+    <string name="emoji_expressionless">Expressionless</string>
+    <string name="emoji_wink">Wink</string>
+    <string name="emoji_pensive">Pensive</string>
+    <string name="emoji_confused">Confused</string>
+    <string name="emoji_confounded">Confounded</string>
+    <string name="emoji_throwing_kiss">Throwing kiss</string>
+    <string name="emoji_kiss">Kiss</string>
+    <string name="emoji_tongue">Tongue</string>
+    <string name="emoji_tongue_with_wink">Tongue with wink</string>
+    <string name="emoji_tongue_with_tightly_closed_eyes">Tongue with tightly-closed eyes</string>
+    <string name="emoji_surprised">Surprised</string>
+    <string name="emoji_hushed">Hushed</string>
+    <string name="emoji_screaming">Screaming</string>
+    <string name="emoji_sleepign">Sleeping</string>
+    <string name="emoji_sad_with_sweat">Sad with sweat</string>
+    <string name="emoji_worried">Worried</string>
+    <string name="emoji_sad">Sad</string>
+    <string name="emoji_angry">Angry</string>
+    <string name="emoji_crying">Crying</string>
+    <string name="emoji_anguished">Anguished</string>
+    <string name="emoji_fearful">Fearful</string>
+    <string name="emoji_tired">Tired</string>
+    <string name="emoji_smirk">Smirk</string>
+
+    <string-array name="emoji_descriptions">
+        <item>@string/emoji_heart</item>
+        <item>@string/emoji_happy_with_halo</item>
+        <item>@string/emoji_happy_with_horns</item>
+        <item>@string/emoji_relieved</item>
+        <item>@string/emoji_happy</item>
+        <item>@string/emoji_dizzy</item>
+        <item>@string/emoji_happy_with_open_mouth_and_open_eyes</item>
+        <item>@string/emoji_happy_with_open_mouth</item>
+        <item>@string/emoji_happy_with_open_mouth_with_sweat</item>
+        <item>@string/emoji_happy_with_tongue</item>
+        <item>@string/emoji_happy_with_tightly_closed_eyes</item>
+        <item>@string/emoji_happy_with_heart_shaped_eyes</item>
+        <item>@string/emoji_happy_with_sunglasses</item>
+        <item>@string/emoji_neutral</item>
+        <item>@string/emoji_expressionless</item>
+        <item>@string/emoji_wink</item>
+        <item>@string/emoji_pensive</item>
+        <item>@string/emoji_confused</item>
+        <item>@string/emoji_confounded</item>
+        <item>@string/emoji_throwing_kiss</item>
+        <item>@string/emoji_kiss</item>
+        <item>@string/emoji_tongue</item>
+        <item>@string/emoji_tongue_with_wink</item>
+        <item>@string/emoji_tongue_with_tightly_closed_eyes</item>
+        <item>@string/emoji_surprised</item>
+        <item>@string/emoji_hushed</item>
+        <item>@string/emoji_screaming</item>
+        <item>@string/emoji_sleepign</item>
+        <item>@string/emoji_sad_with_sweat</item>
+        <item>@string/emoji_worried</item>
+        <item>@string/emoji_sad</item>
+        <item>@string/emoji_angry</item>
+        <item>@string/emoji_crying</item>
+        <item>@string/emoji_anguished</item>
+        <item>@string/emoji_fearful</item>
+        <item>@string/emoji_tired</item>
+        <item>@string/emoji_smirk</item>
+    </string-array>
+
+    <string name="analysis_question">Would you like to enable the analysis which replaces
+        certain parts of your input text with emoticons at chat messages and memories?</string>
+
+    <string name="emoticions">Emoticons</string>
+    <string name="about_emoticions_description">If input text analysis is enabled, the following
+        emoticons could be displayed at your chat messages or memories:</string>
+    <string name="about_emoticons_item_icon">Icon</string>
+    <string name="about_emoticons_item_key">Key</string>
+    <string name="about_emoticons_item_description">Description</string>
 </resources>

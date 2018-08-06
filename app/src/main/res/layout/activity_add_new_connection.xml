@@ -18,6 +18,7 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/til_add_new_connection"
             android:layout_marginBottom="@dimen/distance">
 
             <android.support.design.widget.TextInputEditText

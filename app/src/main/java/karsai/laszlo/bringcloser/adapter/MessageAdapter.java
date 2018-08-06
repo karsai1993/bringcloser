@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.MessageDetail;
@@ -322,9 +322,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private String getDisplayDateWithRespectToCurrentDate(String dateToCompare) {
-        String currentLocalDateAndTime = ApplicationHelper.getLocalDateAndTimeToDisplay(
+        String currentLocalDateAndTime = ApplicationUtils.getLocalDateAndTimeToDisplay(
                 mContext,
-                ApplicationHelper.getCurrentUTCDateAndTime()
+                ApplicationUtils.getCurrentUTCDateAndTime()
         );
         if (currentLocalDateAndTime.equals(mContext.getResources().getString(R.string.data_not_available))) {
             Timber.wtf( "currentLocalDateAndTime problem occurred");
@@ -339,7 +339,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         calendar.add(Calendar.DATE, -1);
         Date yesterdayDateAndTime = calendar.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat(
-                ApplicationHelper.DISPLAY_DATE_PATTERN,
+                ApplicationUtils.DISPLAY_DATE_PATTERN,
                 Locale.getDefault()
         );
         sdf.setTimeZone(TimeZone.getDefault());

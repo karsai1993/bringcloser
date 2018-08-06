@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.adapter.MessageAdapter;
 import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.MessageDetail;
@@ -60,7 +60,7 @@ public class SearchChatMessageAsyncTask extends AsyncTask<String, Void, List<Cha
                 messageDetailList.add(messageDetail);
             }
         }
-        return ApplicationHelper.getDateInfoNextToMessageData(mContext, messageDetailList);
+        return ApplicationUtils.getDateInfoNextToMessageData(mContext, messageDetailList);
     }
 
     @Override

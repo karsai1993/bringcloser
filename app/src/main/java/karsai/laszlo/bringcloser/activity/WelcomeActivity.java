@@ -56,6 +56,9 @@ public class WelcomeActivity extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
+                                    .setLogo(R.mipmap.ic_launcher)
+                                    .setPrivacyPolicyUrl(getResources().getString(R.string.privacy_policy))
+                                    .setTosUrl(getResources().getString(R.string.terms_of_use))
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build(),
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),

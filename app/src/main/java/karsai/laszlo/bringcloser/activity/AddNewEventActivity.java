@@ -11,7 +11,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,7 +39,7 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.fragment.DatePickerFragment;
 import karsai.laszlo.bringcloser.fragment.TimePickerFragment;
@@ -129,7 +128,7 @@ public class AddNewEventActivity extends CommonActivity {
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedData = getIntent();
         if (receivedData != null) {
-            mConnectionDetail = receivedData.getParcelableExtra(ApplicationHelper.EXTRA_DATA);
+            mConnectionDetail = receivedData.getParcelableExtra(ApplicationUtils.EXTRA_DATA);
             if (mConnectionDetail.getFromUid().equals(mCurrentUserUid)) {
                 mOtherUid = mConnectionDetail.getToUid();
             } else {
@@ -138,7 +137,7 @@ public class AddNewEventActivity extends CommonActivity {
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mUserDatabaseRef = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.USERS_NODE)
+                    .child(ApplicationUtils.USERS_NODE)
                     .child(mOtherUid);
             mUserValueEventListener = new ValueEventListener() {
                 @Override
@@ -162,9 +161,9 @@ public class AddNewEventActivity extends CommonActivity {
                 public void onClick(View view) {
                     DialogFragment datePickerFragment = new DatePickerFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(ApplicationHelper.EXTRA_ID, R.id.tv_event_selected_date);
+                    bundle.putInt(ApplicationUtils.EXTRA_ID, R.id.tv_event_selected_date);
                     datePickerFragment.setArguments(bundle);
-                    datePickerFragment.show(getSupportFragmentManager(), ApplicationHelper.TAG_DATA_PICKER);
+                    datePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_DATA_PICKER);
                 }
             });
             mTimeSelectorTextView.setOnClickListener(new View.OnClickListener() {
@@ -172,19 +171,19 @@ public class AddNewEventActivity extends CommonActivity {
                 public void onClick(View view) {
                     DialogFragment timePickerFragment = new TimePickerFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(ApplicationHelper.EXTRA_ID, R.id.tv_event_selected_time);
+                    bundle.putInt(ApplicationUtils.EXTRA_ID, R.id.tv_event_selected_time);
                     timePickerFragment.setArguments(bundle);
-                    timePickerFragment.show(getSupportFragmentManager(), ApplicationHelper.TAG_TIME_PICKER);
+                    timePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_TIME_PICKER);
                 }
             });
 
             mFirebaseStorage = FirebaseStorage.getInstance();
             mImagesRootRef = mFirebaseStorage.getReference()
                     .child(mCurrentUserUid)
-                    .child(ApplicationHelper.STORAGE_EVENT_IMAGES_FOLDER);
+                    .child(ApplicationUtils.STORAGE_EVENT_IMAGES_FOLDER);
             mImagesRef = mImagesRootRef;
             mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.CONNECTIONS_NODE);
+                    .child(ApplicationUtils.CONNECTIONS_NODE);
 
             mGalleryPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -207,7 +206,7 @@ public class AddNewEventActivity extends CommonActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             String photoUrl = uri.toString();
-                            ApplicationHelper.deleteImageFromStorage(
+                            ApplicationUtils.deleteImageFromStorage(
                                     AddNewEventActivity.this,
                                     photoUrl
                             );
@@ -321,7 +320,7 @@ public class AddNewEventActivity extends CommonActivity {
                 @Override
                 public void onSuccess(Uri uri) {
                     String photoUrl = uri.toString();
-                    ApplicationHelper.deleteImageFromStorage(
+                    ApplicationUtils.deleteImageFromStorage(
                             getApplicationContext(),
                             photoUrl
                     );
@@ -358,10 +357,10 @@ public class AddNewEventActivity extends CommonActivity {
                 + timeParts[0]
                 + timeParts[1]
                 + "00";
-        final String whenToArrive = ApplicationHelper.getUTCDateAndTime(this, dateAndTimeComposition);
+        final String whenToArrive = ApplicationUtils.getUTCDateAndTime(this, dateAndTimeComposition);
         if (!whenToArrive.equals(getResources().getString(R.string.data_not_available))) {
             mConnectionsQuery = mConnectionsDatabaseReference
-                    .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                    .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                     .equalTo(mConnectionDetail.getFromUid());
             mConnectionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -374,7 +373,7 @@ public class AddNewEventActivity extends CommonActivity {
                         }
                         String toUidValue = dataSnapshot
                                 .child(key)
-                                .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                                .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                                 .getValue(String.class);
                         if (toUidValue == null) {
                             Timber.wtf("to uid not found connection to");
@@ -383,18 +382,30 @@ public class AddNewEventActivity extends CommonActivity {
                         if (toUidValue.equals(mConnectionDetail.getToUid())) {
                             mEventsDatabaseRef = mConnectionsDatabaseReference
                                     .child(key)
-                                    .child(ApplicationHelper.EVENTS_NODE);
+                                    .child(ApplicationUtils.EVENTS_NODE);
                             DatabaseReference databaseReference
                                     = mEventsDatabaseRef.push();
+                            String title = ApplicationUtils.convertTextToEmojiIfNeeded(
+                                    getApplicationContext(),
+                                    mTitleEditText.getText().toString()
+                            );
+                            String place = ApplicationUtils.convertTextToEmojiIfNeeded(
+                                    getApplicationContext(),
+                                    mPlaceEditText.getText().toString()
+                            );
+                            String message = ApplicationUtils.convertTextToEmojiIfNeeded(
+                                    getApplicationContext(),
+                                    mMessageEditText.getText().toString()
+                            );
                             final Event event = new Event(
                                     mCurrentUserUid,
                                     mConnectionDetail.getFromUid(),
                                     mConnectionDetail.getToUid(),
                                     photoUrl,
                                     whenToArrive,
-                                    mTitleEditText.getText().toString(),
-                                    mPlaceEditText.getText().toString(),
-                                    mMessageEditText.getText().toString(),
+                                    title,
+                                    place,
+                                    message,
                                     false,
                                     databaseReference.getKey()
                             );
@@ -425,24 +436,24 @@ public class AddNewEventActivity extends CommonActivity {
                 = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
         Bundle extraBundle = new Bundle();
         extraBundle.putString(
-                ApplicationHelper.SERVICE_TYPE_IDENTIFIER,
-                ApplicationHelper.SERVICE_TYPE_EVENT
+                ApplicationUtils.SERVICE_TYPE_IDENTIFIER,
+                ApplicationUtils.SERVICE_TYPE_EVENT
         );
         extraBundle.putString(
-                ApplicationHelper.SERVICE_CONTENT_FROM_IDENTIFIER,
+                ApplicationUtils.SERVICE_CONTENT_FROM_IDENTIFIER,
                 event.getConnectionFromUid()
         );
         extraBundle.putString(
-                ApplicationHelper.SERVICE_CONTENT_TO_IDENTIFIER,
+                ApplicationUtils.SERVICE_CONTENT_TO_IDENTIFIER,
                 event.getConnectionToUid()
         );
         extraBundle.putString(
-                ApplicationHelper.SERVICE_CONTENT_KEY_IDENTIFIER,
+                ApplicationUtils.SERVICE_CONTENT_KEY_IDENTIFIER,
                 event.getKey()
         );
         Job myJob = dispatcher.newJobBuilder()
                 .setService(UpdateStateService.class)
-                .setTag(ApplicationHelper.getServiceUniqueTag(
+                .setTag(ApplicationUtils.getServiceUniqueTag(
                         event.getConnectionFromUid(),
                         event.getConnectionToUid(),
                         event.getKey())
@@ -457,9 +468,9 @@ public class AddNewEventActivity extends CommonActivity {
 
     private JobTrigger getTriggerTime(Event event) {
         String targetDateAndTimeAsText = event.getWhenToArrive();
-        String currentDateAndTimeAsText = ApplicationHelper.getCurrentUTCDateAndTime();
-        Date targetDateAndTime = ApplicationHelper.getDateAndTime(targetDateAndTimeAsText);
-        Date currentDateAndTime = ApplicationHelper.getDateAndTime(currentDateAndTimeAsText);
+        String currentDateAndTimeAsText = ApplicationUtils.getCurrentUTCDateAndTime();
+        Date targetDateAndTime = ApplicationUtils.getDateAndTime(targetDateAndTimeAsText);
+        Date currentDateAndTime = ApplicationUtils.getDateAndTime(currentDateAndTimeAsText);
         if (targetDateAndTime == null || currentDateAndTime == null) {
             Timber.wtf( "get trigger time problem occurred");
             return Trigger.NOW;
@@ -485,7 +496,7 @@ public class AddNewEventActivity extends CommonActivity {
         super.onActivityResult(requestCode, resultCode, data);
         final StorageReference tempRef = mImagesRef;
         mImagesRef = mImagesRootRef.child(
-                ApplicationHelper.getCurrentUTCDateAndTime()
+                ApplicationUtils.getCurrentUTCDateAndTime()
         );
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -500,7 +511,7 @@ public class AddNewEventActivity extends CommonActivity {
                                 @Override
                                 public void onSuccess(Uri prevUri) {
                                     String prevPhotoUrl = prevUri.toString();
-                                    ApplicationHelper.deleteImageFromStorage(
+                                    ApplicationUtils.deleteImageFromStorage(
                                             AddNewEventActivity.this,
                                             prevPhotoUrl
                                     );

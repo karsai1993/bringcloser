@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import timber.log.Timber;
 
@@ -36,7 +36,7 @@ public class DatePickerFragment extends DialogFragment
             Bundle bundle = getArguments();
             mActivity = getActivity();
             if (bundle != null) {
-                int textViewId = bundle.getInt(ApplicationHelper.EXTRA_ID);
+                int textViewId = bundle.getInt(ApplicationUtils.EXTRA_ID);
                 textView = mActivity.findViewById(textViewId);
             } else {
                 Timber.wtf("date picker getArguments returned null");

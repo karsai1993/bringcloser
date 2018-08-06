@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.fragment.ConnectionChatFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionEventFragment;
@@ -41,25 +41,25 @@ public class ConnectionDetailFragmentPagerAdapter extends FragmentStatePagerAdap
         if (position == 0) {
             fragment = new ConnectionChatFragment();
             bundle = new Bundle();
-            bundle.putParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY, mConnectionDetail);
+            bundle.putParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY, mConnectionDetail);
             fragment.setArguments(bundle);
             return fragment;
         } else if (position == 1) {
             fragment = new ConnectionWishFragment();
             bundle = new Bundle();
-            bundle.putParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY, mConnectionDetail);
+            bundle.putParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY, mConnectionDetail);
             fragment.setArguments(bundle);
             return fragment;
         } else if (position == 2) {
             fragment = new ConnectionEventFragment();
             bundle = new Bundle();
-            bundle.putParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY, mConnectionDetail);
+            bundle.putParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY, mConnectionDetail);
             fragment.setArguments(bundle);
             return fragment;
         } else {
             fragment = new ConnectionThoughtFragment();
             bundle = new Bundle();
-            bundle.putParcelable(ApplicationHelper.CONNECTION_DETAIL_KEY, mConnectionDetail);
+            bundle.putParcelable(ApplicationUtils.CONNECTION_DETAIL_KEY, mConnectionDetail);
             fragment.setArguments(bundle);
             return fragment;
         }

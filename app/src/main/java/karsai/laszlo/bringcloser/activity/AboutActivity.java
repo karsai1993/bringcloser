@@ -1,16 +1,20 @@
 package karsai.laszlo.bringcloser.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.adapter.EmojiAdapter;
 
 /**
  * Activity to show the details about the application
@@ -21,6 +25,8 @@ public class AboutActivity extends CommonActivity {
     TextView mNoInternetAlertTextView;
     @BindView(R.id.tv_version)
     TextView mVersion;
+    @BindView(R.id.rv_emoticons)
+    RecyclerView mRecyclerView;
 
     private static final String LICENSE_URL_FIREBASE = "https://developer.android.com/studio/terms";
     private static final String LICENSE_URL_FIREBASE_UI
@@ -43,6 +49,24 @@ public class AboutActivity extends CommonActivity {
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
+
+        List<String> emojiKeyList = ApplicationUtils.getEmojiCodeList();
+        List<String> emojiIconList = ApplicationUtils.getEmojiValueList();
+        String[] emojiDescriptionArray = getResources().getStringArray(R.array.emoji_descriptions);
+        EmojiAdapter emojiAdapter = new EmojiAdapter(
+                this,
+                emojiIconList,
+                emojiKeyList,
+                emojiDescriptionArray
+        );
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                mRecyclerView.getContext(),
+                layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.setAdapter(emojiAdapter);
 
         try {
             String version = getApplicationContext()
@@ -99,15 +123,7 @@ public class AboutActivity extends CommonActivity {
                 break;
         }
         if (!url.isEmpty()) {
-            openWebPage(url);
-        }
-    }
-
-    private void openWebPage (String url) {
-        Uri webPage = Uri.parse(url);
-        Intent openWebPageIntent = new Intent(Intent.ACTION_VIEW, webPage);
-        if (openWebPageIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(openWebPageIntent);
+            ApplicationUtils.openWebPage(this, url);
         }
     }
 }

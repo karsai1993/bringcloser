@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.CustomFastScroller;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.AddNewConnectionActivity;
@@ -79,7 +79,7 @@ public class RequestToPeopleFragment extends Fragment {
         mFastScroller = rootView.findViewById(R.id.fast_scroll_rq_to);
 
         if (savedInstanceState != null) {
-            mPos = savedInstanceState.getInt(ApplicationHelper.SAVE_RECYCLERVIEW_POS_KEY, -1);
+            mPos = savedInstanceState.getInt(ApplicationUtils.SAVE_RECYCLERVIEW_POS_KEY, -1);
         }
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -109,9 +109,9 @@ public class RequestToPeopleFragment extends Fragment {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mConnectionsDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.CONNECTIONS_NODE);
+                .child(ApplicationUtils.CONNECTIONS_NODE);
         mUsersDatabaseRef = mFirebaseDatabase.getReference()
-                .child(ApplicationHelper.USERS_NODE);
+                .child(ApplicationUtils.USERS_NODE);
         mConnectionsEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -243,7 +243,7 @@ public class RequestToPeopleFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(
-                ApplicationHelper.SAVE_RECYCLERVIEW_POS_KEY,
+                ApplicationUtils.SAVE_RECYCLERVIEW_POS_KEY,
                 ((GridLayoutManager)mRequestToUsersRecyclerView.getLayoutManager())
                         .findFirstVisibleItemPosition());
         super.onSaveInstanceState(outState);

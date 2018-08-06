@@ -11,7 +11,6 @@ import android.support.design.widget.TextInputEditText;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -33,7 +32,7 @@ import com.google.firebase.storage.UploadTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Thought;
@@ -106,7 +105,7 @@ public class AddNewThoughtActivity extends CommonActivity {
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedData = getIntent();
         if (receivedData != null) {
-            mConnectionDetail = receivedData.getParcelableExtra(ApplicationHelper.EXTRA_DATA);
+            mConnectionDetail = receivedData.getParcelableExtra(ApplicationUtils.EXTRA_DATA);
             if (mConnectionDetail.getFromUid().equals(mCurrentUserUid)) {
                 mOtherUid = mConnectionDetail.getToUid();
             } else {
@@ -115,7 +114,7 @@ public class AddNewThoughtActivity extends CommonActivity {
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mUserDatabaseRef = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.USERS_NODE)
+                    .child(ApplicationUtils.USERS_NODE)
                     .child(mOtherUid);
             mUserValueEventListener = new ValueEventListener() {
                 @Override
@@ -137,10 +136,10 @@ public class AddNewThoughtActivity extends CommonActivity {
             mFirebaseStorage = FirebaseStorage.getInstance();
             mImagesRootRef = mFirebaseStorage.getReference()
                     .child(mCurrentUserUid)
-                    .child(ApplicationHelper.STORAGE_THOUGHT_IMAGES_FOLDER);
+                    .child(ApplicationUtils.STORAGE_THOUGHT_IMAGES_FOLDER);
             mImagesRef = mImagesRootRef;
             mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
-                    .child(ApplicationHelper.CONNECTIONS_NODE);
+                    .child(ApplicationUtils.CONNECTIONS_NODE);
 
             mGalleryPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,7 +162,7 @@ public class AddNewThoughtActivity extends CommonActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             String photoUrl = uri.toString();
-                            ApplicationHelper.deleteImageFromStorage(
+                            ApplicationUtils.deleteImageFromStorage(
                                     AddNewThoughtActivity.this,
                                     photoUrl
                             );
@@ -201,9 +200,9 @@ public class AddNewThoughtActivity extends CommonActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     if (isChecked) {
-                        mStatusTextView.setText(getResources().getString(R.string.thought_status_yes));
+                        mStatusTextView.setText(getResources().getString(R.string.status_yes));
                     } else {
-                        mStatusTextView.setText(getResources().getString(R.string.thought_status_no));
+                        mStatusTextView.setText(getResources().getString(R.string.status_no));
                     }
                 }
             });
@@ -236,7 +235,7 @@ public class AddNewThoughtActivity extends CommonActivity {
                 @Override
                 public void onSuccess(Uri uri) {
                     String photoUrl = uri.toString();
-                    ApplicationHelper.deleteImageFromStorage(
+                    ApplicationUtils.deleteImageFromStorage(
                             getApplicationContext(),
                             photoUrl
                     );
@@ -264,9 +263,9 @@ public class AddNewThoughtActivity extends CommonActivity {
     }
 
     private void createThoughtItem(final String photoUrl) {
-        final String timestamp = ApplicationHelper.getCurrentUTCDateAndTime();
+        final String timestamp = ApplicationUtils.getCurrentUTCDateAndTime();
         mConnectionsQuery = mConnectionsDatabaseReference
-                .orderByChild(ApplicationHelper.CONNECTION_FROM_UID_IDENTIFIER)
+                .orderByChild(ApplicationUtils.CONNECTION_FROM_UID_IDENTIFIER)
                 .equalTo(mConnectionDetail.getFromUid());
 
         mConnectionsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -280,7 +279,7 @@ public class AddNewThoughtActivity extends CommonActivity {
                     }
                     String toUidValue = dataSnapshot
                             .child(key)
-                            .child(ApplicationHelper.CONNECTION_TO_UID_IDENTIFIER)
+                            .child(ApplicationUtils.CONNECTION_TO_UID_IDENTIFIER)
                             .getValue(String.class);
                     if (toUidValue == null) {
                         Timber.wtf("to uid not found connection to");
@@ -289,16 +288,20 @@ public class AddNewThoughtActivity extends CommonActivity {
                     if (toUidValue.equals(mConnectionDetail.getToUid())) {
                         mThoughtsDatabaseRef = mConnectionsDatabaseReference
                                 .child(key)
-                                .child(ApplicationHelper.THOUGHTS_NODE);
+                                .child(ApplicationUtils.THOUGHTS_NODE);
                         DatabaseReference databaseReference
                                 = mThoughtsDatabaseRef.push();
+                        String message = ApplicationUtils.convertTextToEmojiIfNeeded(
+                                getApplicationContext(),
+                                mMessageEditText.getText().toString()
+                        );
                         Thought thought = new Thought(
                                 mCurrentUserUid,
                                 mConnectionDetail.getFromUid(),
                                 mConnectionDetail.getToUid(),
                                 photoUrl,
                                 timestamp,
-                                mMessageEditText.getText().toString(),
+                                message,
                                 mStatusSwitch.isChecked(),
                                 databaseReference.getKey()
                         );
@@ -335,7 +338,7 @@ public class AddNewThoughtActivity extends CommonActivity {
         super.onActivityResult(requestCode, resultCode, data);
         final StorageReference tempRef = mImagesRef;
         mImagesRef = mImagesRootRef.child(
-                ApplicationHelper.getCurrentUTCDateAndTime()
+                ApplicationUtils.getCurrentUTCDateAndTime()
         );
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -350,7 +353,7 @@ public class AddNewThoughtActivity extends CommonActivity {
                                 @Override
                                 public void onSuccess(Uri prevUri) {
                                     String prevPhotoUrl = prevUri.toString();
-                                    ApplicationHelper.deleteImageFromStorage(
+                                    ApplicationUtils.deleteImageFromStorage(
                                             AddNewThoughtActivity.this,
                                             prevPhotoUrl
                                     );
@@ -409,8 +412,8 @@ public class AddNewThoughtActivity extends CommonActivity {
     private void applySwitchStatusHandler() {
         mStatusTextView.setText(
                 mStatusSwitch.isChecked() ?
-                        getResources().getString(R.string.thought_status_yes) :
-                        getResources().getString(R.string.thought_status_no)
+                        getResources().getString(R.string.status_yes) :
+                        getResources().getString(R.string.status_no)
         );
     }
 

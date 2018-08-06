@@ -13,7 +13,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-import karsai.laszlo.bringcloser.ApplicationHelper;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import timber.log.Timber;
 
@@ -34,7 +34,7 @@ public class TimePickerFragment extends DialogFragment
             mActivity = getActivity();
             Bundle bundle = getArguments();
             if (bundle !=  null) {
-                textViewId = bundle.getInt(ApplicationHelper.EXTRA_ID);
+                textViewId = bundle.getInt(ApplicationUtils.EXTRA_ID);
             } else {
                 Timber.wtf("time picker getArguments null");
             }
