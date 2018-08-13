@@ -11,7 +11,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
@@ -28,7 +27,6 @@ import java.util.Map;
 
 import karsai.laszlo.bringcloser.CustomChunk;
 import karsai.laszlo.bringcloser.PdfPageEventHandler;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.EventDetail;
 import karsai.laszlo.bringcloser.model.PdfDetail;
 import karsai.laszlo.bringcloser.model.ReceivedDetail;
@@ -38,6 +36,7 @@ import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.utils.NotificationUtils;
 import karsai.laszlo.bringcloser.utils.PdfUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 public class CreatePdfAllAsyncTask extends AsyncTask<Void, Void, Void> {
 

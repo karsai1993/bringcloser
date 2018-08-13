@@ -18,10 +18,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import karsai.laszlo.bringcloser.R;
 
 import java.util.Arrays;
 
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.utils.NetworkUtils;
 
 /**
@@ -57,9 +57,10 @@ public class WelcomeActivity extends AppCompatActivity {
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
                                     .setLogo(R.mipmap.ic_launcher)
-                                    .setPrivacyPolicyUrl(getResources().getString(R.string.privacy_policy))
-                                    .setTosUrl(getResources().getString(R.string.terms_of_use))
-                                    .setAvailableProviders(Arrays.asList(
+                                    .setTosAndPrivacyPolicyUrls(
+                                            getResources().getString(R.string.terms_of_use),
+                                            getResources().getString(R.string.privacy_policy)
+                                    ).setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build(),
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
                                             new AuthUI.IdpConfig.FacebookBuilder().build())

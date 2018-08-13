@@ -13,11 +13,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.utils.NotificationUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Created by Laci on 10/06/2018.

@@ -30,12 +30,12 @@ import java.util.Objects;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.CustomFastScroller;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.RequestFromUsersAdapter;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.User;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Fragment to handle request from users related information

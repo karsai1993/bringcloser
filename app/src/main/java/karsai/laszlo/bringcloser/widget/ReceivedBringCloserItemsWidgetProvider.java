@@ -10,10 +10,10 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.activity.ReceivedDetailsActivity;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Implementation of App Widget functionality.

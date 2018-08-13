@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import karsai.laszlo.bringcloser.R;
 
 import java.util.List;
-
-import karsai.laszlo.bringcloser.R;
 
 public class EmojiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 

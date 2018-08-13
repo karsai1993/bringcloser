@@ -12,8 +12,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.adapter.EmojiAdapter;
 
 /**
@@ -122,9 +122,6 @@ public class AboutActivity extends CommonActivity {
                 break;
             case R.id.iv_about_open_gnu_agpl:
                 url = LICENSE_URL_GNU_AGPL;
-                break;
-            case R.id.iv_about_open_icons8:
-                url = getResources().getString(R.string.about_icons_content_icons8);
                 break;
             case R.id.iv_about_open_google_icons:
                 url = getResources().getString(R.string.about_icons_content_google_icons);

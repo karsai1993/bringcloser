@@ -323,7 +323,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -783,57 +783,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/about_icons_content_google_icons" />
 
-                    <TextView
-                        style="@style/AppTheme"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/about_icons_content_icons8" />
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_gravity="center"
-                        android:onClick="onOpenBrowserClick"
-                        android:src="@drawable/baseline_open_in_browser_black_48"
-                        android:id="@+id/iv_about_open_icons8"
-                        android:contentDescription="@string/about_license_open_in_browser_content_description"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/AppTheme"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/about_icons_content_google_icons" />
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_gravity="center"
-                        android:onClick="onOpenBrowserClick"
-                        android:src="@drawable/baseline_open_in_browser_black_48"
-                        android:id="@+id/iv_about_open_google_icons"
-                        android:contentDescription="@string/about_license_open_in_browser_content_description"/>
-
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_gravity="center"
+                    android:onClick="onOpenBrowserClick"
+                    android:src="@drawable/baseline_open_in_browser_black_48"
+                    android:id="@+id/iv_about_open_google_icons"
+                    android:contentDescription="@string/about_license_open_in_browser_content_description"/>
 
             </LinearLayout>
 

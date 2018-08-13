@@ -15,10 +15,10 @@ import android.widget.TextView;
 import java.util.List;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.AddChosenConnectionActivity;
 import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Created by Laci on 07/06/2018.

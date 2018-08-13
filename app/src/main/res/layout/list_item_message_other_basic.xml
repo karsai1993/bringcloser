@@ -7,9 +7,9 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="@dimen/photo_icon_size"
+        android:layout_height="@dimen/photo_icon_size"
+        android:layout_gravity="bottom"
         android:scaleType="centerInside"
         android:src="@drawable/baseline_face_black_48"
         android:id="@+id/iv_chat_from_other_photo"

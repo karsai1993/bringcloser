@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.model.EventDetail;
 import karsai.laszlo.bringcloser.model.ReceivedDetail;
@@ -37,6 +36,7 @@ import karsai.laszlo.bringcloser.model.Wish;
 import karsai.laszlo.bringcloser.model.WishDetail;
 import karsai.laszlo.bringcloser.activity.WelcomeActivity;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Service to populate widget

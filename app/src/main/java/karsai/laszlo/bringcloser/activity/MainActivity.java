@@ -35,8 +35,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.utils.AddTokenUtils;
 import karsai.laszlo.bringcloser.adapter.ConnectionFragmentPagerAdapter;
 import karsai.laszlo.bringcloser.model.User;

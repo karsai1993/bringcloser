@@ -19,13 +19,13 @@ import android.support.v4.content.FileProvider;
 import java.io.File;
 import java.net.URL;
 
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.activity.UnusedDataActivity;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.activity.ConnectionActivity;
 import karsai.laszlo.bringcloser.activity.MainActivity;
 import karsai.laszlo.bringcloser.activity.ReceivedDetailsActivity;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Created by Laci on 10/06/2018.

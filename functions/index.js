@@ -385,37 +385,22 @@ exports.sendNewMessageNotification = functions.database.ref('/connections/{key}/
 exports.sendUnusedPhotoNotification = functions.database.ref('/unused/{connection_key}')
     .onWrite((change, context) => {
 	
-	if (!change.after.exists()) {
+	if (!change.after.exists() || change.before.exists()) {
         return null;
     }
 	
-	//const object = change.after.val();
-	//let connection_key = Object.keys(object);
 	let uids = context.params.connection_key.split('_');
 	const toUid = uids[1];
-	
-//	let parentRef = admin.database().ref(`/unused/${context.params.connection_key}`);
+
 	let toTokensRef = admin.database().ref(`/users/${toUid}/tokensMap`);
 	
 	const deviceTokensPromise = toTokensRef.once('value');
-	//const parentRefPromise = parentRef.once('value');
-		
+	
 	let tokensSnapshot;
-	//let parentRefResult;
 	let tokens;
 		
-	return Promise.all([deviceTokensPromise/*, parentRefPromise*/]).then(results => {
+	return Promise.all([deviceTokensPromise]).then(results => {
 		tokensSnapshot = results[0];
-		/*parentRefResult = results[1];
-		
-		let childArray = Object.keys(parentRefResult.val());
-		var childCount = childArray.length;
-		
-		console.log('hopp: ', childCount);
-		
-		if (childCount > 1) {
-			return null;
-		}*/
 		
 		const type = "unused";
 		const payload = {

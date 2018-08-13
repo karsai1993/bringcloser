@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Locale;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Created by Laci on 11/06/2018.

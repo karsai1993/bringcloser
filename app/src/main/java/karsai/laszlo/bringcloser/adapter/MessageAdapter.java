@@ -29,12 +29,12 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Created by Laci on 03/07/2018.

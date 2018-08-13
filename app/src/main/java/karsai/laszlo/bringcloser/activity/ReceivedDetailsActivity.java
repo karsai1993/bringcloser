@@ -27,10 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,11 +39,11 @@ import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.background.CreatePdfAllAsyncTask;
 import karsai.laszlo.bringcloser.background.CreatePdfSingleAsyncTask;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ReceivedDetailAdapter;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.model.EventDetail;

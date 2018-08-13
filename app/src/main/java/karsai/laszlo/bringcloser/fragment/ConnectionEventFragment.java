@@ -37,13 +37,13 @@ import java.util.List;
 import java.util.Objects;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.EventAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.activity.AddNewEventActivity;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Fragment to handle connection events related information

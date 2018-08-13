@@ -15,8 +15,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Fragment to handle date picker related information

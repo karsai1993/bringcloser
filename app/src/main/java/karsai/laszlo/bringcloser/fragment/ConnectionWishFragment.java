@@ -37,13 +37,13 @@ import java.util.List;
 import java.util.Objects;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.WishAdapter;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.model.Wish;
 import karsai.laszlo.bringcloser.activity.AddNewWishActivity;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Fragment to handle connection wishes related information

@@ -1,31 +1,17 @@
 package karsai.laszlo.bringcloser.background;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.FontSelector;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -35,7 +21,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,17 +29,16 @@ import java.util.Map;
 
 import karsai.laszlo.bringcloser.CustomChunk;
 import karsai.laszlo.bringcloser.PdfPageEventHandler;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.EventDetail;
 import karsai.laszlo.bringcloser.model.PdfDetail;
 import karsai.laszlo.bringcloser.model.ReceivedDetail;
 import karsai.laszlo.bringcloser.model.ThoughtDetail;
-import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.model.WishDetail;
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.utils.NotificationUtils;
 import karsai.laszlo.bringcloser.utils.PdfUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 public class CreatePdfSingleAsyncTask extends AsyncTask<Void, Void, Void> {
 

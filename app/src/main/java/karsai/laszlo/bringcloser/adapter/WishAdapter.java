@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.Map;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.Wish;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Adapter to handle wish related information
@@ -309,6 +309,10 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             Toast.LENGTH_LONG
                     ).show();
                 } else {
+                    newValue = ApplicationUtils.convertTextToEmojiIfNeeded(
+                            mContext,
+                            newValue
+                    );
                     updateDB(wish, newValue);
                 }
             }

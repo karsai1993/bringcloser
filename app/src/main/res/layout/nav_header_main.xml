@@ -28,7 +28,6 @@
         android:textStyle="bold|italic"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:text="László Karsai"
         android:textSize="@dimen/nav_drawer_user_name_text_size"/>
 
     <TextView

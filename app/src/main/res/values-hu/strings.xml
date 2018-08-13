@@ -93,7 +93,7 @@
         \u2022 Kattints \"RENDBEN\"-re, hogy megkapd a kérelmet,\n
         \u2022 Ellenőrizd az email fiókod és kattints a megerősítésre,\n
         \u2022 Jelentkezz be újra,\n
-        \u2022 Érezd jól magad a hozzád közeli emberekkel :)</string>
+        \u2022 Érezd jól magad a hozzád közeli emberekkel 😉</string>
     <string name="filter_hint">Írj, hogy szűrd a lenti listát&#8230;</string>
     <string name="add_connection_possible_size">Lehetséges kapcsolatok</string>
     <string name="add_connection_found_possible_size">Talált lehetséges kapcsolatok</string>
@@ -319,13 +319,13 @@
     <string name="dialog_request_approve_title">Arra készülsz, hogy
         elfogadd a következő felkérést!</string>
 
-    <string name="congrats_on_accepted_request_start">Gratulálok! Az új kapcsolatod</string>
+    <string name="congrats_on_accepted_request_start">Gratulálunk! Az új kapcsolatod</string>
     <string name="request_deleted_1">A törlés, ami őt érintette:\u0020</string>
     <string name="request_deleted_2">, sikeresen végre lett hajtva!</string>
 
     <string name="new_request_title">Új felkérés!</string>
     <string name="new_request_body">\u0020akar kapcsolatba lépni veled.</string>
-    <string name="new_approval_title">Gratulálok az új kapcsolathoz!</string>
+    <string name="new_approval_title">Gratulálunk az új kapcsolathoz!</string>
     <string name="new_approval_body">\u0020és Te kapcsolatban vagytok.</string>
     <string name="new_wish_title">Új jókívánság -\u0020</string>
     <string name="new_event_title">Új esemény -\u0020</string>
@@ -434,8 +434,6 @@
         Nincs megjelenítendő emlék!</string>
     <string name="dot">\u2022</string>
 
-    <string name="facebook_application_id" translatable="false">621043098259578</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb621043098259578</string>
     <string name="empty_view_text">Még nincs megjelenítendő emlék!
         Mesélj másoknak is a BringCloser alkalmazásról!</string>
 
@@ -490,9 +488,7 @@
     <string name="about_license_open_in_browser_content_description">Licenc Megnyitás Böngészőben</string>
     <string name="about_icons_label">Ikonok</string>
     <string name="about_icons_content">Az alkalmazásban használt ikonok a
-        következő forrásokból származnak:</string>
-    <string name="about_icons_content_icons8">https://icons8.com</string>
-    <string name="about_icons_content_google_icons">https://material.io/tools/icons/?style=baseline</string>
+        következő forrásból származnak:</string>
     <string name="delete_account_conn_number_1">Törlése\u0020</string>
     <string name="delete_account_conn_number_2">\u0020kapcsolatnak&#8230;</string>
     <string name="fab_content_description_approve">Elfogadás Gomb</string>

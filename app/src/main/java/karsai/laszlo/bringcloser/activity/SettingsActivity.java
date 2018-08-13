@@ -52,8 +52,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.model.Message;
 import karsai.laszlo.bringcloser.model.Thought;
@@ -455,7 +455,11 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
             @Override
             public void onSuccess(Void aVoid) {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(SettingsActivity.this, WelcomeActivity.class));
+                Intent welcomeIntent = new Intent(SettingsActivity.this, WelcomeActivity.class);
+                welcomeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                welcomeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                welcomeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(welcomeIntent);
                 finish();
             }
         });
@@ -503,24 +507,28 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         connectionsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
+                List<String> keyList = new ArrayList<>();
                 for (DataSnapshot connSnapshot : dataSnapshot.getChildren()) {
                     String key = connSnapshot.getKey();
                     if (key == null) {
                         Timber.wtf("key null delete single memory elements connection identifier" + uid);
                         continue;
                     }
-                    int count = 0;
-                    List<String> keyList = new ArrayList<>();
                     if (key.contains(uid)) {
                         count++;
                         keyList.add(key);
                     }
+                }
+                if (count == 0) {
+                    deleteAccount();
+                } else {
                     Toast.makeText(context,
                             new StringBuilder()
-                            .append(context.getResources().getString(R.string.delete_account_conn_number_1))
-                            .append(count)
-                            .append(context.getResources().getString(R.string.delete_account_conn_number_2))
-                            .toString(),
+                                    .append(context.getResources().getString(R.string.delete_account_conn_number_1))
+                                    .append(count)
+                                    .append(context.getResources().getString(R.string.delete_account_conn_number_2))
+                                    .toString(),
                             Toast.LENGTH_LONG
                     ).show();
                     int currCounter = 0;

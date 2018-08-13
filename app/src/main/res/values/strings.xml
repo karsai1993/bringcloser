@@ -85,7 +85,7 @@
         \u2022 Click \"OK\" to have the request sent to you\n
         \u2022 Check your mail box and click on verifying\n
         \u2022 Re-authenticate to the app\n
-        \u2022 Have fun with your close ones :)</string>
+        \u2022 Have fun with your close ones 😉</string>
     <string name="filter_hint">Type to filter the list below&#8230;</string>
     <string name="add_connection_possible_size">Possible connections</string>
     <string name="add_connection_found_possible_size">Found possible connections</string>
@@ -446,39 +446,39 @@
     <string name="about_mission_3">
         This app focuses on your memories (interactions with close people) from your everyday life,
         and to give it back in a smooth manner.</string>
-    <string name="about_used_libraries_label">Used third party libraries</string>
-    <string name="about_used_libraries_firebase_common_name">com.google.firebase:firebase-common</string>
-    <string name="about_used_libraries_firebase_common_version">16.0.0</string>
-    <string name="about_used_libraries_firebase_core_name">com.google.firebase:firebase-core</string>
-    <string name="about_used_libraries_firebase_core_version">16.0.1</string>
-    <string name="about_used_libraries_firebase_auth_name">com.google.firebase:firebase-auth</string>
-    <string name="about_used_libraries_firebase_auth_version">16.0.2</string>
-    <string name="about_used_libraries_firebase_database_name">com.google.firebase:firebase-database</string>
-    <string name="about_used_libraries_firebase_databasae_version">16.0.1</string>
-    <string name="about_used_libraries_firebase_storage_name">com.google.firebase:firebase-storage</string>
-    <string name="about_used_libraries_firebase_storage_version">16.0.1</string>
-    <string name="about_used_libraries_firebase_messaging_name">com.google.firebase:firebase-messaging</string>
-    <string name="about_used_libraries_firebase_messaging_version">17.1.0</string>
-    <string name="about_used_libraries_firebase_ui_auth_name">com.firebaseui:firebase-ui-auth</string>
-    <string name="about_used_libraries_firebase_ui_auth_version">4.1.0</string>
-    <string name="about_used_libraries_glide_name">com.github.bumptech.glide:glide</string>
-    <string name="about_used_libraries_glide_version">4.7.1</string>
-    <string name="about_used_libraries_glide_compiler_name">com.github.bumptech.glide:compiler</string>
-    <string name="about_used_libraries_glide_compiler_version">4.7.1</string>
-    <string name="about_used_libraries_butterknife_name">com.jakewharton:butterknife</string>
-    <string name="about_used_libraries_butterknife_version">8.8.1</string>
-    <string name="about_used_libraries_butterknife_compiler_name">com.jakewharton:butterknife-compiler</string>
-    <string name="about_used_libraries_butterknife_compiler_version">8.8.1</string>
-    <string name="about_used_libraries_fastscroller_name">com.futuremind.recyclerfastscroll:fastscroll</string>
-    <string name="about_used_libraries_fastscroller_version">0.2.5</string>
-    <string name="about_used_libraries_facebook_login_name">com.facebook.android:facebook-login</string>
-    <string name="about_used_libraries_facebook_login_version">4.34.0</string>
-    <string name="about_used_libraries_firebase_jobdispatcher_name">com.firebase:firebase-jobdispatcher</string>
-    <string name="about_used_libraries_firebase_jobdispatcher_version">0.8.5</string>
-    <string name="about_used_libraries_timber_name">com.jakewharton.timber:timber</string>
-    <string name="about_used_libraries_timber_version">4.7.1</string>
-    <string name="about_used_libraries_itext_name">com.itextpdf:itextpdf</string>
-    <string name="about_used_libraries_itext_version">5.5.13</string>
+    <string name="about_used_libraries_label" translatable="false">Used third party libraries</string>
+    <string name="about_used_libraries_firebase_common_name" translatable="false">com.google.firebase:firebase-common</string>
+    <string name="about_used_libraries_firebase_common_version" translatable="false">16.0.0</string>
+    <string name="about_used_libraries_firebase_core_name" translatable="false">com.google.firebase:firebase-core</string>
+    <string name="about_used_libraries_firebase_core_version" translatable="false">16.0.1</string>
+    <string name="about_used_libraries_firebase_auth_name" translatable="false">com.google.firebase:firebase-auth</string>
+    <string name="about_used_libraries_firebase_auth_version" translatable="false">16.0.2</string>
+    <string name="about_used_libraries_firebase_database_name" translatable="false">com.google.firebase:firebase-database</string>
+    <string name="about_used_libraries_firebase_databasae_version" translatable="false">16.0.1</string>
+    <string name="about_used_libraries_firebase_storage_name" translatable="false">com.google.firebase:firebase-storage</string>
+    <string name="about_used_libraries_firebase_storage_version" translatable="false">16.0.1</string>
+    <string name="about_used_libraries_firebase_messaging_name" translatable="false">com.google.firebase:firebase-messaging</string>
+    <string name="about_used_libraries_firebase_messaging_version" translatable="false">17.1.0</string>
+    <string name="about_used_libraries_firebase_ui_auth_name" translatable="false">com.firebaseui:firebase-ui-auth</string>
+    <string name="about_used_libraries_firebase_ui_auth_version" translatable="false">4.1.0</string>
+    <string name="about_used_libraries_glide_name" translatable="false">com.github.bumptech.glide:glide</string>
+    <string name="about_used_libraries_glide_version" translatable="false">4.7.1</string>
+    <string name="about_used_libraries_glide_compiler_name" translatable="false">com.github.bumptech.glide:compiler</string>
+    <string name="about_used_libraries_glide_compiler_version" translatable="false">4.7.1</string>
+    <string name="about_used_libraries_butterknife_name" translatable="false">com.jakewharton:butterknife</string>
+    <string name="about_used_libraries_butterknife_version" translatable="false">8.8.1</string>
+    <string name="about_used_libraries_butterknife_compiler_name" translatable="false">com.jakewharton:butterknife-compiler</string>
+    <string name="about_used_libraries_butterknife_compiler_version" translatable="false">8.8.1</string>
+    <string name="about_used_libraries_fastscroller_name" translatable="false">com.futuremind.recyclerfastscroll:fastscroll</string>
+    <string name="about_used_libraries_fastscroller_version" translatable="false">0.2.5</string>
+    <string name="about_used_libraries_facebook_login_name" translatable="false">com.facebook.android:facebook-login</string>
+    <string name="about_used_libraries_facebook_login_version" translatable="false">4.34.0</string>
+    <string name="about_used_libraries_firebase_jobdispatcher_name" translatable="false">com.firebase:firebase-jobdispatcher</string>
+    <string name="about_used_libraries_firebase_jobdispatcher_version" translatable="false">0.8.5</string>
+    <string name="about_used_libraries_timber_name" translatable="false">com.jakewharton.timber:timber</string>
+    <string name="about_used_libraries_timber_version" translatable="false">4.7.1</string>
+    <string name="about_used_libraries_itext_name" translatable="false">com.itextpdf:itextpdf</string>
+    <string name="about_used_libraries_itext_version" translatable="false">5.5.13</string>
     <string name="about_license_label">License</string>
     <string name="about_license_content">This is free software licensed under GNU AGPL v3.</string>
     <string name="about_logo_content_description">About Logo</string>
@@ -513,9 +513,8 @@
     <string name="widget_logo_content_description">Widget Logo</string>
     <string name="about_license_open_in_browser_content_description">Open In Browser License</string>
     <string name="about_icons_label">Icons</string>
-    <string name="about_icons_content">The app icons are from the following sources:</string>
-    <string name="about_icons_content_icons8">https://icons8.com</string>
-    <string name="about_icons_content_google_icons">https://material.io/tools/icons/?style=baseline</string>
+    <string name="about_icons_content">The app icons are from the following source:</string>
+    <string name="about_icons_content_google_icons" translatable="false">https://material.io/tools/icons/?style=baseline</string>
     <string name="delete_account_conn_number_1">Deleting\u0020</string>
     <string name="delete_account_conn_number_2">\u0020connections&#8230;</string>
     <string name="fab_content_description_approve">Approve Button</string>

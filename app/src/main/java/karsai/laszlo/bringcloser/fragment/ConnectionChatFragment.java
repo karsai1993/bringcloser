@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.MessageAdapter;
 import karsai.laszlo.bringcloser.background.SearchChatMessageAsyncTask;
 import karsai.laszlo.bringcloser.model.ChatDetail;
@@ -45,6 +44,7 @@ import karsai.laszlo.bringcloser.model.Message;
 import karsai.laszlo.bringcloser.model.MessageDetail;
 import karsai.laszlo.bringcloser.model.User;
 import timber.log.Timber;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Fragment to handle connection chat messages related information

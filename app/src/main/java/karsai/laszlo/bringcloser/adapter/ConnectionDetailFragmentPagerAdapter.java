@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.fragment.ConnectionChatFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionEventFragment;
 import karsai.laszlo.bringcloser.fragment.ConnectionThoughtFragment;

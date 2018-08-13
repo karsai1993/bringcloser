@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/connection_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="karsai.laszlo.bringcloser.activity.ConnectionActivity"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/connection_app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:elevation="@dimen/app_bar_elevation"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/connection_collapsing_toolbar"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:contentScrim="?attr/colorPrimary"
+                android:fitsSystemWindows="true"
+                app:titleEnabled="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="?actionBarSize"
+                    android:layout_marginStart="?actionBarSize"
+                    android:layout_marginRight="?actionBarSize"
+                    android:layout_marginEnd="?actionBarSize"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        android:layout_margin="@dimen/distance">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/AppTheme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/connection_activity_toolbar_you"
+                                android:textStyle="bold"
+                                android:background="@drawable/action_background"/>
+
+                            <ImageView
+                                android:id="@+id/iv_connection_toolbar_current_photo"
+                                android:layout_width="@dimen/nav_drawer_photo_size"
+                                android:layout_height="@dimen/nav_drawer_photo_size"
+                                android:src="@drawable/baseline_face_black_48"
+                                android:contentDescription="@string/connection_activity_current_photo"/>
+
+                            <TextView
+                                style="@style/AppTheme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_connection_toolbar_current_relationship"
+                                android:textStyle="bold|italic"
+                                android:background="@drawable/action_background"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/AppTheme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_connection_toolbar_other_name"
+                                android:textStyle="bold"
+                                android:background="@drawable/action_background"/>
+
+                            <ImageView
+                                android:id="@+id/iv_connection_toolbar_other_photo"
+                                android:layout_width="@dimen/nav_drawer_photo_size"
+                                android:layout_height="@dimen/nav_drawer_photo_size"
+                                android:src="@drawable/baseline_face_black_48"
+                                android:contentDescription="@string/connection_activity_other_photo"/>
+
+                            <TextView
+                                style="@style/AppTheme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_connection_toolbar_other_relationship"
+                                android:textStyle="bold|italic"
+                                android:background="@drawable/action_background"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/connection_activity_since"/>
+
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:id="@+id/tv_connection_toolbar_since"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/connection_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/baseline_arrow_back_white_24"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                    <TextView
+                        android:id="@+id/tv_connection_toolbar_title"
+                        style="@style/AppTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/nav_drawer_user_name_text_size"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <include
+                layout="@layout/no_internet_general"
+                android:visibility="gone"/>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout_connection_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:tabMode="scrollable"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_connection_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chat_ctrl_panel_height"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/cl_ctrl_panel">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/ll_chat_action_panel"
+            android:background="@android:color/white"
+            android:paddingBottom="@dimen/distance"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="@dimen/chat_control_panel_icon_size"
+                android:layout_height="@dimen/chat_control_panel_icon_size"
+                android:layout_gravity="bottom"
+                android:src="@drawable/baseline_search_black_48"
+                android:id="@+id/iv_chat_search"
+                android:contentDescription="@string/search_content_description"/>
+
+            <EditText
+                style="@style/AppTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:id="@+id/et_chat_filter"
+                android:hint="@string/chat_filter_hint"
+                android:inputType="none"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/ll_chat_action_panel_inner">
+
+                <ImageView
+                    android:layout_width="@dimen/chat_control_panel_icon_size"
+                    android:layout_height="@dimen/chat_control_panel_icon_size"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/baseline_photo_camera_black_48"
+                    android:id="@+id/iv_chat_add_photo_from_camera"
+                    android:contentDescription="@string/camera_content_description"/>
+
+
+                <ImageView
+                    android:layout_width="@dimen/chat_control_panel_icon_size"
+                    android:layout_height="@dimen/chat_control_panel_icon_size"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/baseline_photo_black_48"
+                    android:id="@+id/iv_chat_add_photo_from_gallery"
+                    android:contentDescription="@string/gallery_content_description"/>
+
+                <EditText
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/et_chat"
+                    android:hint="@string/chat_hint"
+                    android:inputType="textCapSentences"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="@dimen/chat_control_panel_icon_size"
+                    android:layout_height="@dimen/chat_control_panel_icon_size"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/baseline_send_black_48"
+                    android:id="@+id/iv_chat_send"
+                    android:visibility="gone"
+                    android:contentDescription="@string/send_content_description"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_plus_one_wish"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_plus_one_black_48"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:visibility="gone"
+            android:contentDescription="@string/fab_content_description_plus_one"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_plus_one_event"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_plus_one_black_48"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:visibility="gone"
+            android:contentDescription="@string/fab_content_description_plus_one"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_plus_one_thought"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/baseline_plus_one_black_48"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/fab_elevation"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            android:visibility="gone"
+            android:contentDescription="@string/fab_content_description_plus_one"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

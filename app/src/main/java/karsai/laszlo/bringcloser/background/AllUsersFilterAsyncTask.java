@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.AllUsersAdapter;
 import karsai.laszlo.bringcloser.model.User;
+import karsai.laszlo.bringcloser.R;
 
 /**
  * Background task to handle filtering in all users

@@ -45,8 +45,8 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.fragment.DatePickerFragment;
 import karsai.laszlo.bringcloser.fragment.TimePickerFragment;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;

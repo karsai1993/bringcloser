@@ -10,9 +10,9 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.UnusedPhotoDetail;
 import karsai.laszlo.bringcloser.utils.ImageUtils;
+import karsai.laszlo.bringcloser.R;
 
 public class UnusedDataAdapter extends RecyclerView.Adapter<UnusedDataAdapter.UnusedDataViewHolder> {
 

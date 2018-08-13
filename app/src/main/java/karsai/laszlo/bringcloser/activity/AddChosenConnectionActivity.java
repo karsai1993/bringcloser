@@ -34,8 +34,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.model.User;
 import timber.log.Timber;
@@ -84,7 +84,7 @@ public class AddChosenConnectionActivity extends CommonActivity {
         mChosenUserUid = mChosenUser.getUid();
 
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.ic_icons8_load_96_1);
+        requestOptions.placeholder(R.drawable.baseline_scatter_plot_black_48);
         requestOptions.error(R.drawable.baseline_error_outline_black_48);
         requestOptions.fitCenter();
         requestOptions.circleCrop();
