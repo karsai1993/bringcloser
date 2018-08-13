@@ -33,6 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String MESSAGE_IDENTIFIER = "message";
     private static final String PRIVACY_CHANGED_IDENTIFIER = "privacy";
     private static final String TERMS_CHANGED_IDENTIFIER = "terms";
+    private static final String UNUSED_IDENTIFIER = "unused";
     private static final int REQUEST_NOTIFICATION_ID = 1;
     private static final int APPROVAL_NOTIFICATION_ID = 2;
     private static final int WISH_NOTIFICATION_ID = 3;
@@ -40,6 +41,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final int THOUGHT_NOTIFICATION_ID = 5;
     private static final int PRIVACY_CHANGED_NOTIFICATION_ID = 6;
     private static final int TERMS_CHANGED_NOTIFICATION_ID = 7;
+    private static final int UNUSED_NOTIFICATION_ID = 8;
 
     private int mMessageNotificationId;
 
@@ -169,7 +171,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         getApplicationContext(),
                         NOTIFICATION_ID_GENERAL_KEY);
                 if (storedGeneralId == null) {
-                    mMessageNotificationId = 8;
+                    mMessageNotificationId = 11;
                 } else {
                     mMessageNotificationId = Integer.parseInt(storedGeneralId) + 1;
                 }
@@ -222,9 +224,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .getString(R.string.doc_changed_message);
             notificationId = TERMS_CHANGED_NOTIFICATION_ID;
             action = ApplicationUtils.NOTIFICATION_INTENT_TERMS;
+        } else if (type.equals(UNUSED_IDENTIFIER)) {
+            title = getApplicationContext().getResources().getString(R.string.unused_data_notification_title);
+            body = getApplicationContext().getResources().getString(R.string.unused_data_notification_body);
+            notificationId = UNUSED_NOTIFICATION_ID;
+            action = ApplicationUtils.NOTIFICATION_INTENT_UNUSED;
         }
 
-        NotificationUtils.addNotification(
+        NotificationUtils.addFunctionsNotification(
                 getApplicationContext(),
                 title,
                 body,

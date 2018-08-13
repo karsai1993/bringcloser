@@ -48,6 +48,14 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
+            android:name=".activity.UnusedDataActivity"
+            android:label="@string/activity_unused_label"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".activity.AboutActivity"
             android:label="@string/about_activity"
             android:parentActivityName=".activity.MainActivity">
@@ -144,6 +152,16 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/received_bring_closer_items_widget_info" />
         </receiver>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
         <service
             android:name=".widget.ReceivedBringCloserItemsWidgetService"

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -26,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 
 import karsai.laszlo.bringcloser.R;
@@ -41,8 +44,8 @@ public class ImageUtils {
 
     private static final String PHOTO_PICKER_TITLE = "Complete action using";
     private static final String PHOTO_TYPE = "image/*";
-    private static final int RC_PHOTO_PICKER = 1;
-    private static final int REQUEST_IMAGE_CAPTURE = 2;
+    public static final int RC_PHOTO_PICKER = 1;
+    public static final int REQUEST_IMAGE_CAPTURE = 2;
     private static final String CAMERA_DATA_KEY = "data";
     private static final String CAMERA_IMAGE_EXTENSION = ".jpg";
     private static final String FROM_FILE_ID = "file";
@@ -148,7 +151,6 @@ public class ImageUtils {
 
     public static void onActivityResult(
             Context context,
-            View snackbarView,
             int requestCode,
             int resultCode,
             Intent data,
@@ -156,13 +158,12 @@ public class ImageUtils {
             OnSuccessListener<UploadTask.TaskSnapshot> onSuccessListener) {
         if ((requestCode == RC_PHOTO_PICKER || requestCode == REQUEST_IMAGE_CAPTURE)
                 && resultCode == RESULT_OK) {
-            final Uri imageUri;
+            Uri imageUri;
             switch (requestCode) {
                 case RC_PHOTO_PICKER:
                     imageUri = data.getData();
                     storeFileInStorage(
                             context,
-                            snackbarView,
                             imageUri,
                             storageReference,
                             onSuccessListener
@@ -179,11 +180,16 @@ public class ImageUtils {
                         }
                         image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                         File destination = new File(
-                                Environment.getExternalStorageDirectory(),
+                                android.os.Environment.getExternalStorageDirectory()
+                                        + File.separator
+                                        + context.getResources().getString(R.string.app_name),
                                 System.currentTimeMillis() + CAMERA_IMAGE_EXTENSION);
                         FileOutputStream fo;
                         try {
-                            //destination.createNewFile();
+                            if (!destination.getParentFile().exists())
+                                destination.getParentFile().mkdirs();
+                            if (!destination.exists())
+                                destination.createNewFile();
                             fo = new FileOutputStream(destination);
                             fo.write(bytes.toByteArray());
                             fo.close();
@@ -191,7 +197,6 @@ public class ImageUtils {
                             if (imageUri != null)
                                 storeFileInStorage(
                                         context,
-                                        snackbarView,
                                         imageUri,
                                         storageReference,
                                         onSuccessListener
@@ -210,14 +215,11 @@ public class ImageUtils {
 
     private static void storeFileInStorage(
             final Context context,
-            View snackbarView,
-            final Uri imageUri,
-            final StorageReference photoRef,
+            Uri imageUri,
+            StorageReference photoRef,
             OnSuccessListener<UploadTask.TaskSnapshot> onSuccessListener) {
-        final Snackbar snackbar = Snackbar.make(
-                snackbarView,
-                "",
-                Snackbar.LENGTH_INDEFINITE);
+        final boolean[] isFirst = new boolean[1];
+        isFirst[0] = true;
         UploadTask uploadTask = photoRef.putFile(imageUri);
         uploadTask.addOnSuccessListener(onSuccessListener);
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -225,18 +227,20 @@ public class ImageUtils {
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                 double actualProgressValue = (double) taskSnapshot.getBytesTransferred() /
                         taskSnapshot.getTotalByteCount() * 100;
-                snackbar.setText(new StringBuilder()
-                        .append(context.getResources().getString(R.string.uploading_image))
-                        .append(" (")
-                        .append(String.format(
-                                Locale.getDefault(),
-                                "%.2f",
-                                actualProgressValue)
-                        ).append("%)").toString());
-                snackbar.show();
+                NotificationUtils.addUploadNotification(context,false, isFirst[0], (int)actualProgressValue);
                 if (actualProgressValue == 100D) {
-                    snackbar.dismiss();
+                    NotificationUtils.addUploadNotification(context,true, isFirst[0], 0);
                 }
+                if (isFirst[0]) {
+                    isFirst[0] = false;
+                }
+            }
+        });
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String message = e.getMessage();
+                Timber.wtf("image upload: " + message);
             }
         });
     }

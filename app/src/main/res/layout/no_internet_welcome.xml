@@ -25,6 +25,6 @@
         android:text="@string/retry"
         android:textStyle="bold"
         android:textColor="@android:color/white"
-        android:background="@drawable/retry_btn_background"/>
+        android:background="@drawable/btn_background"/>
 
 </LinearLayout>

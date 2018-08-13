@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="rv_span_count">6</integer>
+    <integer name="rv_span_count">4</integer>
     <integer name="rv_connection_detail_span_count">2</integer>
-    <integer name="connected_rv_span_count">6</integer>
+    <integer name="connected_rv_span_count">4</integer>
     <integer name="requested_rv_span_count">4</integer>
     <integer name="collapsing_threshold">-163</integer>
+    <integer name="unused_span_count">4</integer>
 </resources>

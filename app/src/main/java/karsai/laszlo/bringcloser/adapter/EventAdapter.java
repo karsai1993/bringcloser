@@ -283,7 +283,7 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void deleteFromStorage(final Event event) {
-        ApplicationUtils.deleteImageFromStorage(mContext, event.getExtraPhotoUrl());
+        ApplicationUtils.deleteImageFromStorage(mContext, event.getExtraPhotoUrl(), null, null);
     }
 
     private void editMessage(final Event event) {

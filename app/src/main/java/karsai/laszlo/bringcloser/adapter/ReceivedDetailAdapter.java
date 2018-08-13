@@ -129,9 +129,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         shareReceivedItem(
                                 viewType,
                                 wishDetail.getExtraPhotoUrl(),
-                                wishDetail.getText(),
-                                wishBasicDate,
-                                wishDetail.getFromName());
+                                wishDetail.getText());
                     }
                 });
                 wishBasicViewHolder.chatReceivedItemImageView.setOnClickListener(
@@ -178,9 +176,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 shareReceivedItem(
                                         viewType,
                                         wishDetail.getExtraPhotoUrl(),
-                                        wishDetail.getText(),
-                                        wishExtraDate,
-                                        wishDetail.getFromName());
+                                        wishDetail.getText());
                             }
                         });
                 wishExtraPhotoViewHolder.chatReceivedItemImageView.setOnClickListener(
@@ -220,9 +216,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 shareReceivedItem(
                                         viewType,
                                         null,
-                                        eventDetail.getText(),
-                                        eventBasicDate,
-                                        eventDetail.getFromName());
+                                        eventDetail.getText());
                             }
                         });
                 eventBasicViewHolder.chatReceivedItemImageView.setOnClickListener(
@@ -269,9 +263,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 shareReceivedItem(
                                         viewType,
                                         eventDetail.getExtraPhotoUrl(),
-                                        eventDetail.getText(),
-                                        eventExtraDate,
-                                        eventDetail.getFromName());
+                                        eventDetail.getText());
                             }
                         });
                 eventExtraPhotoViewHolder.chatReceivedItemImageView.setOnClickListener(
@@ -307,9 +299,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 shareReceivedItem(
                                         viewType,
                                         null,
-                                        thoughtDetail.getText(),
-                                        thoughtBasicDate,
-                                        thoughtDetail.getFromName());
+                                        thoughtDetail.getText());
                             }
                         });
                 thoughtBasicViewHolder.chatReceivedItemImageView.setOnClickListener(
@@ -353,9 +343,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 shareReceivedItem(
                                         viewType,
                                         thoughtDetail.getExtraPhotoUrl(),
-                                        thoughtDetail.getText(),
-                                        thoughtExtraDate,
-                                        thoughtDetail.getFromName());
+                                        thoughtDetail.getText());
                             }
                         });
                 thoughtExtraPhotoViewHolder.chatReceivedItemImageView.setOnClickListener(
@@ -459,9 +447,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void shareReceivedItem(
             int viewType,
             String extraPhotoUrl,
-            String message,
-            String date,
-            String fromName) {
+            String message) {
         String mimeType = "text/plain";
         String type;
         if (viewType == WISH_BASIC_VIEW_TYPE || viewType == WISH_EXTRA_PHOTO_VIEW_TYPE) {
@@ -471,44 +457,34 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         } else {
             type = mContext.getResources().getString(R.string.received_detail_thought);
         }
-        type = type.toLowerCase(Locale.getDefault());
+        String lowerCaseType = type.toLowerCase(Locale.getDefault());
         String title = new StringBuilder()
                 .append(mContext.getResources().getString(R.string.share_title_received_item_1))
-                .append(type)
+                .append(lowerCaseType)
                 .append(mContext.getResources().getString(R.string.share_title_received_item_2))
                 .toString();
         Activity activity = (Activity) mContext;
         String content;
         if (extraPhotoUrl == null) {
             content = new StringBuilder()
-                    .append(mContext.getResources().getString(R.string.share_content_received_item_1))
-                    .append(type)
-                    .append(mContext.getResources().getString(R.string.share_content_received_item_2))
-                    .append(fromName)
-                    .append(mContext.getResources().getString(R.string.share_content_received_item_3))
-                    .append(date)
-                    .append(".\n")
                     .append(message)
+                    .append("\n")
+                    .append(mContext.getResources().getString(R.string.share_content_received_item))
                     .toString();
         } else {
             content = new StringBuilder()
-                    .append(mContext.getResources().getString(R.string.share_content_received_item_1))
-                    .append(type)
-                    .append(mContext.getResources().getString(R.string.share_content_received_item_2))
-                    .append(fromName)
-                    .append(mContext.getResources().getString(R.string.share_content_received_item_3))
-                    .append(date)
-                    .append(".\n")
                     .append(message)
                     .append("\n")
                     .append(extraPhotoUrl)
+                    .append("\n")
+                    .append(mContext.getResources().getString(R.string.share_content_received_item))
                     .toString();
         }
         Intent shareIntent = ShareCompat.IntentBuilder
                 .from(activity)
                 .setChooserTitle(title)
                 .setType(mimeType)
-                .setSubject(date)
+                .setSubject(type)
                 .setText(content)
                 .createChooserIntent();
         if (shareIntent.resolveActivity(mContext.getPackageManager()) != null) {

@@ -29,4 +29,11 @@
         </menu>
     </item>
 
+    <item android:title="@string/nav_other">
+        <menu>
+            <item
+                android:id="@+id/nav_unused_photo"
+                android:title="@string/action_show_unused_data" />
+        </menu>
+    </item>
 </menu>

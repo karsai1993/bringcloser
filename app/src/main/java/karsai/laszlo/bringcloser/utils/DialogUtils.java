@@ -49,6 +49,23 @@ public class DialogUtils {
         }
     }
 
+    public static void onDialogRequestForMemorySave(
+            Context context,
+            String title,
+            String [] options,
+            final DialogInterface.OnClickListener onClickListener,
+            int animationStyle) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle(title);
+        alertDialog.setSingleChoiceItems(options, -1, onClickListener);
+        AlertDialog alert = alertDialog.create();
+        Window window = alert.getWindow();
+        if (window != null) {
+            window.getAttributes().windowAnimations = animationStyle;
+        }
+        alert.show();
+    }
+
     public static void onDialogRequestForThoughtSending(
             final Context context,
             String title,

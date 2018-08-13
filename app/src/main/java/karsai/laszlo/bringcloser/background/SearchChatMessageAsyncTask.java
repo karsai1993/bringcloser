@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -20,19 +21,19 @@ import karsai.laszlo.bringcloser.model.MessageDetail;
  */
 public class SearchChatMessageAsyncTask extends AsyncTask<String, Void, List<ChatDetail>> {
 
-    private RecyclerView mRecyclerView;
+    private WeakReference<RecyclerView> mRecyclerView;
     private MessageAdapter mMessageAdapter;
     private List<ChatDetail> mChatDetailList;
-    private ProgressBar mProgressBar;
-    private Context mContext;
+    private WeakReference<ProgressBar> mProgressBar;
+    private WeakReference<Context> mContext;
     private List<MessageDetail> mMessageDetailList;
 
     public SearchChatMessageAsyncTask(
-            RecyclerView mRecyclerView,
+            WeakReference<RecyclerView> mRecyclerView,
             MessageAdapter mMessageAdapter,
             List<ChatDetail> mChatDetailList,
-            ProgressBar mProgressBar,
-            Context mContext,
+            WeakReference<ProgressBar> mProgressBar,
+            WeakReference<Context> mContext,
             List<MessageDetail> mMessageDetailList) {
         this.mRecyclerView = mRecyclerView;
         this.mMessageAdapter = mMessageAdapter;
@@ -44,8 +45,8 @@ public class SearchChatMessageAsyncTask extends AsyncTask<String, Void, List<Cha
 
     @Override
     protected void onPreExecute() {
-        mRecyclerView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mRecyclerView.get().setVisibility(View.GONE);
+        mProgressBar.get().setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class SearchChatMessageAsyncTask extends AsyncTask<String, Void, List<Cha
                 messageDetailList.add(messageDetail);
             }
         }
-        return ApplicationUtils.getDateInfoNextToMessageData(mContext, messageDetailList);
+        return ApplicationUtils.getDateInfoNextToMessageData(mContext.get(), messageDetailList);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class SearchChatMessageAsyncTask extends AsyncTask<String, Void, List<Cha
         mChatDetailList.clear();
         mChatDetailList.addAll(chatDetails);
         mMessageAdapter.notifyDataSetChanged();
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        mProgressBar.get().setVisibility(View.GONE);
+        mRecyclerView.get().setVisibility(View.VISIBLE);
     }
 }

@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <include
         layout="@layout/no_internet_general"
@@ -713,6 +715,54 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_width"
+                    android:layout_margin="@dimen/small_distance"
+                    android:background="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/about_used_libraries_itext_name" />
+
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/about_used_libraries_itext_version" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_about_open_itext"
+                        style="@style/AppTheme"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/small_distance"
+                        android:contentDescription="@string/about_license_open_in_browser_content_description"
+                        android:onClick="onOpenBrowserClick"
+                        android:src="@drawable/baseline_open_in_browser_black_48" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView
@@ -796,13 +846,30 @@
                 android:textSize="@dimen/header_text_size"
                 android:textStyle="bold" />
 
-            <TextView
-                style="@style/AppTheme"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/about_license_content" />
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/about_license_content" />
+
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_gravity="center"
+                    android:onClick="onOpenBrowserClick"
+                    android:src="@drawable/baseline_open_in_browser_black_48"
+                    android:id="@+id/iv_about_open_gnu_agpl"
+                    android:contentDescription="@string/about_license_open_in_browser_content_description"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

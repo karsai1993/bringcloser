@@ -1,10 +1,14 @@
 package karsai.laszlo.bringcloser.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -18,18 +22,24 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.model.ChatDetail;
 import karsai.laszlo.bringcloser.model.Event;
 import karsai.laszlo.bringcloser.model.MessageDetail;
+import karsai.laszlo.bringcloser.model.UnusedPhotoDetail;
 import karsai.laszlo.bringcloser.model.Wish;
 import timber.log.Timber;
 
@@ -50,6 +60,7 @@ public class ApplicationUtils {
     public static final String CONNECTION_KEY = "connection";
     public static final String USERS_NODE = "users";
     public static final String CONNECTIONS_NODE = "connections";
+    public static final String UNUSED_NODE = "unused";
     public static final String MESSAGES_NODE = "messages";
     public static final String WISHES_NODE = "wishes";
     public static final String EVENTS_NODE = "events";
@@ -71,6 +82,7 @@ public class ApplicationUtils {
     public static final String NOTIFICATION_INTENT_ACTION_MESSAGE = "action_message";
     public static final String NOTIFICATION_INTENT_PRIVACY = "action_privacy";
     public static final String NOTIFICATION_INTENT_TERMS = "action_terms";
+    public static final String NOTIFICATION_INTENT_UNUSED = "action_unused";
     public static final String NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION = "action_sent_rq";
     public static final String SAVE_RECYCLERVIEW_POS_KEY = "save_recyclerview_pos";
     public static final String FULL_DATE_PATTERN = "yyyyMMddHHmmss";
@@ -158,6 +170,20 @@ public class ApplicationUtils {
         return displaySimpleDateFormat.format(date);
     }
 
+    public static String getLocalDateAndTime(Context context, String dateAndTimeToConvert) {
+        SimpleDateFormat sdf = new SimpleDateFormat(FULL_DATE_PATTERN, Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date;
+        try {
+            date = sdf.parse(dateAndTimeToConvert);
+        } catch (ParseException e) {
+            return context.getResources().getString(R.string.data_not_available);
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FULL_DATE_PATTERN, Locale.getDefault());
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return simpleDateFormat.format(date);
+    }
+
     public static Date getDateAndTime(String dateAndTimeToConvert) {
         SimpleDateFormat sdf = new SimpleDateFormat(FULL_DATE_PATTERN, Locale.getDefault());
         try {
@@ -198,7 +224,11 @@ public class ApplicationUtils {
         return isExpired;
     }
 
-    public static void deleteImageFromStorage(final Context context, String url) {
+    public static void deleteImageFromStorage(
+            final Context context,
+            final String url,
+            final String fromUid,
+            final String toUid) {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         StorageReference imageStorageReference;
         if (url != null && !url.isEmpty()) {
@@ -207,11 +237,26 @@ public class ApplicationUtils {
             imageStorageReference.delete().addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(
-                            context,
-                            context.getResources().getString(R.string.problem),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    if (toUid == null || fromUid == null) {
+                        Toast.makeText(
+                                context,
+                                context.getResources().getString(R.string.problem)
+                                + ": " + e.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    } else {
+                        UnusedPhotoDetail unusedPhotoDetail = new UnusedPhotoDetail(
+                                fromUid,
+                                toUid,
+                                url
+                        );
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        firebaseDatabase.getReference()
+                                .child(ApplicationUtils.UNUSED_NODE)
+                                .child(fromUid + "_" + toUid)
+                                .push()
+                                .setValue(unusedPhotoDetail);
+                    }
                 }
             });
         }
@@ -461,9 +506,7 @@ public class ApplicationUtils {
                                                 .getResources()
                                                 .getString(
                                                         R.string.request_deleted_1)
-                                        ).append(" ")
-                                        .append(name)
-                                        .append(" ")
+                                        ).append(name)
                                         .append(context
                                                 .getResources()
                                                 .getString(
@@ -672,5 +715,45 @@ public class ApplicationUtils {
         emojiValueList.add(EMOJI_TIRED_VALUE);
         emojiValueList.add(EMOJI_SMIRK_VALUE);
         return emojiValueList;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public static int getExifRotation(InputStream in) {
+        try {
+            ExifInterface exif = new ExifInterface(in);
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED
+            );
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return 90;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return 180;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return 270;
+                default:
+                    return ExifInterface.ORIENTATION_UNDEFINED;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
     }
 }

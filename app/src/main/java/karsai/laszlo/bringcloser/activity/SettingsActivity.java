@@ -109,7 +109,6 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     private User mCurrentUser;
     private List<String> mGenderOptionList;
     private List<String> mGenderOptionsIdList;
-    private View mSnackbarView;
     private FirebaseUser mFirebaseUser;
 
     @Override
@@ -167,7 +166,6 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
             @Override
             public void onClick(View view) {
                 if (mFirebaseUser.isEmailVerified()) {
-                    mSnackbarView = view;
                     ImageUtils.onClickFromFile(SettingsActivity.this);
                 } else {
                     Snackbar.make(
@@ -182,7 +180,6 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
             @Override
             public void onClick(View view) {
                 if (mFirebaseUser.isEmailVerified()) {
-                    mSnackbarView = view;
                     ImageUtils.onClickFromCamera(SettingsActivity.this);
                 } else {
                     Snackbar.make(
@@ -338,7 +335,6 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         };
         ImageUtils.onActivityResult(
                 SettingsActivity.this,
-                mSnackbarView,
                 requestCode,
                 resultCode,
                 data,
@@ -496,10 +492,10 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         updateValues.put("/" + mFirebaseUser.getUid(), null);
         mUsersRootDatabaseReference.updateChildren(updateValues);
         String currUid = mFirebaseUser.getUid();
-        deleteSingleMemoryElements(SettingsActivity.this, currUid);
+        deleteSingleMemoryElementsPrep(SettingsActivity.this, currUid);
     }
 
-    private void deleteSingleMemoryElements(
+    private void deleteSingleMemoryElementsPrep(
             final Context context,
             final String uid) {
         final DatabaseReference connectionsRef
@@ -542,12 +538,28 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                         final DatabaseReference thoughtsDatabaseRef = connectionsRef
                                 .child(currentKey)
                                 .child(ApplicationUtils.THOUGHTS_NODE);
+                        String[] keyPairs = currentKey.split("_");
+                        String otherUid;
+                        try {
+                            String keyOne = keyPairs[0];
+                            String keyTwo = keyPairs[1];
+                            if (keyOne.equals(uid)) {
+                                otherUid = keyTwo;
+                            } else {
+                                otherUid = keyOne;
+                            }
+                        } catch (Exception e) {
+                            Timber.wtf("connection key split failed: " + uid);
+                            otherUid = null;
+                        }
                         deleteSingleMemoryElements(
                                 messagesDatabaseRef,
                                 wishesDatabaseRef,
                                 eventsDatabaseRef,
                                 thoughtsDatabaseRef,
-                                context
+                                context,
+                                uid,
+                                otherUid
                         );
                         if (currCounter == count) {
                             deleteSingleConnection(uid);
@@ -568,14 +580,20 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
             final DatabaseReference wishesDatabaseRef,
             final DatabaseReference eventsDatabaseRef,
             final DatabaseReference thoughtsDatabaseRef,
-            final Context context) {
+            final Context context,
+            final String currUid,
+            final String otherUid) {
         messagesDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageSnapshot.getValue(Message.class);
                     if (message == null) continue;
-                    ApplicationUtils.deleteImageFromStorage(context, message.getPhotoUrl());
+                    ApplicationUtils.deleteImageFromStorage(
+                            context,
+                            message.getPhotoUrl(),
+                            currUid,
+                            otherUid);
                 }
                 wishesDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -583,7 +601,11 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Wish wish = snapshot.getValue(Wish.class);
                             if (wish == null) continue;
-                            ApplicationUtils.deleteImageFromStorage(context, wish.getExtraPhotoUrl());
+                            ApplicationUtils.deleteImageFromStorage(
+                                    context,
+                                    wish.getExtraPhotoUrl(),
+                                    currUid,
+                                    otherUid);
                         }
                         eventsDatabaseRef.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -592,7 +614,11 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             Event event = snapshot.getValue(Event.class);
                                             if (event == null) continue;
-                                            ApplicationUtils.deleteImageFromStorage(context, event.getExtraPhotoUrl());
+                                            ApplicationUtils.deleteImageFromStorage(
+                                                    context,
+                                                    event.getExtraPhotoUrl(),
+                                                    currUid,
+                                                    otherUid);
                                         }
                                         thoughtsDatabaseRef.addListenerForSingleValueEvent(
                                                 new ValueEventListener() {
@@ -601,7 +627,11 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                             Thought thought = snapshot.getValue(Thought.class);
                                                             if (thought == null) continue;
-                                                            ApplicationUtils.deleteImageFromStorage(context, thought.getExtraPhotoUrl());
+                                                            ApplicationUtils.deleteImageFromStorage(
+                                                                    context,
+                                                                    thought.getExtraPhotoUrl(),
+                                                                    currUid,
+                                                                    otherUid);
                                                         }
                                                     }
 

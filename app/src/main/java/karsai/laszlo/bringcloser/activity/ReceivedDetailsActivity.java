@@ -1,18 +1,24 @@
 package karsai.laszlo.bringcloser.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,6 +42,9 @@ import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import karsai.laszlo.bringcloser.background.CreatePdfAllAsyncTask;
+import karsai.laszlo.bringcloser.background.CreatePdfSingleAsyncTask;
+import karsai.laszlo.bringcloser.model.Connection;
 import karsai.laszlo.bringcloser.utils.ApplicationUtils;
 import karsai.laszlo.bringcloser.R;
 import karsai.laszlo.bringcloser.adapter.ReceivedDetailAdapter;
@@ -44,6 +57,8 @@ import karsai.laszlo.bringcloser.model.User;
 import karsai.laszlo.bringcloser.model.Wish;
 import karsai.laszlo.bringcloser.model.WishDetail;
 import karsai.laszlo.bringcloser.utils.DialogUtils;
+import karsai.laszlo.bringcloser.utils.PdfUtils;
+import karsai.laszlo.bringcloser.utils.PermissionUtils;
 import timber.log.Timber;
 
 /**
@@ -659,5 +674,260 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(INSTANCE_SAVE_SORT_BY_VALUE, mSortedByValueTextView.getText().toString());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.received_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_create_pdf) {
+            if (PermissionUtils.isPermissionChecked(this)) {
+                onSaveClicked();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionUtils.REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                onSaveClicked();
+            } else {
+                Toast.makeText(
+                        this,
+                        getResources().getString(R.string.denied_permission_message),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        }
+    }
+
+    private void onSaveClicked() {
+        if (!mStatus.equals(NONE)) {
+            if (!mDisplayedReceivedDetailList.isEmpty()) {
+                readUserInfo();
+            } else {
+                Snackbar.make(
+                        findViewById(android.R.id.content),
+                        getResources().getString(R.string.pdf_creation_no_memories),
+                        Snackbar.LENGTH_LONG
+                ).show();
+            }
+        } else {
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    getResources().getString(R.string.pdf_creation_none_selected),
+                    Snackbar.LENGTH_LONG
+            ).show();
+        }
+    }
+
+    private void readUserInfo() {
+        List<String> userUidList = new ArrayList<>();
+        List<String> userNameList = new ArrayList<>();
+        List<String> userPhotoUrlList = new ArrayList<>();
+        for (ReceivedDetail receivedDetail : mDisplayedReceivedDetailList) {
+            WishDetail wishDetail = receivedDetail.getWishDetail();
+            EventDetail eventDetail = receivedDetail.getEventDetail();
+            ThoughtDetail thoughtDetail = receivedDetail.getThoughtDetail();
+            if (wishDetail != null) {
+                String fromUid = wishDetail.getFromUid();
+                if (!userUidList.contains(fromUid)) {
+                    userUidList.add(fromUid);
+                    userNameList.add(wishDetail.getFromName());
+                    userPhotoUrlList.add(wishDetail.getFromPhotoUrl());
+                }
+            } else if (eventDetail != null) {
+                String fromUid = eventDetail.getFromUid();
+                if (!userUidList.contains(fromUid)) {
+                    userUidList.add(fromUid);
+                    userNameList.add(eventDetail.getFromName());
+                    userPhotoUrlList.add(eventDetail.getFromPhotoUrl());
+                }
+            } else if (thoughtDetail != null) {
+                String fromUid = thoughtDetail.getFromUid();
+                if (!userUidList.contains(fromUid)) {
+                    userUidList.add(fromUid);
+                    userNameList.add(thoughtDetail.getFromName());
+                    userPhotoUrlList.add(thoughtDetail.getFromPhotoUrl());
+                }
+            }
+        }
+        openDialogForSave(userUidList, userNameList, userPhotoUrlList);
+    }
+
+    private void openDialogForSave(
+            final List<String> userUidList,
+            List<String> userNameList,
+            final List<String> userPhotoUrlList) {
+        final String[] options = new String[userNameList.size() + 1];
+        options[0] = getResources().getString(R.string.pdf_creation_all);
+        int arrayPos = 1;
+        for (String name : userNameList) {
+            options[arrayPos] = name;
+            arrayPos++;
+        }
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position) {
+                if (position == 0) {
+                    handleAllMemoryRequest();
+                } else {
+                    String chosenName = options[position];
+                    String chosenUid = userUidList.get(position - 1);
+                    String chosenPhotoUrl = userPhotoUrlList.get(position - 1);
+                    List<ReceivedDetail> receivedDetailList = getFilteredReceivedDetailList(chosenUid);
+                    handleSingleMemoryRequest(receivedDetailList, chosenName, chosenUid, chosenPhotoUrl);
+                }
+                dialogInterface.dismiss();
+            }
+        };
+        DialogUtils.onDialogRequestForMemorySave(
+                this,
+                getResources().getString(R.string.pdf_creation_question),
+                options,
+                onClickListener,
+                R.style.DialogUpDownTheme);
+    }
+
+    private List<ReceivedDetail> getFilteredReceivedDetailList(String chosenUid) {
+        List<ReceivedDetail> receivedDetailList = new ArrayList<>();
+        for (ReceivedDetail receivedDetail : mDisplayedReceivedDetailList) {
+            WishDetail wishDetail = receivedDetail.getWishDetail();
+            EventDetail eventDetail = receivedDetail.getEventDetail();
+            ThoughtDetail thoughtDetail = receivedDetail.getThoughtDetail();
+            if (wishDetail != null) {
+                if (wishDetail.getFromUid().equals(chosenUid)) {
+                    receivedDetailList.add(receivedDetail);
+                }
+            } else if (eventDetail != null) {
+                if (eventDetail.getFromUid().equals(chosenUid)) {
+                    receivedDetailList.add(receivedDetail);
+                }
+            } else if (thoughtDetail != null) {
+                if (thoughtDetail.getFromUid().equals(chosenUid)) {
+                    receivedDetailList.add(receivedDetail);
+                }
+            }
+        }
+        return receivedDetailList;
+    }
+
+    private void handleSingleMemoryRequest(
+            final List<ReceivedDetail> receivedDetailList,
+            final String chosenName,
+            final String chosenUid,
+            final String chosenPhotoUrl) {
+        mConnectionsDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String connectionToLookFor = chosenUid + "_" + mCurrentUserUid;
+                if (dataSnapshot.hasChild(connectionToLookFor)) {
+                    applySingleMemoryRequest(
+                            receivedDetailList,
+                            chosenName,
+                            chosenPhotoUrl,
+                            dataSnapshot.child(connectionToLookFor)
+                    );
+                } else {
+                    connectionToLookFor = mCurrentUserUid + "_" + chosenUid;
+                    if (dataSnapshot.hasChild(connectionToLookFor)) {
+                        applySingleMemoryRequest(
+                                receivedDetailList,
+                                chosenName,
+                                chosenPhotoUrl,
+                                dataSnapshot.child(connectionToLookFor)
+                        );
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void applySingleMemoryRequest(
+            final List<ReceivedDetail> receivedDetailList,
+            final String chosenName,
+            final String chosenPhotoUrl,
+            DataSnapshot child) {
+        Connection connection = child.getValue(Connection.class);
+        if (connection == null) {
+            Timber.wtf("connection not found - apply single memory request");
+            return;
+        }
+        final String connectionTimestamp = connection.getTimestamp();
+        mUsersDatabaseRef.child(mCurrentUserUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user == null) {
+                    Timber.wtf("current user null - single memories " + mCurrentUserUid);
+                    return;
+                }
+                String currentName = user.getUsername();
+                String currentPhotoUrl = user.getPhotoUrl();
+                new CreatePdfSingleAsyncTask(
+                        new WeakReference<Context>(ReceivedDetailsActivity.this),
+                        mCurrentUserUid,
+                        receivedDetailList,
+                        currentName,
+                        currentPhotoUrl,
+                        chosenName,
+                        chosenPhotoUrl,
+                        connectionTimestamp
+                ).execute();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void handleAllMemoryRequest() {
+        mUsersDatabaseRef.child(mCurrentUserUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user == null) {
+                    Timber.wtf("current user null - all memories " + mCurrentUserUid);
+                    return;
+                }
+                String currentName = user.getUsername();
+                String currentPhotoUrl = user.getPhotoUrl();
+                String currentRegistrationTime = user.getRegistrationTime();
+                try {
+                    new CreatePdfAllAsyncTask(
+                            new WeakReference<Context>(ReceivedDetailsActivity.this),
+                            mCurrentUserUid,
+                            mDisplayedReceivedDetailList,
+                            currentName,
+                            currentPhotoUrl,
+                            currentRegistrationTime
+                    ).execute();
+                } catch (Exception e) {
+                    Timber.wtf(e.getMessage() + mCurrentUserUid);
+                    PdfUtils.showError(ReceivedDetailsActivity.this, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

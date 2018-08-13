@@ -1,5 +1,6 @@
 package karsai.laszlo.bringcloser.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -28,7 +29,11 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -109,8 +115,6 @@ public class AddNewWishActivity extends CommonActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseRef;
     private ValueEventListener mUserValueEventListener;
-    private View mSnackbarView;
-    private FirebaseUser mFirebaseUser;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mWishImagesRootRef;
     private StorageReference mWishImagesRef;
@@ -122,6 +126,7 @@ public class AddNewWishActivity extends CommonActivity {
     private Bundle mSavedInstanceState;
     private String mChosenPhotoUrl;
     private boolean mGenderShouldBeReversed;
+    private ProgressDialog mDialog;
 
     private final static String SAVE_CHOSEN_VALUE = "chosen_val";
     private final static String SAVE_DATE = "date";
@@ -195,10 +200,9 @@ public class AddNewWishActivity extends CommonActivity {
                     timePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_TIME_PICKER);
                 }
             });
-            mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             mFirebaseStorage = FirebaseStorage.getInstance();
             mWishImagesRootRef = mFirebaseStorage.getReference()
-                    .child(mFirebaseUser.getUid())
+                    .child(mCurrentUserUid)
                     .child(ApplicationUtils.STORAGE_WISH_IMAGES_FOLDER);
             mWishImagesRef = mWishImagesRootRef;
             mConnectionsDatabaseReference = mFirebaseDatabase.getReference()
@@ -206,14 +210,12 @@ public class AddNewWishActivity extends CommonActivity {
             mWishGalleryPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mSnackbarView = view;
                     ImageUtils.onClickFromFile(AddNewWishActivity.this);
                 }
             });
             mWishCameraPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mSnackbarView = view;
                     ImageUtils.onClickFromCamera(AddNewWishActivity.this);
                 }
             });
@@ -226,7 +228,9 @@ public class AddNewWishActivity extends CommonActivity {
                             String photoUrl = uri.toString();
                             ApplicationUtils.deleteImageFromStorage(
                                     AddNewWishActivity.this,
-                                    photoUrl
+                                    photoUrl,
+                                    null,
+                                    null
                             );
                             mWishAddPhotoLinearLayout.setVisibility(View.GONE);
                             mWishNoPhotoAlertTextView.setVisibility(View.VISIBLE);
@@ -234,10 +238,16 @@ public class AddNewWishActivity extends CommonActivity {
                     });
                 }
             });
+            mDialog = new ProgressDialog(this);
             mApproveFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mDialog.setMessage(getResources().getString(R.string.memory_creating));
+                    mDialog.show();
                     if (mSpinner.getSelectedItem().equals(getString(R.string.wish_default_occasion))) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.wish_alert_no_occasion),
@@ -246,12 +256,18 @@ public class AddNewWishActivity extends CommonActivity {
                     } else if (mSpinner.getSelectedItem()
                             .equals(getString(R.string.wish_other_occasion))
                             && mWishOtherEditText.getText().toString().isEmpty()) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.wish_alert_no_occasion_specified),
                                 Snackbar.LENGTH_LONG
                         ).show();
                     } else if (mWishEditText.getText().toString().isEmpty()) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.wish_alert_no_text),
@@ -259,6 +275,9 @@ public class AddNewWishActivity extends CommonActivity {
                         ).show();
                     } else if (mWishSelectedDateTextView.getText().toString()
                             .equals(getString(R.string.selected_date_default))) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.alert_no_date),
@@ -266,6 +285,9 @@ public class AddNewWishActivity extends CommonActivity {
                         ).show();
                     } else if (mWishSelectedTimeTextView.getText().toString()
                             .equals(getString(R.string.selected_time_default))) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.alert_no_time),
@@ -330,7 +352,9 @@ public class AddNewWishActivity extends CommonActivity {
                     String photoUrl = uri.toString();
                     ApplicationUtils.deleteImageFromStorage(
                             getApplicationContext(),
-                            photoUrl
+                            photoUrl,
+                            null,
+                            null
                     );
                     Toast.makeText(
                             getApplicationContext(),
@@ -441,6 +465,9 @@ public class AddNewWishActivity extends CommonActivity {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             startUpdateService(wish);
+                                            if (mDialog != null && mDialog.isShowing()) {
+                                                mDialog.dismiss();
+                                            }
                                             finish();
                                         }
                                     });
@@ -521,56 +548,77 @@ public class AddNewWishActivity extends CommonActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        final StorageReference tempRef = mWishImagesRef;
-        mWishImagesRef = mWishImagesRootRef.child(
-                ApplicationUtils.getCurrentUTCDateAndTime()
-        );
+        if ((requestCode == ImageUtils.RC_PHOTO_PICKER
+                || requestCode == ImageUtils.REQUEST_IMAGE_CAPTURE)
+                && resultCode == RESULT_OK) {
+            if (!mWishImagesRef.equals(mWishImagesRootRef)) {
+                Task<Uri> task = mWishImagesRef.getDownloadUrl();
+                task.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        Timber.d("completed");
+                    }
+                });
+                task.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Timber.wtf("failure - wish old image delete " + mCurrentUserUid);
+                    }
+                });
+                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String prevPhotoUrl = uri.toString();
+                        ApplicationUtils.deleteImageFromStorage(
+                                AddNewWishActivity.this,
+                                prevPhotoUrl,
+                                null,
+                                null
+                        );
+                    }
+                });
+                task.addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Timber.d("canceled");
+                    }
+                });
+            }
+            mWishImagesRef = mWishImagesRootRef.child(
+                    ApplicationUtils.getCurrentUTCDateAndTime()
+            );
+        }
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageMetadata storageMetadata = taskSnapshot.getMetadata();
+                if (storageMetadata == null) {
+                    return;
+                }
+                mWishImagesRef = storageMetadata.getReference();
+                if (mWishImagesRef == null) {
+                    return;
+                }
                 mWishImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(final Uri uri) {
-                        final String photoUrl = uri.toString();
-                        if (mWishAddPhotoLinearLayout.getVisibility() == View.VISIBLE) {
-                            tempRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri prevUri) {
-                                    String prevPhotoUrl = prevUri.toString();
-                                    ApplicationUtils.deleteImageFromStorage(
-                                            AddNewWishActivity.this,
-                                            prevPhotoUrl
-                                    );
-                                    mWishNoPhotoAlertTextView.setVisibility(View.GONE);
-                                    mWishAddPhotoLinearLayout.setVisibility(View.VISIBLE);
-                                    ImageUtils.setPhoto(
-                                            AddNewWishActivity.this,
-                                            photoUrl,
-                                            mWishAddedExtraPhotoImageView,
-                                            false
-                                    );
-                                    mChosenPhotoUrl = photoUrl;
-                                }
-                            });
-                        } else {
-                            mWishNoPhotoAlertTextView.setVisibility(View.GONE);
-                            mWishAddPhotoLinearLayout.setVisibility(View.VISIBLE);
-                            ImageUtils.setPhoto(
-                                    AddNewWishActivity.this,
-                                    photoUrl,
-                                    mWishAddedExtraPhotoImageView,
-                                    false
-                            );
-                            mChosenPhotoUrl = photoUrl;
-                        }
+                    public void onSuccess(Uri uri) {
+                        String photoUrl = uri.toString();
+                        mWishNoPhotoAlertTextView.setVisibility(View.GONE);
+                        mWishAddPhotoLinearLayout.setVisibility(View.VISIBLE);
+                        ImageUtils.setPhoto(
+                                AddNewWishActivity.this,
+                                photoUrl,
+                                mWishAddedExtraPhotoImageView,
+                                false
+                        );
+                        mChosenPhotoUrl = photoUrl;
                     }
                 });
             }
         };
         ImageUtils.onActivityResult(
                 AddNewWishActivity.this,
-                mSnackbarView,
                 requestCode,
                 resultCode,
                 data,

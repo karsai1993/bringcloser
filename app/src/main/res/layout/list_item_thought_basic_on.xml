@@ -101,7 +101,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/header_text_size"
                 android:id="@+id/tv_thought_dismiss"
-                android:text="@string/thought_cancel_sent_data"/>
+                android:text="@string/delete_data"/>
 
         </LinearLayout>
 

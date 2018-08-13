@@ -43,6 +43,10 @@ public class AboutActivity extends CommonActivity {
             = "https://github.com/firebase/firebase-jobdispatcher-android/blob/master/LICENSE";
     private static final String LICENSE_URL_TIMBER
             = "https://github.com/JakeWharton/timber/blob/master/LICENSE.txt";
+    private static final String LICENSE_URL_ITEXT
+            = "https://github.com/itext/itextpdf/blob/develop/LICENSE.md";
+    private static final String LICENSE_URL_GNU_AGPL
+            = "http://www.gnu.org/licenses/agpl.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,12 @@ public class AboutActivity extends CommonActivity {
                 break;
             case R.id.iv_about_open_timber:
                 url = LICENSE_URL_TIMBER;
+                break;
+            case R.id.iv_about_open_itext:
+                url = LICENSE_URL_ITEXT;
+                break;
+            case R.id.iv_about_open_gnu_agpl:
+                url = LICENSE_URL_GNU_AGPL;
                 break;
             case R.id.iv_about_open_icons8:
                 url = getResources().getString(R.string.about_icons_content_icons8);

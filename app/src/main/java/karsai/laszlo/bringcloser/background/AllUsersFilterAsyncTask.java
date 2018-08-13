@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -21,21 +22,21 @@ import karsai.laszlo.bringcloser.model.User;
  */
 public class AllUsersFilterAsyncTask extends AsyncTask<String, Void, List<User>> {
 
-    private Context mContext;
-    private Context mAppContext;
+    private WeakReference<Context> mContext;
+    private WeakReference<Context> mAppContext;
     private List<User> mUserList;
-    private RecyclerView mAllUsersRecyclerView;
-    private TextView mInfoAboutConnectionsTextView;
-    private ProgressBar mFilterProgressBar;
+    private WeakReference<RecyclerView> mAllUsersRecyclerView;
+    private WeakReference<TextView> mInfoAboutConnectionsTextView;
+    private WeakReference<ProgressBar> mFilterProgressBar;
     private List<User> mFilteredUserList;
 
     public AllUsersFilterAsyncTask(
-            Context context,
-            Context appContext,
+            WeakReference<Context> context,
+            WeakReference<Context> appContext,
             List<User> userList,
-            RecyclerView recyclerView,
-            TextView textView,
-            ProgressBar progressBar,
+            WeakReference<RecyclerView> recyclerView,
+            WeakReference<TextView> textView,
+            WeakReference<ProgressBar> progressBar,
             List<User> filteredUserList) {
         this.mContext = context;
         this.mAppContext = appContext;
@@ -48,9 +49,9 @@ public class AllUsersFilterAsyncTask extends AsyncTask<String, Void, List<User>>
 
     @Override
     protected void onPreExecute() {
-        mAllUsersRecyclerView.setVisibility(View.GONE);
-        mInfoAboutConnectionsTextView.setVisibility(View.GONE);
-        mFilterProgressBar.setVisibility(View.VISIBLE);
+        mAllUsersRecyclerView.get().setVisibility(View.GONE);
+        mInfoAboutConnectionsTextView.get().setVisibility(View.GONE);
+        mFilterProgressBar.get().setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -67,21 +68,21 @@ public class AllUsersFilterAsyncTask extends AsyncTask<String, Void, List<User>>
     @Override
     protected void onPostExecute(List<User> userList) {
         mFilteredUserList = userList;
-        mAllUsersRecyclerView.setVisibility(View.VISIBLE);
-        mInfoAboutConnectionsTextView.setVisibility(View.VISIBLE);
-        mFilterProgressBar.setVisibility(View.GONE);
-        int position = ((GridLayoutManager)mAllUsersRecyclerView.getLayoutManager())
+        mAllUsersRecyclerView.get().setVisibility(View.VISIBLE);
+        mInfoAboutConnectionsTextView.get().setVisibility(View.VISIBLE);
+        mFilterProgressBar.get().setVisibility(View.GONE);
+        int position = ((GridLayoutManager)mAllUsersRecyclerView.get().getLayoutManager())
                 .findFirstVisibleItemPosition();
         AllUsersAdapter allUsersAdapter = new AllUsersAdapter(
-                mContext,
-                mAppContext,
+                mContext.get(),
+                mAppContext.get(),
                 mFilteredUserList
         );
-        mAllUsersRecyclerView.setAdapter(allUsersAdapter);
-        mAllUsersRecyclerView.scrollToPosition(position);
-        mInfoAboutConnectionsTextView.setText(
+        mAllUsersRecyclerView.get().setAdapter(allUsersAdapter);
+        mAllUsersRecyclerView.get().scrollToPosition(position);
+        mInfoAboutConnectionsTextView.get().setText(
                 new StringBuilder()
-                        .append(mContext
+                        .append(mContext.get()
                                 .getResources()
                                 .getString(R.string.add_connection_found_possible_size)
                         ).append(" (")

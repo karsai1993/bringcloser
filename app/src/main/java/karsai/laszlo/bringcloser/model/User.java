@@ -18,6 +18,7 @@ public class User implements Parcelable {
     private String mGender;
     private Map<String, Object> mTokensMap;
     private String mUid;
+    private String mRegistrationTime;
 
     public User(
             boolean isEmailVerified,
@@ -26,7 +27,8 @@ public class User implements Parcelable {
             String birthday,
             String gender,
             Map<String, Object> tokensMap,
-            String uid) {
+            String uid,
+            String registrationTime) {
         this.mIsEmailVerified = isEmailVerified;
         this.mUsername = username;
         this.mPhotoUrl = photoUrl;
@@ -34,9 +36,17 @@ public class User implements Parcelable {
         this.mGender = gender;
         this.mTokensMap = tokensMap;
         this.mUid = uid;
+        this.mRegistrationTime = registrationTime;
     }
 
-    public User() {
+    public User() {}
+
+    public String getRegistrationTime() {
+        return mRegistrationTime;
+    }
+
+    public void setRegistrationTime(String registrationTime) {
+        this.mRegistrationTime = registrationTime;
     }
 
     public String getUid() {
@@ -103,6 +113,7 @@ public class User implements Parcelable {
         this.mGender = in.readString();
         this.mTokensMap = in.readHashMap(Boolean.class.getClassLoader());
         this.mUid = in.readString();
+        this.mRegistrationTime = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -131,5 +142,6 @@ public class User implements Parcelable {
         parcel.writeString(mGender);
         parcel.writeMap(mTokensMap);
         parcel.writeString(mUid);
+        parcel.writeString(mRegistrationTime);
     }
 }

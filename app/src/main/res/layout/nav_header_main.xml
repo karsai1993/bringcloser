@@ -75,7 +75,7 @@
                 android:textSize="@dimen/nav_header_text_size"
                 android:layout_alignStart="@+id/tv_user_birthday"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@android:color/white"/>
 
         </RelativeLayout>
 
@@ -107,7 +107,7 @@
                 android:textSize="@dimen/nav_header_text_size"
                 android:layout_alignStart="@+id/tv_user_gender"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@android:color/white"/>
 
         </RelativeLayout>
 

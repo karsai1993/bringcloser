@@ -122,7 +122,8 @@ public class MainActivity extends CommonActivity
                 getResources().getString(R.string.settings_birthday_default_id),
                 getResources().getString(R.string.gender_none_id),
                 null,
-                mCurrentUserUid
+                mCurrentUserUid,
+                ApplicationUtils.getCurrentUTCDateAndTime()
         );
         initializeUsersData();
         mToolbar.setTitle("");
@@ -351,6 +352,8 @@ public class MainActivity extends CommonActivity
                     this,
                     getResources().getString(R.string.privacy_policy)
             );
+        } else if (id == R.id.nav_unused_photo) {
+            startActivity(new Intent(MainActivity.this, UnusedDataActivity.class));
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         item.setChecked(false);

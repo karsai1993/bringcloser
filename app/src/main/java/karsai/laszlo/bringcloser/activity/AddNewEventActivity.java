@@ -1,5 +1,6 @@
 package karsai.laszlo.bringcloser.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +24,11 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -93,7 +99,6 @@ public class AddNewEventActivity extends CommonActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseRef;
     private ValueEventListener mUserValueEventListener;
-    private View mSnackbarView;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mImagesRootRef;
     private StorageReference mImagesRef;
@@ -103,6 +108,7 @@ public class AddNewEventActivity extends CommonActivity {
     private String mCurrentUserUid;
     private Bundle mPausedData;
     private Bundle mSavedInstanceState;
+    private ProgressDialog mDialog;
     private String mChosenPhotoUrl;
 
     private final static String SAVE_DATE = "date";
@@ -188,14 +194,12 @@ public class AddNewEventActivity extends CommonActivity {
             mGalleryPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mSnackbarView = view;
                     ImageUtils.onClickFromFile(AddNewEventActivity.this);
                 }
             });
             mCameraPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mSnackbarView = view;
                     ImageUtils.onClickFromCamera(AddNewEventActivity.this);
                 }
             });
@@ -208,7 +212,9 @@ public class AddNewEventActivity extends CommonActivity {
                             String photoUrl = uri.toString();
                             ApplicationUtils.deleteImageFromStorage(
                                     AddNewEventActivity.this,
-                                    photoUrl
+                                    photoUrl,
+                                    null,
+                                    null
                             );
                             mAddPhotoLinearLayout.setVisibility(View.GONE);
                             mNoPhotoAlertTextView.setVisibility(View.VISIBLE);
@@ -216,22 +222,34 @@ public class AddNewEventActivity extends CommonActivity {
                     });
                 }
             });
+            mDialog = new ProgressDialog(this);
             mApproveFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mDialog.setMessage(getResources().getString(R.string.memory_creating));
+                    mDialog.show();
                     if (mTitleEditText.getText().toString().isEmpty()) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.event_alert_no_title),
                                 Snackbar.LENGTH_LONG
                         ).show();
                     } else if (mPlaceEditText.getText().toString().isEmpty()) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.event_alert_no_place),
                                 Snackbar.LENGTH_LONG
                         ).show();
                     } else if (mMessageEditText.getText().toString().isEmpty()) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.event_alert_no_message),
@@ -239,6 +257,9 @@ public class AddNewEventActivity extends CommonActivity {
                         ).show();
                     } else if (mSelectedDateTextView.getText().toString()
                             .equals(getString(R.string.selected_date_default))) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.alert_no_date),
@@ -246,6 +267,9 @@ public class AddNewEventActivity extends CommonActivity {
                         ).show();
                     } else if (mSelectedTimeTextView.getText().toString()
                             .equals(getString(R.string.selected_time_default))) {
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                         Snackbar.make(
                                 view,
                                 getString(R.string.alert_no_time),
@@ -322,7 +346,9 @@ public class AddNewEventActivity extends CommonActivity {
                     String photoUrl = uri.toString();
                     ApplicationUtils.deleteImageFromStorage(
                             getApplicationContext(),
-                            photoUrl
+                            photoUrl,
+                            null,
+                            null
                     );
                     Toast.makeText(
                             getApplicationContext(),
@@ -414,6 +440,9 @@ public class AddNewEventActivity extends CommonActivity {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             startUpdateService(event);
+                                            if (mDialog != null && mDialog.isShowing()) {
+                                                mDialog.dismiss();
+                                            }
                                             finish();
                                         }
                                     });
@@ -494,56 +523,77 @@ public class AddNewEventActivity extends CommonActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        final StorageReference tempRef = mImagesRef;
-        mImagesRef = mImagesRootRef.child(
-                ApplicationUtils.getCurrentUTCDateAndTime()
-        );
+        if ((requestCode == ImageUtils.RC_PHOTO_PICKER
+                || requestCode == ImageUtils.REQUEST_IMAGE_CAPTURE)
+                && resultCode == RESULT_OK) {
+            if (!mImagesRef.equals(mImagesRootRef)) {
+                Task<Uri> task = mImagesRef.getDownloadUrl();
+                task.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        Timber.d("completed");
+                    }
+                });
+                task.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Timber.wtf("failure - event old image delete " + mCurrentUserUid);
+                    }
+                });
+                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String prevPhotoUrl = uri.toString();
+                        ApplicationUtils.deleteImageFromStorage(
+                                AddNewEventActivity.this,
+                                prevPhotoUrl,
+                                null,
+                                null
+                        );
+                    }
+                });
+                task.addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Timber.d("canceled");
+                    }
+                });
+            }
+            mImagesRef = mImagesRootRef.child(
+                    ApplicationUtils.getCurrentUTCDateAndTime()
+            );
+        }
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageMetadata storageMetadata = taskSnapshot.getMetadata();
+                if (storageMetadata == null) {
+                    return;
+                }
+                mImagesRef = storageMetadata.getReference();
+                if (mImagesRef == null) {
+                    return;
+                }
                 mImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(final Uri uri) {
-                        final String photoUrl = uri.toString();
-                        if (mAddPhotoLinearLayout.getVisibility() == View.VISIBLE) {
-                            tempRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri prevUri) {
-                                    String prevPhotoUrl = prevUri.toString();
-                                    ApplicationUtils.deleteImageFromStorage(
-                                            AddNewEventActivity.this,
-                                            prevPhotoUrl
-                                    );
-                                    mNoPhotoAlertTextView.setVisibility(View.GONE);
-                                    mAddPhotoLinearLayout.setVisibility(View.VISIBLE);
-                                    ImageUtils.setPhoto(
-                                            AddNewEventActivity.this,
-                                            photoUrl,
-                                            mAddedExtraPhotoImageView,
-                                            false
-                                    );
-                                    mChosenPhotoUrl = photoUrl;
-                                }
-                            });
-                        } else {
-                            mNoPhotoAlertTextView.setVisibility(View.GONE);
-                            mAddPhotoLinearLayout.setVisibility(View.VISIBLE);
-                            ImageUtils.setPhoto(
-                                    AddNewEventActivity.this,
-                                    photoUrl,
-                                    mAddedExtraPhotoImageView,
-                                    false
-                            );
-                            mChosenPhotoUrl = photoUrl;
-                        }
+                    public void onSuccess(Uri uri) {
+                        String photoUrl = uri.toString();
+                        mNoPhotoAlertTextView.setVisibility(View.GONE);
+                        mAddPhotoLinearLayout.setVisibility(View.VISIBLE);
+                        ImageUtils.setPhoto(
+                                AddNewEventActivity.this,
+                                photoUrl,
+                                mAddedExtraPhotoImageView,
+                                false
+                        );
+                        mChosenPhotoUrl = photoUrl;
                     }
                 });
             }
         };
         ImageUtils.onActivityResult(
                 AddNewEventActivity.this,
-                mSnackbarView,
                 requestCode,
                 resultCode,
                 data,

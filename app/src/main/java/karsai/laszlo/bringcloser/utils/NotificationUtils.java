@@ -1,6 +1,5 @@
 package karsai.laszlo.bringcloser.utils;
 
-import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,18 +10,17 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.support.media.ExifInterface;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.io.File;
 import java.net.URL;
 
 import karsai.laszlo.bringcloser.R;
+import karsai.laszlo.bringcloser.activity.UnusedDataActivity;
 import karsai.laszlo.bringcloser.model.ConnectionDetail;
 import karsai.laszlo.bringcloser.activity.ConnectionActivity;
 import karsai.laszlo.bringcloser.activity.MainActivity;
@@ -36,24 +34,25 @@ import timber.log.Timber;
 public class NotificationUtils {
 
     private static final String NOTIFICATION_CHANNEL_ID = "10001";
+    private static final String HIGH_IMP_NOTIFICATION_CHANNEL_ID = "10003";
+    private static final String LOW_IMP_NOTIFICATION_CHANNEL_ID = "10004";
+    private static final int PDF_NOTIFICATION_ID = 9;
+    private static final int UPLOAD_NOTIFICATION_ID = 10;
     private static final String NOTIFICATION_CHANNEL_NAME = "bring_closer_notifications";
 
-    public static Bitmap getBitmapFromUrl(String imageUrl) {
-        HttpURLConnection connection = null;
+    private static Bitmap getBitmapFromUrl(String imageUrl) {
         try {
             URL url = new URL(imageUrl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
             int rotDegree = 0;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                rotDegree = getExifRotation(connection.getInputStream());
+                rotDegree = ApplicationUtils.getExifRotation(url.openStream());
             }
-            connection.disconnect();
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            Bitmap image = BitmapFactory.decodeStream(connection.getInputStream());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(url.openStream(), null, options);
+            options.inSampleSize = ApplicationUtils.calculateInSampleSize(options, 100, 100);
+            options.inJustDecodeBounds = false;
+            Bitmap image = BitmapFactory.decodeStream(url.openStream(), null, options);
             Matrix matrix = new Matrix();
             matrix.postRotate(rotDegree);
             return Bitmap.createBitmap(
@@ -67,38 +66,10 @@ public class NotificationUtils {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    public static int getExifRotation(InputStream in) {
-        try {
-            ExifInterface exif = new ExifInterface(in);
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_UNDEFINED
-            );
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    return 90;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    return 180;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    return 270;
-                default:
-                    return ExifInterface.ORIENTATION_UNDEFINED;
-            }
-        } catch (IOException e) {
-            return 0;
-        }
-    }
-
-
-    public static void addNotification(
+    public static void addFunctionsNotification(
             Context context,
             String title,
             String message,
@@ -130,6 +101,10 @@ public class NotificationUtils {
             String url = context.getResources().getString(R.string.terms_of_use);
             Uri webPage = Uri.parse(url);
             targetIntent = new Intent(Intent.ACTION_VIEW, webPage);
+        } else if (action.equals(ApplicationUtils.NOTIFICATION_INTENT_UNUSED)) {
+            openMainActivityForUpNavigationIntent = new Intent(context, MainActivity.class);
+            openMainActivityForUpNavigationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            targetIntent = new Intent(context, UnusedDataActivity.class);
         } else {
             return;
         }
@@ -166,22 +141,24 @@ public class NotificationUtils {
         );
 
         builder.setSmallIcon(R.drawable.ic_stat_notification);
+        if (!action.equals(ApplicationUtils.NOTIFICATION_INTENT_UNUSED)) {
+            builder.setLargeIcon(
+                    action.equals(ApplicationUtils.NOTIFICATION_INTENT_PRIVACY)
+                            || action.equals(ApplicationUtils.NOTIFICATION_INTENT_TERMS) ?
+                            BitmapFactory.decodeResource(
+                                    context.getResources(),
+                                    R.mipmap.ic_launcher
+                            ) :
+                            imageUrl != null ?
+                                    getBitmapFromUrl(imageUrl) :
+                                    BitmapFactory.decodeResource(
+                                            context.getResources(),
+                                            R.drawable.baseline_face_black_48
+                                    )
+            );
+        }
         builder.setContentTitle(title)
                 .setContentText(message)
-                .setLargeIcon(
-                        action.equals(ApplicationUtils.NOTIFICATION_INTENT_PRIVACY)
-                                || action.equals(ApplicationUtils.NOTIFICATION_INTENT_TERMS) ?
-                                BitmapFactory.decodeResource(
-                                        context.getResources(),
-                                        R.mipmap.ic_launcher
-                                ) :
-                        imageUrl != null ?
-                                getBitmapFromUrl(imageUrl) :
-                                BitmapFactory.decodeResource(
-                                        context.getResources(),
-                                        R.drawable.baseline_face_black_48
-                                )
-                )
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
@@ -212,5 +189,138 @@ public class NotificationUtils {
             notificationManager.createNotificationChannel(notificationChannel);
         }
         notificationManager.notify(notificationId, builder.build());
+    }
+
+    public static void addPdfNotification(
+            Context context,
+            File destination,
+            boolean isDone,
+            int progress) {
+        boolean isHighImportanceRequired = isDone || progress == 1;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context,
+                isHighImportanceRequired ? HIGH_IMP_NOTIFICATION_CHANNEL_ID :
+                        LOW_IMP_NOTIFICATION_CHANNEL_ID
+        );
+
+        builder.setSmallIcon(R.drawable.ic_stat_notification);
+        builder.setColor(ContextCompat.getColor(context, R.color.colorPrimary));
+
+        if (isDone) {
+            Uri uri = FileProvider.getUriForFile(
+                    context,
+                    "android.support.v4.content.FileProvider",
+                    destination);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent targetIntent = Intent.createChooser(
+                    intent,
+                    context.getResources().getString(R.string.pdf_notification_choose)
+            );
+            PendingIntent contentIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    targetIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT
+            );
+            builder.setProgress(0, progress, false);
+            builder.setContentTitle(context.getResources().getString(R.string.pdf_notification_title_done))
+                    .setContentText(context.getResources().getString(R.string.pdf_notification_message))
+                    .setAutoCancel(true)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                    .setContentIntent(contentIntent);
+        } else {
+            builder.setProgress(6, progress, false)
+                    .setContentTitle(context.getResources().getString(R.string.pdf_notification_title_progress))
+                    .setDefaults(0)
+                    .setSound(null);
+        }
+
+        NotificationManager notificationManager
+                = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            Timber.wtf("notificationmanager null");
+            return;
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    isHighImportanceRequired ? HIGH_IMP_NOTIFICATION_CHANNEL_ID :
+                            LOW_IMP_NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_NAME,
+                    isHighImportanceRequired ? NotificationManager.IMPORTANCE_HIGH :
+                            NotificationManager.IMPORTANCE_LOW
+            );
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLACK);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(
+                    new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400}
+            );
+            builder.setChannelId(
+                    isHighImportanceRequired ? HIGH_IMP_NOTIFICATION_CHANNEL_ID :
+                            LOW_IMP_NOTIFICATION_CHANNEL_ID);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        notificationManager.notify(PDF_NOTIFICATION_ID, builder.build());
+    }
+
+    public static void addUploadNotification(
+            Context context,
+            boolean isDone,
+            boolean isFirst,
+            int progress) {
+        boolean isHighImportanceRequired = isDone || isFirst;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context,
+                isHighImportanceRequired ? HIGH_IMP_NOTIFICATION_CHANNEL_ID :
+                        LOW_IMP_NOTIFICATION_CHANNEL_ID
+        );
+
+        builder.setSmallIcon(R.drawable.ic_stat_notification);
+        builder.setColor(ContextCompat.getColor(context, R.color.colorPrimary));
+
+        if (isDone) {
+            builder.setProgress(0, progress, false);
+            builder.setContentTitle(context.getResources().getString(R.string.uploaded_image))
+                    .setAutoCancel(true)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+        } else {
+            builder.setProgress(100, progress, false)
+                    .setContentTitle(context.getResources().getString(R.string.uploading_image))
+                    .setDefaults(0)
+                    .setSound(null);
+        }
+
+        NotificationManager notificationManager
+                = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            Timber.wtf("notificationmanager null");
+            return;
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    isHighImportanceRequired ? HIGH_IMP_NOTIFICATION_CHANNEL_ID :
+                            LOW_IMP_NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_NAME,
+                    isHighImportanceRequired ? NotificationManager.IMPORTANCE_HIGH :
+                            NotificationManager.IMPORTANCE_LOW
+            );
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLACK);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(
+                    new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400}
+            );
+            builder.setChannelId(
+                    isHighImportanceRequired ? HIGH_IMP_NOTIFICATION_CHANNEL_ID :
+                            LOW_IMP_NOTIFICATION_CHANNEL_ID);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        notificationManager.notify(UPLOAD_NOTIFICATION_ID, builder.build());
     }
 }

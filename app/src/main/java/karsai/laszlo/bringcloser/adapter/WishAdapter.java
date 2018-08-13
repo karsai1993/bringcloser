@@ -396,7 +396,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void deleteFromStorage(final Wish wish) {
-        ApplicationUtils.deleteImageFromStorage(mContext, wish.getExtraPhotoUrl());
+        ApplicationUtils.deleteImageFromStorage(mContext, wish.getExtraPhotoUrl(), null, null);
     }
 
     private void updateDB(final Wish wish, final String newValue) {

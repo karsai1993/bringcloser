@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -255,11 +256,11 @@ public class ConnectionChatFragment extends Fragment {
                                                     mChatInnerControlLayout.setVisibility(View.GONE);
                                                     mMessageFilterEditText.setVisibility(View.VISIBLE);
                                                     new SearchChatMessageAsyncTask(
-                                                            mChatRecyclerView,
+                                                            new WeakReference<RecyclerView>(mChatRecyclerView),
                                                             mMessageAdapter,
                                                             mChatDetailList,
-                                                            mProgressBar,
-                                                            getContext(),
+                                                            new WeakReference<ProgressBar>(mProgressBar),
+                                                            new WeakReference<Context>(getContext()),
                                                             mMessageDetailList
                                                     ).execute(filter);
                                                 }
@@ -368,11 +369,11 @@ public class ConnectionChatFragment extends Fragment {
                     mMessageAdapter.notifyDataSetChanged();
                 } else {
                     new SearchChatMessageAsyncTask(
-                            mChatRecyclerView,
+                            new WeakReference<RecyclerView>(mChatRecyclerView),
                             mMessageAdapter,
                             mChatDetailList,
-                            mProgressBar,
-                            getContext(),
+                            new WeakReference<ProgressBar>(mProgressBar),
+                            new WeakReference<Context>(getContext()),
                             mMessageDetailList
                     ).execute(filter);
                 }

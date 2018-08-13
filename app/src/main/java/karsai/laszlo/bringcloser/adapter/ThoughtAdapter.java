@@ -264,7 +264,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void deleteFromStorage(Thought thought) {
-        ApplicationUtils.deleteImageFromStorage(mContext, thought.getExtraPhotoUrl());
+        ApplicationUtils.deleteImageFromStorage(mContext, thought.getExtraPhotoUrl(), null, null);
     }
 
     private void deleteFromDB(final Thought thought) {

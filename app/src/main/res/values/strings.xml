@@ -32,6 +32,7 @@
     <string name="wrong_date_selected_message_before">Selected day should be before today!</string>
     <string name="wrong_date_selected_message_after">Selected day should be today or after!</string>
     <string name="uploading_image">Uploading your image&#8230;</string>
+    <string name="uploaded_image">Your image has been uploaded!</string>
     <string name="settings_display_name_header">Displayed name</string>
     <string name="settings_birthday_header">Birthday</string>
     <string name="settings_gender_header">Gender</string>
@@ -287,7 +288,7 @@
     <string name="sorted_by_title">What do you want to sort by?</string>
     <string name="edit_sent_data">EDIT MESSAGE</string>
     <string name="cancel_sent_data">WITHDRAW</string>
-    <string name="thought_cancel_sent_data">DELETE</string>
+    <string name="delete_data">DELETE</string>
 
     <string name="play_services_alert">Without a valid Play Services installed,
         you may not receive certain notifications!</string>
@@ -312,8 +313,8 @@
         the following request!</string>
 
     <string name="congrats_on_accepted_request_start">Congrats! Your new connection is</string>
-    <string name="request_deleted_1">The deletion relating to</string>
-    <string name="request_deleted_2">has been performed!</string>
+    <string name="request_deleted_1">The deletion relating to\u0020</string>
+    <string name="request_deleted_2">\u0020has been performed!</string>
 
     <string name="new_request_title">New contact request!</string>
     <string name="new_request_body">\u0020wants to connect you.</string>
@@ -417,9 +418,9 @@
     <string name="received_detail_thought">Thought</string>
     <string name="share_title_received_item_1">Sharing your received\u0020</string>
     <string name="share_title_received_item_2">&#8230;</string>
-    <string name="share_content_received_item_1">I got the following\u0020</string>
-    <string name="share_content_received_item_2">\u0020from\u0020</string>
-    <string name="share_content_received_item_3">\u0020at\u0020</string>
+
+    <string name="share_content_received_item">Shared from BringCloser app</string>
+
     <string name="received_details_no_selection_alert">
         Please, select at least one out of the three options above!</string>
     <string name="received_details_no_result_alert">
@@ -459,7 +460,7 @@
     <string name="about_used_libraries_firebase_messaging_name">com.google.firebase:firebase-messaging</string>
     <string name="about_used_libraries_firebase_messaging_version">17.1.0</string>
     <string name="about_used_libraries_firebase_ui_auth_name">com.firebaseui:firebase-ui-auth</string>
-    <string name="about_used_libraries_firebase_ui_auth_version">4.0.0</string>
+    <string name="about_used_libraries_firebase_ui_auth_version">4.1.0</string>
     <string name="about_used_libraries_glide_name">com.github.bumptech.glide:glide</string>
     <string name="about_used_libraries_glide_version">4.7.1</string>
     <string name="about_used_libraries_glide_compiler_name">com.github.bumptech.glide:compiler</string>
@@ -476,20 +477,10 @@
     <string name="about_used_libraries_firebase_jobdispatcher_version">0.8.5</string>
     <string name="about_used_libraries_timber_name">com.jakewharton.timber:timber</string>
     <string name="about_used_libraries_timber_version">4.7.1</string>
+    <string name="about_used_libraries_itext_name">com.itextpdf:itextpdf</string>
+    <string name="about_used_libraries_itext_version">5.5.13</string>
     <string name="about_license_label">License</string>
-    <string name="about_license_content">Copyright 2018 László Karsai\n
-        \n
-        Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at\n
-        \n
-        http://www.apache.org/licenses/LICENSE-2.0\n
-        \n
-        Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions and
-        limitations under the License.</string>
+    <string name="about_license_content">This is free software licensed under GNU AGPL v3.</string>
     <string name="about_logo_content_description">About Logo</string>
     <string name="add_chosen_photo_content_description">Add Chosen Photo</string>
     <string name="camera_content_description">Take Camera Photo</string>
@@ -631,4 +622,65 @@
     <string name="about_emoticons_item_icon">Icon</string>
     <string name="about_emoticons_item_key">Key</string>
     <string name="about_emoticons_item_description">Description</string>
+
+    <string name="pdf_notification_title_progress">Saving your memories&#8230;</string>
+    <string name="pdf_notification_title_done">Your memories have been saved!</string>
+    <string name="pdf_notification_message">Please, click here to view.</string>
+    <string name="pdf_notification_choose">Please, choose an app to continue!</string>
+    <string name="pdf_creation_action">Save memories</string>
+    <string name="pdf_creation_none_selected">Please, select at least one out of the three options!</string>
+    <string name="pdf_creation_no_memories">You have not received any memories, yet!</string>
+    <string name="pdf_creation_question">Who should be involved?</string>
+    <!--string name="pdf_creation_start">Saving your memories is in progress&#8230;</string-->
+    <string name="pdf_creation_all">Everyone</string>
+    <string name="pdf_creation_all_file_title">_all_memories</string>
+    <string name="pdf_creation_single_file_title_1">_and_</string>
+    <string name="pdf_creation_single_file_title_2">_memories</string>
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="minute">minute</string>
+    <string name="minutes">minutes</string>
+    <string name="second">second</string>
+    <string name="seconds">seconds</string>
+    <string name="pdf_creation_all_doc_title_part">\'s Memories</string>
+    <string name="pdf_creation_all_doc_since">You have been registered since:</string>
+    <string-array name="pdf_chars_to_replace"/>
+    <string-array name="pdf_chars_replacement"/>
+    <string name="pdf_creation_all_doc_displayed_1">Out of your received memories, we can show you\u0020</string>
+    <string name="pdf_creation_all_doc_displayed_2_single">\u0020memory which is:</string>
+    <string name="pdf_creation_all_doc_displayed_2_plural">\u0020memories including:</string>
+    <string name="pdf_creation_single_doc_title_and">\u0020and\u0020</string>
+    <string name="pdf_creation_single_doc_title_memories">Shared Memories From:\u0020</string>
+    <string name="pdf_creation_single_doc_since">You have been connected since:</string>
+    <string name="pdf_creation_single_doc_displayed_1">From your received memories, we can show you\u0020</string>
+    <string name="pdf_creation_single_doc_displayed_2_single">\u0020memory which is:</string>
+    <string name="pdf_creation_single_doc_displayed_2_plural">\u0020memories including:</string>
+    <string name="pdf_wish">wish</string>
+    <string name="pdf_wishes">wishes</string>
+    <string name="pdf_event">event</string>
+    <string name="pdf_events">events</string>
+    <string name="pdf_thought">thought</string>
+    <string name="pdf_thoughts">thoughts</string>
+    <string name="pdf_collection_wishes">List of Wishes</string>
+    <string name="pdf_collection_events">List of Events</string>
+    <string name="pdf_collection_thoughts">List of Thoughts</string>
+    <!--string name="pdf_from">From:\u0020</string-->
+
+    <string name="memory_creating">Creating memory&#8230;</string>
+    <string name="page">Page\u0020</string>
+    <string name="footer_note">Created by iText through BringCloser app</string>
+
+    <string name="activity_unused_label">Your unused photos</string>
+    <string name="activity_unused_text">Due to user based restrictions, if one of your connection
+        deletes either you as a connection or the account, then the photos you have sent to
+        that person cannot be removed from storage.\nThus, you have to delete them.</string>
+    <string name="activity_unused_header">Unused photos</string>
+    <string name="activity_unused_no_data">Your list of unused photos is empty!</string>
+    <string name="activity_unused_progress">Deleting your unused photos&#8230;</string>
+    <string name="action_show_unused_data">Unused photos</string>
+    <string name="unused_data_notification_title">Unused photos!</string>
+    <string name="unused_data_notification_body">Click for further information!</string>
+    <string name="nav_other">Other</string>
 </resources>

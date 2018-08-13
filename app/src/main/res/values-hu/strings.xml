@@ -35,6 +35,7 @@
     <string name="wrong_date_selected_message_after">A kiválasztott nap a mai
         vagy az utáni kell, hogy legyen!</string>
     <string name="uploading_image">Kép feltöltése&#8230;</string>
+    <string name="uploaded_image">Kép feltöltés kész!</string>
     <string name="settings_display_name_header">Megjelenített név</string>
     <string name="settings_birthday_header">Születésnap</string>
     <string name="settings_gender_header">Nem</string>
@@ -294,7 +295,7 @@
     <string name="sorted_by_title">Mi alapján szeretnél rendezni?</string>
     <string name="edit_sent_data">SZERKESZTÉS</string>
     <string name="cancel_sent_data">VISSZAVONÁS</string>
-    <string name="thought_cancel_sent_data">TÖRLÉS</string>
+    <string name="delete_data">TÖRLÉS</string>
 
     <string name="play_services_alert">Play Services telepítés nélkül,
         talán nem kapsz bizonyos értesítéseket!</string>
@@ -422,11 +423,11 @@
     <string name="received_detail_wish">Jókívánság</string>
     <string name="received_detail_event">Esemény</string>
     <string name="received_detail_thought">Gondolat</string>
-    <string name="share_title_received_item_1">Megosztás: bejövő\u0020</string>
-    <string name="share_title_received_item_2">&#8230;</string>
-    <string name="share_content_received_item_1">Kaptam:\u0020</string>
-    <string name="share_content_received_item_2">\u0020küldte:\u0020</string>
-    <string name="share_content_received_item_3">\u0020ekkor:\u0020</string>
+    <string name="share_title_received_item_1">Bejövő\u0020</string>
+    <string name="share_title_received_item_2">\u0020megosztása&#8230;</string>
+
+    <string name="share_content_received_item">Megoszta BringCloser alkalmazásból</string>
+
     <string name="received_details_no_selection_alert">
         Kérlek, válassz legalább egyet a fenti három lehetőségből!</string>
     <string name="received_details_no_result_alert">
@@ -454,50 +455,8 @@
         Ez az alkalmazás a mindennapi életedből eredő emlékeidre összpontosít,
         és azokat könnyen értelmezhető módon adja vissza.</string>
     <string name="about_used_libraries_label">Használt külső források</string>
-    <string name="about_used_libraries_firebase_common_name">com.google.firebase:firebase-common</string>
-    <string name="about_used_libraries_firebase_common_version">16.0.0</string>
-    <string name="about_used_libraries_firebase_core_name">com.google.firebase:firebase-core</string>
-    <string name="about_used_libraries_firebase_core_version">16.0.1</string>
-    <string name="about_used_libraries_firebase_auth_name">com.google.firebase:firebase-auth</string>
-    <string name="about_used_libraries_firebase_auth_version">16.0.2</string>
-    <string name="about_used_libraries_firebase_database_name">com.google.firebase:firebase-database</string>
-    <string name="about_used_libraries_firebase_databasae_version">16.0.1</string>
-    <string name="about_used_libraries_firebase_storage_name">com.google.firebase:firebase-storage</string>
-    <string name="about_used_libraries_firebase_storage_version">16.0.1</string>
-    <string name="about_used_libraries_firebase_messaging_name">com.google.firebase:firebase-messaging</string>
-    <string name="about_used_libraries_firebase_messaging_version">17.1.0</string>
-    <string name="about_used_libraries_firebase_ui_auth_name">com.firebaseui:firebase-ui-auth</string>
-    <string name="about_used_libraries_firebase_ui_auth_version">4.0.0</string>
-    <string name="about_used_libraries_glide_name">com.github.bumptech.glide:glide</string>
-    <string name="about_used_libraries_glide_version">4.7.1</string>
-    <string name="about_used_libraries_glide_compiler_name">com.github.bumptech.glide:compiler</string>
-    <string name="about_used_libraries_glide_compiler_version">4.7.1</string>
-    <string name="about_used_libraries_butterknife_name">com.jakewharton:butterknife</string>
-    <string name="about_used_libraries_butterknife_version">8.8.1</string>
-    <string name="about_used_libraries_butterknife_compiler_name">com.jakewharton:butterknife-compiler</string>
-    <string name="about_used_libraries_butterknife_compiler_version">8.8.1</string>
-    <string name="about_used_libraries_fastscroller_name">com.futuremind.recyclerfastscroll:fastscroll</string>
-    <string name="about_used_libraries_fastscroller_version">0.2.5</string>
-    <string name="about_used_libraries_facebook_login_name">com.facebook.android:facebook-login</string>
-    <string name="about_used_libraries_facebook_login_version">4.34.0</string>
-    <string name="about_used_libraries_firebase_jobdispatcher_name">com.firebase:firebase-jobdispatcher</string>
-    <string name="about_used_libraries_firebase_jobdispatcher_version">0.8.5</string>
-    <string name="about_used_libraries_timber_name">com.jakewharton.timber:timber</string>
-    <string name="about_used_libraries_timber_version">4.7.1</string>
     <string name="about_license_label">Licenc</string>
-    <string name="about_license_content">Copyright 2018 László Karsai\n
-        \n
-        Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at\n
-        \n
-        http://www.apache.org/licenses/LICENSE-2.0\n
-        \n
-        Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions and
-        limitations under the License.</string>
+    <string name="about_license_content">Ez egy ingyenes szoftver, amelynek licence: GNU AGPL v3.</string>
     <string name="about_logo_content_description">Alkalmazásról oldal Logo</string>
     <string name="add_chosen_photo_content_description">Kiválasztott Kép Hozzáadás</string>
     <string name="camera_content_description">Kamera Kép Készítés</string>
@@ -641,4 +600,75 @@
     <string name="about_emoticons_item_icon">Ikon</string>
     <string name="about_emoticons_item_key">Kulcs</string>
     <string name="about_emoticons_item_description">Leírás</string>
+
+    <string name="pdf_notification_title_progress">Emlékeid mentése&#8230;</string>
+    <string name="pdf_notification_title_done">Emlékeid el lettek mentve!</string>
+    <string name="pdf_notification_message">Kérlek, kattints ide, hogy megnézd.</string>
+    <string name="pdf_notification_choose">Kérlek, válassz egy alkalmazást a folytatáshoz!</string>
+    <string name="pdf_creation_action">Emlékek mentése</string>
+    <string name="pdf_creation_none_selected">Kérlek, válassz legalább egyet a három lehetőségből!</string>
+    <string name="pdf_creation_no_memories">Még nem kaptál egy emléket sem!</string>
+    <string name="pdf_creation_question">Ki legyen bevonva?</string>
+    <!--string name="pdf_creation_start">Emlékeid mentése folyamatban&#8230;</string-->
+    <string name="pdf_creation_all">Mindenki</string>
+    <string name="pdf_creation_all_file_title">_minden_emlék</string>
+    <string name="pdf_creation_single_file_title_1">_és_</string>
+    <string name="pdf_creation_single_file_title_2">_emlékei</string>
+    <string name="day">nap</string>
+    <string name="days">nap</string>
+    <string name="hour">óra</string>
+    <string name="hours">óra</string>
+    <string name="minute">perc</string>
+    <string name="minutes">perc</string>
+    <string name="second">másodperc</string>
+    <string name="seconds">másodperc</string>
+    <string name="pdf_creation_all_doc_title_part">\u0020Emlékei</string>
+    <string name="pdf_creation_all_doc_since">Regisztrációd óta eltelt idő:</string>
+    <string-array name="pdf_chars_to_replace">
+        <item>ő</item>
+        <item>Ő</item>
+        <item>ű</item>
+        <item>Ű</item>
+    </string-array>
+    <string-array name="pdf_chars_replacement">
+        <item>ö</item>
+        <item>Ö</item>
+        <item>ü</item>
+        <item>Ü</item>
+    </string-array>
+    <string name="pdf_creation_all_doc_displayed_1">Bejövő emlékeid közül\u0020</string>
+    <string name="pdf_creation_all_doc_displayed_2_single">\u0020emléket tudunk mutatni, ami:</string>
+    <string name="pdf_creation_all_doc_displayed_2_plural">\u0020emléket tudunk mutatni, amelyek:</string>
+    <string name="pdf_creation_single_doc_title_and">\u0020és\u0020</string>
+    <string name="pdf_creation_single_doc_title_memories">Közös Emlékek Feladója:\u0020</string>
+    <string name="pdf_creation_single_doc_since">Kapcsolatban lépésetek óta eltelt idő:</string>
+    <string name="pdf_creation_single_doc_displayed_1">Bejövő emlékeid közül\u0020</string>
+    <string name="pdf_creation_single_doc_displayed_2_single">\u0020emléket tudunk mutatni, ami:</string>
+    <string name="pdf_creation_single_doc_displayed_2_plural">\u0020emléket tudunk mutatni, amelyek:</string>
+    <string name="pdf_wish">jókívánság</string>
+    <string name="pdf_wishes">jókívánság</string>
+    <string name="pdf_event">esemény</string>
+    <string name="pdf_events">esemény</string>
+    <string name="pdf_thought">gondolat</string>
+    <string name="pdf_thoughts">gondolat</string>
+    <string name="pdf_collection_wishes">Jókívánságok Listája</string>
+    <string name="pdf_collection_events">Események Listája</string>
+    <string name="pdf_collection_thoughts">Gondolatok Listája</string>
+    <!--string name="pdf_from">Küldte:\u0020</string-->
+
+    <string name="memory_creating">Emlék készítése&#8230;</string>
+    <string name="page">Oldal\u0020</string>
+    <string name="footer_note">Készítette iText a BringCloser alkalmazás által</string>
+
+    <string name="activity_unused_label">Nem használt képeid</string>
+    <string name="activity_unused_text">A felhasználói korlátozások miatt, ha az egyik kapcsolatod
+        vagy töröl Téged, mint kapcsolatot vagy magát az alkalmazásból, akkor azok a képek, amelyeket
+        Te küldtél neki nem törölhetőek.\nEzért azokat Neked kell törölnöd.</string>
+    <string name="activity_unused_header">Nem használt képek</string>
+    <string name="activity_unused_no_data">A nem használt képeid listája üres!</string>
+    <string name="activity_unused_progress">Nem használt képek törlése&#8230;</string>
+    <string name="action_show_unused_data">Nem használt képek</string>
+    <string name="unused_data_notification_title">Nem használt képek!</string>
+    <string name="unused_data_notification_body">Kattints a további információkért!</string>
+    <string name="nav_other">Egyéb</string>
 </resources>

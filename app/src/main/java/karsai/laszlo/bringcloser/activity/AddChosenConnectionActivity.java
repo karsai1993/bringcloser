@@ -233,6 +233,7 @@ public class AddChosenConnectionActivity extends CommonActivity {
                                             ApplicationUtils
                                                     .NEW_SENT_REQUEST_INTENT_ACTION_PAGE_CONNECTION
                                     );
+                                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(mainIntent);
                                 }
 

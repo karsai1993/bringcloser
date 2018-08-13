@@ -39,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -124,8 +125,8 @@ public class ConnectionActivity extends CommonActivity {
     private ChildEventListener mConnectionChildValueEventListener;
     private ConnectionDetailFragmentPagerAdapter mPageAdapter;
     private ConnectionDetail mConnectionDetail;
-    private View mSnackbarView;
     private FirebaseStorage mFirebaseStorage;
+    private StorageReference mMessageImagesRootRef;
     private StorageReference mMessageImagesRef;
     private TextWatcher mTextWatcher;
 
@@ -185,9 +186,6 @@ public class ConnectionActivity extends CommonActivity {
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mMessageImagesRef = mFirebaseStorage.getReference()
-                .child(mFirebaseUser.getUid())
-                .child(ApplicationUtils.STORAGE_MESSAGE_IMAGES_FOLDER);
         mCurrentUserUid = FirebaseAuth.getInstance().getUid();
         Intent receivedData = getIntent();
         if (receivedData != null) {
@@ -202,20 +200,21 @@ public class ConnectionActivity extends CommonActivity {
             if (mViewPager.getCurrentItem() == 0) {
                 mAppBarLayout.setExpanded(false);
             }
+            mMessageImagesRootRef = mFirebaseStorage.getReference()
+                    .child(mCurrentUserUid)
+                    .child(ApplicationUtils.STORAGE_MESSAGE_IMAGES_FOLDER);
         } else {
             Timber.wtf("received data returned null connection activity");
         }
         mGalleryImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSnackbarView = view;
                 ImageUtils.onClickFromFile(ConnectionActivity.this);
             }
         });
         mCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSnackbarView = view;
                 ImageUtils.onClickFromCamera(ConnectionActivity.this);
             }
         });
@@ -555,13 +554,24 @@ public class ConnectionActivity extends CommonActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mMessageImagesRef = mMessageImagesRef.child(
-                ApplicationUtils.getCurrentUTCDateAndTime()
-        );
+        if ((requestCode == ImageUtils.RC_PHOTO_PICKER || requestCode == ImageUtils.REQUEST_IMAGE_CAPTURE)
+                && resultCode == RESULT_OK) {
+            mMessageImagesRef = mMessageImagesRootRef.child(
+                    ApplicationUtils.getCurrentUTCDateAndTime()
+            );
+        }
         OnSuccessListener<UploadTask.TaskSnapshot> uploadOnSuccessListener
                 = new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageMetadata storageMetadata = taskSnapshot.getMetadata();
+                if (storageMetadata == null) {
+                    return;
+                }
+                mMessageImagesRef = storageMetadata.getReference();
+                if (mMessageImagesRef == null) {
+                    return;
+                }
                 mMessageImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
@@ -573,7 +583,6 @@ public class ConnectionActivity extends CommonActivity {
         };
         ImageUtils.onActivityResult(
                 ConnectionActivity.this,
-                mSnackbarView,
                 requestCode,
                 resultCode,
                 data,
@@ -686,7 +695,8 @@ public class ConnectionActivity extends CommonActivity {
             final Context context,
             final String fromUid,
             final String toUid,
-            final String name) {
+            final String name,
+            final String otherUid) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference connectionsRef
                 = firebaseDatabase.getReference().child(ApplicationUtils.CONNECTIONS_NODE);
@@ -725,7 +735,8 @@ public class ConnectionActivity extends CommonActivity {
                                 context,
                                 fromUid,
                                 toUid,
-                                name);
+                                name,
+                                otherUid);
                     }
                 }
             }
@@ -745,15 +756,25 @@ public class ConnectionActivity extends CommonActivity {
             final Context context,
             final String fromUid,
             final String toUid,
-            final String name
-    ) {
+            final String name,
+            final String otherUid) {
+        final String currUid;
+        if (otherUid.equals(fromUid)) {
+            currUid = toUid;
+        } else {
+            currUid = fromUid;
+        }
         messagesDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     Message message = messageSnapshot.getValue(Message.class);
                     if (message == null) continue;
-                    ApplicationUtils.deleteImageFromStorage(context, message.getPhotoUrl());
+                    ApplicationUtils.deleteImageFromStorage(
+                            context,
+                            message.getPhotoUrl(),
+                            currUid,
+                            otherUid);
                 }
                 wishesDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -761,7 +782,11 @@ public class ConnectionActivity extends CommonActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Wish wish = snapshot.getValue(Wish.class);
                             if (wish == null) continue;
-                            ApplicationUtils.deleteImageFromStorage(context, wish.getExtraPhotoUrl());
+                            ApplicationUtils.deleteImageFromStorage(
+                                    context,
+                                    wish.getExtraPhotoUrl(),
+                                    currUid,
+                                    otherUid);
                         }
                         eventsDatabaseRef.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -770,7 +795,11 @@ public class ConnectionActivity extends CommonActivity {
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             Event event = snapshot.getValue(Event.class);
                                             if (event == null) continue;
-                                            ApplicationUtils.deleteImageFromStorage(context, event.getExtraPhotoUrl());
+                                            ApplicationUtils.deleteImageFromStorage(
+                                                    context,
+                                                    event.getExtraPhotoUrl(),
+                                                    currUid,
+                                                    otherUid);
                                         }
                                         thoughtsDatabaseRef.addListenerForSingleValueEvent(
                                                 new ValueEventListener() {
@@ -779,7 +808,11 @@ public class ConnectionActivity extends CommonActivity {
                                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                             Thought thought = snapshot.getValue(Thought.class);
                                                             if (thought == null) continue;
-                                                            ApplicationUtils.deleteImageFromStorage(context, thought.getExtraPhotoUrl());
+                                                            ApplicationUtils.deleteImageFromStorage(
+                                                                    context,
+                                                                    thought.getExtraPhotoUrl(),
+                                                                    currUid,
+                                                                    otherUid);
                                                         }
                                                         if (fromUid != null
                                                                 && toUid != null
@@ -822,9 +855,16 @@ public class ConnectionActivity extends CommonActivity {
 
     private void applyConnectionDeletionHandler() {
         final String otherName;
+        final String otherUid;
         final String fromUid = mConnectionDetail.getFromUid();
-        if (fromUid.equals(mCurrentUserUid)) otherName = mConnectionDetail.getToName();
-        else otherName = mConnectionDetail.getFromName();
+        if (fromUid.equals(mCurrentUserUid)) {
+            otherName = mConnectionDetail.getToName();
+            otherUid = mConnectionDetail.getToUid();
+        }
+        else {
+            otherName = mConnectionDetail.getFromName();
+            otherUid = mConnectionDetail.getFromUid();
+        }
         DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -835,7 +875,8 @@ public class ConnectionActivity extends CommonActivity {
                         ConnectionActivity.this,
                         fromUid,
                         mConnectionDetail.getToUid(),
-                        otherName
+                        otherName,
+                        otherUid
                 );
                 finish();
             }
