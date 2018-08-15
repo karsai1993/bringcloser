@@ -10,13 +10,12 @@ import java.util.Comparator;
  */
 public class ThoughtDetail implements Parcelable{
 
-    String fromUid;
-    String fromPhotoUrl;
-    String fromName;
-    String extraPhotoUrl;
-    String timestamp;
-    String text;
-    Comparator<ThoughtDetail> listComparator;
+    private String fromUid;
+    private String fromPhotoUrl;
+    private String fromName;
+    private String extraPhotoUrl;
+    private String timestamp;
+    private String text;
 
     public ThoughtDetail(
             String fromUid,

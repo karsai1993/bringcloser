@@ -88,7 +88,7 @@ public class ThoughtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Thought thought = mThoughtList.get(position);
         String photoUrl = thought.getExtraPhotoUrl();
-        boolean hasArrived = thought.hasArrived();
+        boolean hasArrived = thought.isHasArrived();
         if (photoUrl != null && !photoUrl.isEmpty()) {
             if (hasArrived) {
                 return EXTRA_PHOTO_OFF;

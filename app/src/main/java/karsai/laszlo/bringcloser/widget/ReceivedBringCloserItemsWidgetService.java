@@ -231,7 +231,7 @@ public class ReceivedBringCloserItemsWidgetService extends RemoteViewsService {
                                                 ApplicationUtils.RECEIVED_DETAIL_KEY_IDENTIFIER)
                                 );
                                 if (!thought.getFromUid().equals(mCurrentUserUid)
-                                        && thought.hasArrived()) {
+                                        && thought.isHasArrived()) {
                                     mThoughtList.add(thought);
                                 }
                             }

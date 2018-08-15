@@ -63,7 +63,7 @@
     <string name="settings_verification_positive">Megerősítve</string>
     <string name="settings_verification_negative">Nincs megerősítve</string>
     <string name="settings_verification_ongoing">Bejövő levelek megnézése, megerősítés,
-        bejelentkezés újra</string>
+        alkalmazás újbóli megnyitása vagy kattintás erre: \"ÚJRA\"</string>
     <string name="nav_drawer_verification_required">Email megerősítés szükséges!</string>
     <string name="starting_toolbar_title">Betöltés&#8230;</string>
     <string name="no_suitable_app_message">A telefonnak nincs megfelelő alkalmazása,
@@ -90,10 +90,10 @@
         \u2022 Bejelentkezési adataid</string>
     <string name="settings_verification_dialog_title">Email megerősítési kérelem</string>
     <string name="settings_verification_dialog_info">\n
-        \u2022 Kattints \"RENDBEN\"-re, hogy megkapd a kérelmet,\n
-        \u2022 Ellenőrizd az email fiókod és kattints a megerősítésre,\n
-        \u2022 Jelentkezz be újra,\n
-        \u2022 Érezd jól magad a hozzád közeli emberekkel 😉</string>
+        1. Kattints \"RENDBEN\"-re, hogy megkapd a kérelmet,\n
+        2. Ellenőrizd az email fiókod és kattints a megerősítésre,\n
+        3. Nyisd meg újra az alkalmazást vagy kattints erre: \"ÚJRA\",\n
+        4. Érezd jól magad a hozzád közeli emberekkel 😉</string>
     <string name="filter_hint">Írj, hogy szűrd a lenti listát&#8230;</string>
     <string name="add_connection_possible_size">Lehetséges kapcsolatok</string>
     <string name="add_connection_found_possible_size">Talált lehetséges kapcsolatok</string>
@@ -426,7 +426,7 @@
     <string name="share_title_received_item_1">Bejövő\u0020</string>
     <string name="share_title_received_item_2">\u0020megosztása&#8230;</string>
 
-    <string name="share_content_received_item">Megoszta BringCloser alkalmazásból</string>
+    <string name="share_content_received_item">Megosztva a BringCloser alkalmazásból</string>
 
     <string name="received_details_no_selection_alert">
         Kérlek, válassz legalább egyet a fenti három lehetőségből!</string>

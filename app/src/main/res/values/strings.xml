@@ -57,7 +57,7 @@
     <string name="settings_verification_btn">VERIFY</string>
     <string name="settings_verification_positive">Verified</string>
     <string name="settings_verification_negative">Not verified</string>
-    <string name="settings_verification_ongoing">Checking mail box, verifying, re-authenticating</string>
+    <string name="settings_verification_ongoing">Checking mail box, verifying, reopen app or click to \"RETRY\"</string>
     <string name="nav_drawer_verification_required">Email verification required!</string>
     <string name="starting_toolbar_title">Loading&#8230;</string>
     <string name="no_suitable_app_message">Your phone has no app to perform the request!</string>
@@ -82,10 +82,10 @@
         \u2022 Your authorization to enter BringCloser app</string>
     <string name="settings_verification_dialog_title">Email verification request</string>
     <string name="settings_verification_dialog_info">\n
-        \u2022 Click \"OK\" to have the request sent to you\n
-        \u2022 Check your mail box and click on verifying\n
-        \u2022 Re-authenticate to the app\n
-        \u2022 Have fun with your close ones 😉</string>
+        1. Click \"OK\" to have the request sent to you\n
+        2. Check your mail box and click on verifying\n
+        3. Reopen the app or click to \"RETRY\"\n
+        4. Have fun with your close ones 😉</string>
     <string name="filter_hint">Type to filter the list below&#8230;</string>
     <string name="add_connection_possible_size">Possible connections</string>
     <string name="add_connection_found_possible_size">Found possible connections</string>

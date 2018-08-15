@@ -205,7 +205,8 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_settings_verification"
                             android:layout_weight="1"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/small_distance"/>
                         <TextView
                             style="@style/AppTheme"
                             android:layout_width="wrap_content"
@@ -214,6 +215,15 @@
                             android:textColor="@color/colorAccent"
                             android:textStyle="bold"
                             android:text="@string/settings_verification_btn"/>
+                        <TextView
+                            style="@style/AppTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_settings_verification_retry"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold"
+                            android:text="@string/retry"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                 </LinearLayout>

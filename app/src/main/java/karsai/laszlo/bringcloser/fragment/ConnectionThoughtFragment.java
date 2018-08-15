@@ -3,6 +3,7 @@ package karsai.laszlo.bringcloser.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;

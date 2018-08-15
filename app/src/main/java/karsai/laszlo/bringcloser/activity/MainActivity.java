@@ -62,6 +62,7 @@ public class MainActivity extends CommonActivity
     private DatabaseReference mUsersDatabaseReference;
     private DatabaseReference mCurrentUserDatabaseReference;
     private ValueEventListener mUserDatabaseReferenceEventListener;
+    private ValueEventListener mUserDatabaseReferenceSingleEventListener;
     private User mCurrentUser;
     private TextView mUserNameInNavDrawer;
     private TextView mUserBirthdayInNavDrawer;
@@ -80,6 +81,19 @@ public class MainActivity extends CommonActivity
     protected void onResume() {
         super.onResume();
         mCurrentUserDatabaseReference.addValueEventListener(mUserDatabaseReferenceEventListener);
+        mCurrentUserDatabaseReference.addListenerForSingleValueEvent(mUserDatabaseReferenceSingleEventListener);
+        if (mFirebaseUser != null) {
+            if (!mFirebaseUser.isEmailVerified()) {
+                mFirebaseUser.reload().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (mFirebaseUser.isEmailVerified()) {
+                            recreate();
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -87,6 +101,9 @@ public class MainActivity extends CommonActivity
         super.onPause();
         if (mUserDatabaseReferenceEventListener != null) {
             mCurrentUserDatabaseReference.removeEventListener(mUserDatabaseReferenceEventListener);
+        }
+        if (mUserDatabaseReferenceSingleEventListener != null) {
+            mCurrentUserDatabaseReference.removeEventListener(mUserDatabaseReferenceSingleEventListener);
         }
     }
 
@@ -216,7 +233,7 @@ public class MainActivity extends CommonActivity
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
-        mCurrentUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserDatabaseReferenceSingleEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
@@ -243,17 +260,17 @@ public class MainActivity extends CommonActivity
                 }
                 FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(
                         MainActivity.this,  new OnSuccessListener<InstanceIdResult>() {
-                    @Override
-                    public void onSuccess(InstanceIdResult instanceIdResult) {
-                        String newToken = instanceIdResult.getToken();
-                        AddTokenUtils.addTokenIfNeeded(newToken, mCurrentUserUid);
-                    }
-                });
+                            @Override
+                            public void onSuccess(InstanceIdResult instanceIdResult) {
+                                String newToken = instanceIdResult.getToken();
+                                AddTokenUtils.addTokenIfNeeded(newToken, mCurrentUserUid);
+                            }
+                        });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+        };
     }
 
     private void setUserDataInNavigationDrawer() {

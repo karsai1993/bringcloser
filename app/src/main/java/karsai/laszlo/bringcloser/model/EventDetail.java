@@ -10,15 +10,14 @@ import java.util.Comparator;
  */
 public class EventDetail implements Parcelable{
 
-    String fromUid;
-    String fromPhotoUrl;
-    String fromName;
-    String extraPhotoUrl;
-    String whenToArrive;
-    String title;
-    String place;
-    String text;
-    Comparator<EventDetail> listComparator;
+    private String fromUid;
+    private String fromPhotoUrl;
+    private String fromName;
+    private String extraPhotoUrl;
+    private String whenToArrive;
+    private String title;
+    private String place;
+    private String text;
 
     public EventDetail(
             String fromUid,

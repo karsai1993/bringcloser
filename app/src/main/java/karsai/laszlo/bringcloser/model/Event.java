@@ -10,17 +10,17 @@ import java.util.Comparator;
  */
 public class Event implements Parcelable, Comparator<Event> {
 
-    String fromUid;
-    String connectionFromUid;
-    String connectionToUid;
-    String extraPhotoUrl;
-    String whenToArrive;
-    String title;
-    String place;
-    String text;
-    boolean hasArrived;
-    String key;
-    Comparator<Event> listComparator;
+    private String fromUid;
+    private String connectionFromUid;
+    private String connectionToUid;
+    private String extraPhotoUrl;
+    private String whenToArrive;
+    private String title;
+    private String place;
+    private String text;
+    private boolean hasArrived;
+    private String key;
+    private Comparator<Event> listComparator;
 
     public Event(
             String fromUid,
@@ -136,7 +136,7 @@ public class Event implements Parcelable, Comparator<Event> {
         this.text = text;
     }
 
-    public boolean hasArrived() {
+    public boolean isHasArrived() {
         return hasArrived;
     }
 

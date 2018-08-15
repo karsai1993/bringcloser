@@ -10,11 +10,11 @@ import java.util.Comparator;
  */
 public class ReceivedDetail implements Parcelable, Comparator<ReceivedDetail>{
 
-    WishDetail wishDetail;
-    EventDetail eventDetail;
-    ThoughtDetail thoughtDetail;
-    String type;
-    Comparator<ReceivedDetail> listComparator;
+    private WishDetail wishDetail;
+    private EventDetail eventDetail;
+    private ThoughtDetail thoughtDetail;
+    private String type;
+    private Comparator<ReceivedDetail> listComparator;
 
     public ReceivedDetail(WishDetail wishDetail, String type) {
         this.wishDetail = wishDetail;

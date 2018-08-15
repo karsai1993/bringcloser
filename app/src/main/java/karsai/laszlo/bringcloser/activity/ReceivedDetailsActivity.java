@@ -382,7 +382,7 @@ public class ReceivedDetailsActivity extends CommonActivity implements Comparato
                                             ApplicationUtils.RECEIVED_DETAIL_KEY_IDENTIFIER)
                             );
                             if (!thought.getFromUid().equals(mCurrentUserUid)
-                                    && thought.hasArrived()) {
+                                    && thought.isHasArrived()) {
                                 mThoughtList.add(thought);
                             }
                         }

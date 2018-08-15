@@ -55,4 +55,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_list_type_and_name_dist">25dp</dimen>
     <dimen name="nav_header_padding">25dp</dimen>
     <dimen name="nav_header_text_size">12sp</dimen>
+    <dimen name="spinner_height">40dp</dimen>
 </resources>

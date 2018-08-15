@@ -10,16 +10,16 @@ import java.util.Comparator;
  */
 public class Wish implements Parcelable, Comparator<Wish> {
 
-    String fromUid;
-    String connectionFromUid;
-    String connectionToUid;
-    String extraPhotoUrl;
-    String whenToArrive;
-    String occasion;
-    String text;
-    boolean hasArrived;
-    String key;
-    Comparator<Wish> listComparator;
+    private String fromUid;
+    private String connectionFromUid;
+    private String connectionToUid;
+    private String extraPhotoUrl;
+    private String whenToArrive;
+    private String occasion;
+    private String text;
+    private boolean hasArrived;
+    private String key;
+    private Comparator<Wish> listComparator;
 
     public Wish() {}
 
@@ -132,7 +132,7 @@ public class Wish implements Parcelable, Comparator<Wish> {
         this.text = text;
     }
 
-    public boolean hasArrived() {
+    public boolean isHasArrived() {
         return hasArrived;
     }
 

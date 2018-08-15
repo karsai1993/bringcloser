@@ -632,8 +632,8 @@ public class AddNewWishActivity extends CommonActivity {
         final String name = user.getUsername().split(" ")[0];
         List<String> occasionOptionsList = getPossibleOccasions(gender);
         ArrayAdapter<String> occasionListAdapter = new ArrayAdapter<>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_item,
+                AddNewWishActivity.this,
+                R.layout.list_item_spinner,
                 occasionOptionsList
         );
         mSpinner.setAdapter(occasionListAdapter);

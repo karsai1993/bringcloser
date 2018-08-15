@@ -468,7 +468,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (extraPhotoUrl == null) {
             content = new StringBuilder()
                     .append(message)
-                    .append("\n")
+                    .append("\n\n")
                     .append(mContext.getResources().getString(R.string.share_content_received_item))
                     .toString();
         } else {
@@ -476,7 +476,7 @@ public class ReceivedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .append(message)
                     .append("\n")
                     .append(extraPhotoUrl)
-                    .append("\n")
+                    .append("\n\n")
                     .append(mContext.getResources().getString(R.string.share_content_received_item))
                     .toString();
         }

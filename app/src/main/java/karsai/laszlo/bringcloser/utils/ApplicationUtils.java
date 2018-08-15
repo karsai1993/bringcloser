@@ -275,11 +275,11 @@ public class ApplicationUtils {
         boolean isExpired;
         if (object instanceof Wish) {
             Wish wish = (Wish) object;
-            hasArrived = wish.hasArrived();
+            hasArrived = wish.isHasArrived();
             targetDateAndTimeAsText = wish.getWhenToArrive();
         } else if (object instanceof Event) {
             Event event = (Event) object;
-            hasArrived = event.hasArrived();
+            hasArrived = event.isHasArrived();
             targetDateAndTimeAsText = event.getWhenToArrive();
         } else {
             return false;

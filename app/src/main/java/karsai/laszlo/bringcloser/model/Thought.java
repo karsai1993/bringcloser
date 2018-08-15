@@ -10,15 +10,15 @@ import java.util.Comparator;
  */
 public class Thought implements Parcelable, Comparator<Thought> {
 
-    String fromUid;
-    String connectionFromUid;
-    String connectionToUid;
-    String extraPhotoUrl;
-    String timestamp;
-    String text;
-    boolean hasArrived;
-    String key;
-    Comparator<Thought> listComparator;
+    private String fromUid;
+    private String connectionFromUid;
+    private String connectionToUid;
+    private String extraPhotoUrl;
+    private String timestamp;
+    private String text;
+    private boolean hasArrived;
+    private String key;
+    private Comparator<Thought> listComparator;
 
     public Thought() {}
 
@@ -63,6 +63,10 @@ public class Thought implements Parcelable, Comparator<Thought> {
             return new Thought[size];
         }
     };
+
+    public boolean isHasArrived() {
+        return hasArrived;
+    }
 
     public String getFromUid() {
         return fromUid;
@@ -112,12 +116,8 @@ public class Thought implements Parcelable, Comparator<Thought> {
         this.text = text;
     }
 
-    public boolean hasArrived() {
-        return hasArrived;
-    }
-
     public void setHasArrived(boolean hasArrived) {
-        this.hasArrived = hasArrived;
+        this.hasArrived = Boolean.valueOf(hasArrived);
     }
 
     public String getKey() {

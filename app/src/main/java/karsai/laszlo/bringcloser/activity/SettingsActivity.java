@@ -85,6 +85,8 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     TextView mSettingsVerificationStatus;
     @BindView(R.id.tv_settings_verification_change)
     TextView mSettingsVerificationChange;
+    @BindView(R.id.tv_settings_verification_retry)
+    TextView mSettingsVerificationRetry;
     @BindView(R.id.tv_settings_displayed_name_change)
     TextView mSettingsDisplayedNameChange;
     @BindView(R.id.tv_settings_birthday_change)
@@ -110,6 +112,19 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     private List<String> mGenderOptionList;
     private List<String> mGenderOptionsIdList;
     private FirebaseUser mFirebaseUser;
+    private Bundle mSavedInstanceState;
+    private ArrayAdapter<String> mGenderListAdapter;
+
+    private final static String SAVE_VERIFICATION_STATUS = "verification_status";
+    private final static String STATUS_PENDING = "pending";
+    private final static String STATUS_OK = "ok";
+    private final static String STATUS_DEFAULT = "default";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SAVE_VERIFICATION_STATUS, mSettingsVerificationRetry.getVisibility());
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -138,7 +153,25 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mFirebaseUser != null) {
+            if (!mFirebaseUser.isEmailVerified()) {
+                mFirebaseUser.reload().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (mFirebaseUser.isEmailVerified()) {
+                            recreate();
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mSavedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
@@ -148,6 +181,11 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         mBirthday = findViewById(R.id.tv_settings_birthday);
         mGenderOptionList = getGenderOptionsList();
         mGenderOptionsIdList = getGenderOptionsIdList();
+        mGenderListAdapter = new ArrayAdapter<>(
+                this,
+                R.layout.list_item_spinner,
+                mGenderOptionList
+        );
         mGenderOptions = findViewById(R.id.spinner_settings_gender);
         mGenderOptions.setOnItemSelectedListener(this);
         mSettingsVerificationStatus = findViewById(R.id.tv_settings_verification);
@@ -234,6 +272,35 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                 datePickerFragment.show(getSupportFragmentManager(), ApplicationUtils.TAG_DATA_PICKER);
             }
         });
+        mSettingsVerificationRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mFirebaseUser.reload().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (mFirebaseUser.isEmailVerified()) {
+                            ApplicationUtils.saveValueToPrefs(
+                                    SettingsActivity.this,
+                                    SAVE_VERIFICATION_STATUS,
+                                    STATUS_OK
+                            );
+                            mSettingsVerificationRetry.setVisibility(View.GONE);
+                            recreate();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(
+                                findViewById(android.R.id.content),
+                                getResources().getString(R.string.problem),
+                                Snackbar.LENGTH_LONG
+                        ).show();
+                        Timber.wtf("retry problem - settings: " + e.getMessage());
+                    }
+                });
+            }
+        });
         mSettingsVerificationChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,6 +323,12 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                                 getResources().getString(R.string.settings_verification_ongoing)
                         );
                         mSettingsVerificationChange.setVisibility(View.GONE);
+                        mSettingsVerificationRetry.setVisibility(View.VISIBLE);
+                        ApplicationUtils.saveValueToPrefs(
+                                SettingsActivity.this,
+                                SAVE_VERIFICATION_STATUS,
+                                STATUS_PENDING
+                        );
                     }
                 };
                 DialogUtils.onDialogRequest(
@@ -348,12 +421,7 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         String username = mCurrentUser.getUsername();
         String birthday = mCurrentUser.getBirthday();
         String gender = mCurrentUser.getGender();
-        ArrayAdapter<String> genderListAdapter = new ArrayAdapter<>(
-                context,
-                android.R.layout.simple_spinner_item,
-                mGenderOptionList
-        );
-        mGenderOptions.setAdapter(genderListAdapter);
+        mGenderOptions.setAdapter(mGenderListAdapter);
         if (gender == null || gender.equals(context.getResources().getString(R.string.gender_none_id))) {
             mGenderOptions.setSelection(0, true);
         } else if (gender.equals(context.getResources().getString(R.string.gender_male_id))){
@@ -370,16 +438,49 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
                 mBirthday.setText(birthday);
             }
         }
-        if (mCurrentUser.getIsEmailVerified()) {
+        if (mFirebaseUser.isEmailVerified()) {
+            String status = ApplicationUtils.getValueFromPrefs(SettingsActivity.this, SAVE_VERIFICATION_STATUS);
+            if (status != null && status.equals(STATUS_PENDING)) {
+                ApplicationUtils.saveValueToPrefs(
+                        SettingsActivity.this,
+                        SAVE_VERIFICATION_STATUS,
+                        STATUS_OK
+                );
+            }
             mSettingsVerificationStatus.setText(
                     context.getResources().getString(R.string.settings_verification_positive)
             );
             mSettingsVerificationChange.setVisibility(View.GONE);
         } else {
-            mSettingsVerificationStatus.setText(
-                    context.getResources().getString(R.string.settings_verification_negative)
-            );
-            mSettingsVerificationChange.setVisibility(View.VISIBLE);
+            if (mSavedInstanceState != null) {
+                int visibility = mSavedInstanceState.getInt(SAVE_VERIFICATION_STATUS, View.GONE);
+                if (visibility == View.VISIBLE) {
+                    mSettingsVerificationStatus.setText(
+                            getResources().getString(R.string.settings_verification_ongoing)
+                    );
+                    mSettingsVerificationChange.setVisibility(View.GONE);
+                    mSettingsVerificationRetry.setVisibility(View.VISIBLE);
+                } else {
+                    mSettingsVerificationStatus.setText(
+                            context.getResources().getString(R.string.settings_verification_negative)
+                    );
+                    mSettingsVerificationChange.setVisibility(View.VISIBLE);
+                }
+            } else {
+                String status = ApplicationUtils.getValueFromPrefs(SettingsActivity.this, SAVE_VERIFICATION_STATUS);
+                if (status != null && status.equals(STATUS_PENDING)) {
+                    mSettingsVerificationStatus.setText(
+                            getResources().getString(R.string.settings_verification_ongoing)
+                    );
+                    mSettingsVerificationChange.setVisibility(View.GONE);
+                    mSettingsVerificationRetry.setVisibility(View.VISIBLE);
+                } else {
+                    mSettingsVerificationStatus.setText(
+                            context.getResources().getString(R.string.settings_verification_negative)
+                    );
+                    mSettingsVerificationChange.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -454,6 +555,11 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                ApplicationUtils.saveValueToPrefs(
+                        SettingsActivity.this,
+                        SAVE_VERIFICATION_STATUS,
+                        STATUS_DEFAULT
+                );
                 FirebaseAuth.getInstance().signOut();
                 Intent welcomeIntent = new Intent(SettingsActivity.this, WelcomeActivity.class);
                 welcomeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

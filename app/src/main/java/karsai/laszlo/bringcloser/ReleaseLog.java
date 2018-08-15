@@ -42,6 +42,7 @@ public class ReleaseLog extends Timber.DebugTree {
         if (priority == Log.ASSERT) {//wtf in Timber
             registerProblem(message, tag);
         }
+        super.log(priority, tag, message, t);
     }
 
     private void registerProblem(@NotNull String message, @Nullable String tag) {

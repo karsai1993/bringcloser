@@ -139,8 +139,8 @@ public class AddChosenConnectionActivity extends CommonActivity {
         mRelationshipOptionsList = getRelationshipOptionsList();
         mRelationshipOptionsIdList = getRelationshipOptionsIdList();
         ArrayAdapter<String> relationshipListAdapter = new ArrayAdapter<>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_item,
+                this,
+                R.layout.list_item_spinner,
                 mRelationshipOptionsList
         );
         mChosenRelationshipSpinner.setAdapter(relationshipListAdapter);
