@@ -6,11 +6,23 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+        <item name="android:actionBarStyle">@style/AppbarTheme</item>
+        <item name="actionBarStyle">@style/AppbarTheme</item-->
+    </style>
+
+    <style name="DotsDarkTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+        <item name="android:tint">@android:color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <!--item name="actionMenuTextColor">@android:color/black</item>
+        <item name="android:actionMenuTextColor">@android:color/black</item-->
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
@@ -21,6 +33,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="DialogLeftRightTheme">
@@ -37,12 +50,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--item name="android:textColor">@android:color/white</item-->
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+        <!--item name="android:actionBarStyle">@style/AppbarTheme</item>
+        <item name="actionBarStyle">@style/AppbarTheme</item-->
     </style>
 
     <style name="FastScrollerTextAppearance" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">@dimen/nav_drawer_user_name_text_size</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
     </style>
 
 </resources>

@@ -2,6 +2,7 @@ package karsai.laszlo.bringcloser.service;
 
 import android.support.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +62,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CONNECTION_TYPE_KEY = "connectionType";
     private static final String TIMESTAMP_KEY = "timestamp";
 
+    //private static final String SHOULD_RECEIVE_KEY = "shouldReceive";
+    //private static final String SHOULD_RECEIVE_DEFAULT = "all";
+
     private static final String NOTIFICATION_ID_GENERAL_KEY = "notification_id_general";
 
     private static final String NO_DATA_UNDEFINED = "undefined";
@@ -86,6 +90,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String toBirthday = data.get(TO_BIRTHDAY_KEY);
         String connectionType = data.get(CONNECTION_TYPE_KEY);
         String timestamp = data.get(TIMESTAMP_KEY);
+        //String shouldReceiveUid = data.get(SHOULD_RECEIVE_KEY);
 
         String title = "";
         String body = "";
@@ -231,6 +236,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             action = ApplicationUtils.NOTIFICATION_INTENT_UNUSED;
         }
 
+        /*String currentUid = FirebaseAuth.getInstance().getUid();
+        if (shouldReceiveUid.equals(SHOULD_RECEIVE_DEFAULT)
+                || (currentUid != null && currentUid.equals(shouldReceiveUid))) {
+            NotificationUtils.addFunctionsNotification(
+                    getApplicationContext(),
+                    title,
+                    body,
+                    photoUrl,
+                    notificationId,
+                    action,
+                    connectionDetail
+            );
+        }*/
         NotificationUtils.addFunctionsNotification(
                 getApplicationContext(),
                 title,
@@ -248,32 +266,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         updateTokenInDatabase(token);
     }
 
-    private void updateTokenInDatabase(final String token) {
+    private void updateTokenInDatabase(String token) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = firebaseDatabase.getReference()
+        DatabaseReference databaseReference = firebaseDatabase.getReference()
                 .child(ApplicationUtils.USERS_NODE);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    User user = usersSnapshot.getValue(User.class);
-                    if (user == null) {
-                        Timber.wtf("user null update token");
-                        continue;
-                    }
-                    String uid = user.getUid();
-                    databaseReference
-                            .child(uid)
-                            .child(ApplicationUtils.USER_TOKENS_IDENTIFIER)
-                            .child(token)
-                            .setValue(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            databaseReference
+                    .child(uid)
+                    .child(ApplicationUtils.USER_TOKENS_IDENTIFIER)
+                    .child(token)
+                    .setValue(true);
+        }
     }
 }

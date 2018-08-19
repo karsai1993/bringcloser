@@ -26,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -101,6 +102,10 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
     TextView mAnalysisStatus;
     @BindView(R.id.switch_analysis)
     Switch mAnalysisSwitch;
+    @BindView(R.id.tv_settings_analysis_header)
+    TextView mAnalysisHeaderTextView;
+    @BindView(R.id.ll_settings_analysis)
+    LinearLayout mAnalysisLinearLayout;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUsersRootDatabaseReference;
@@ -175,6 +180,14 @@ public class SettingsActivity extends CommonActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mAnalysisHeaderTextView.setVisibility(View.VISIBLE);
+            mAnalysisLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            mAnalysisHeaderTextView.setVisibility(View.GONE);
+            mAnalysisLinearLayout.setVisibility(View.GONE);
+        }
 
         mUserPhoto = findViewById(R.id.iv_settings_user_photo);
         mDisplayedName = findViewById(R.id.tv_settings_displayed_name);

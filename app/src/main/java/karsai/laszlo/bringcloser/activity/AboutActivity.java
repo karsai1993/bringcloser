@@ -1,6 +1,7 @@
 package karsai.laszlo.bringcloser.activity;
 
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,10 @@ public class AboutActivity extends CommonActivity {
     TextView mVersion;
     @BindView(R.id.rv_emoticons)
     RecyclerView mRecyclerView;
+    @BindView(R.id.tv_emoticons_header)
+    TextView mEmoticonsHeaderTextView;
+    @BindView(R.id.tv_emoticons_description)
+    TextView mEmoticonsDescriptionTextView;
 
     private static final String LICENSE_URL_FIREBASE = "https://developer.android.com/studio/terms";
     private static final String LICENSE_URL_FIREBASE_UI
@@ -53,6 +58,16 @@ public class AboutActivity extends CommonActivity {
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mEmoticonsHeaderTextView.setVisibility(View.VISIBLE);
+            mEmoticonsDescriptionTextView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mEmoticonsHeaderTextView.setVisibility(View.GONE);
+            mEmoticonsDescriptionTextView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
 
         List<String> emojiKeyList = ApplicationUtils.getEmojiCodeList();
         List<String> emojiIconList = ApplicationUtils.getEmojiValueList();

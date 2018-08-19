@@ -614,6 +614,9 @@ public class ApplicationUtils {
     }
 
     public static String convertTextToEmojiIfNeeded(Context context, String text) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return text;
+        }
         String storedAnalysisIdentifier = getValueFromPrefs(context, EMOJI_KEY);
         if (storedAnalysisIdentifier == null
                 || storedAnalysisIdentifier.equals(EMOJI_ENABLE_IDENTIFIER)) {

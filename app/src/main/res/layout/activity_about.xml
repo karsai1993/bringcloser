@@ -105,6 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/distance"
+                android:id="@+id/tv_emoticons_header"
                 android:text="@string/emoticions"
                 android:textSize="@dimen/header_text_size"
                 android:textStyle="bold" />
@@ -113,6 +114,7 @@
                 style="@style/AppTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_emoticons_description"
                 android:text="@string/about_emoticions_description"
                 android:layout_marginBottom="@dimen/small_distance"/>
 

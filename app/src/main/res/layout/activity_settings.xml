@@ -142,7 +142,8 @@
                     android:text="@string/emoticions"
                     android:textStyle="bold"
                     android:textSize="@dimen/header_text_size"
-                    android:layout_below="@id/ll_settings_gender"/>
+                    android:layout_below="@id/ll_settings_gender"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -150,7 +151,8 @@
                     android:orientation="horizontal"
                     android:layout_marginBottom="@dimen/distance"
                     android:id="@+id/ll_settings_analysis"
-                    android:layout_below="@id/tv_settings_analysis_header">
+                    android:layout_below="@id/tv_settings_analysis_header"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="0dp"

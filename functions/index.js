@@ -62,7 +62,8 @@ exports.sendRelationshipOperationsNotification = functions.database.ref('/connec
 				data: {
 					type: `${type}`,
 					name: `${nameResult}`,
-					photoUrl: `${photoUrlResult}`
+					photoUrl: `${photoUrlResult}`//,
+					//shouldReceive: toUid
 				}
 			};
 			tokens = Object.keys(tokensSnapshot.val());
@@ -92,7 +93,8 @@ exports.sendRelationshipOperationsNotification = functions.database.ref('/connec
 					data: {
 						type: `${type}`,
 						name: `${nameResult}`,
-						photoUrl: `${photoUrlResult}`
+						photoUrl: `${photoUrlResult}`//,
+						//shouldReceive: fromUid
 					}
 				};
 				tokens = Object.keys(tokensSnapshot.val());
@@ -155,7 +157,8 @@ exports.sendNewWishNotification = functions.database.ref('/connections/{key}/wis
 					type: `${type}`,
 					name: `${nameResult}`,
 					photoUrl: `${photoUrlResult}`,
-					content: message
+					content: message//,
+					//shouldReceive: toUid
 				}
 			};
 			tokens = Object.keys(tokensSnapshot.val());
@@ -215,7 +218,8 @@ exports.sendNewEventNotification = functions.database.ref('/connections/{key}/ev
 					type: `${type}`,
 					name: `${nameResult}`,
 					photoUrl: `${photoUrlResult}`,
-					content: message
+					content: message//,
+					//shouldReceive: toUid
 				}
 			};
 			tokens = Object.keys(tokensSnapshot.val());
@@ -275,7 +279,8 @@ exports.sendNewThoughtNotification = functions.database.ref('/connections/{key}/
 					type: `${type}`,
 					name: `${nameResult}`,
 					photoUrl: `${photoUrlResult}`,
-					content: message
+					content: message//,
+					//shouldReceive: toUid
 				}
 			};
 			tokens = Object.keys(tokensSnapshot.val());
@@ -374,7 +379,8 @@ exports.sendNewMessageNotification = functions.database.ref('/connections/{key}/
 				toGender: `${toGenderResult}`,
 				toBirthday: `${toBirthdayResult}`,
 				connectionType: `${connTypeResult}`,
-				timestamp: `${timestampResult}`
+				timestamp: `${timestampResult}`//,
+				//shouldReceive: toUid
 			}
 		};
 		tokens = Object.keys(tokensSnapshot.val());
@@ -405,7 +411,8 @@ exports.sendUnusedPhotoNotification = functions.database.ref('/unused/{connectio
 		const type = "unused";
 		const payload = {
 			data: {
-				type: `${type}`
+				type: `${type}`//,
+				//shouldReceive: toUid
 			}
 		};
 		tokens = Object.keys(tokensSnapshot.val());
@@ -442,7 +449,8 @@ exports.sendPrivacyChangedNotification = functions.database.ref('/privacy_change
 			const type = "privacy";
 			const payload = {
 				data: {
-					type: `${type}`
+					type: `${type}`//,
+					//shouldReceive: `all`
 				}
 			};
 			console.log('Sending privacy policy changed notification to', uid);
@@ -480,7 +488,8 @@ exports.sendTermsChangedNotification = functions.database.ref('/terms_changed')
 			const type = "terms";
 			const payload = {
 				data: {
-					type: `${type}`
+					type: `${type}`//,
+					//shouldReceive: `all`
 				}
 			};
 			console.log('Sending terms of use changed notification to', uid);

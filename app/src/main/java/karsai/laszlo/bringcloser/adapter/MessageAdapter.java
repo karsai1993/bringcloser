@@ -156,7 +156,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         fromPhotoUrl,
                         messageOtherBasicViewHolder.fromImageView,
                         true);
-                messageOtherBasicViewHolder.messageTextView.setText(sentText);
+                messageOtherBasicViewHolder.messageTextView.setText(
+                        ApplicationUtils.convertTextToEmojiIfNeeded(mContext, sentText)
+                );
                 messageOtherBasicViewHolder.timeTextView.setText(time);
                 messageOtherBasicViewHolder.textFieldLinearLayout.setOnLongClickListener(
                         new View.OnLongClickListener() {
@@ -213,7 +215,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case MESSAGE_CURRENT_BASIC_VIEW_TYPE:
                 MessageCurrentBasicViewHolder messageCurrentBasicViewHolder
                         = (MessageCurrentBasicViewHolder) holder;
-                messageCurrentBasicViewHolder.messageTextView.setText(sentText);
+                messageCurrentBasicViewHolder.messageTextView.setText(
+                        ApplicationUtils.convertTextToEmojiIfNeeded(mContext, sentText)
+                );
                 messageCurrentBasicViewHolder.timeTextView.setText(time);
                 messageCurrentBasicViewHolder.textFieldLinearLayout.setOnLongClickListener(
                         new View.OnLongClickListener() {
